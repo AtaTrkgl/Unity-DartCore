@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,7 +12,7 @@ namespace UILib
     [ExecuteInEditMode]
     public class ProgressBar : MonoBehaviour
     {
-        #region Unity Editor
+#region Unity Editor
 #if UNITY_EDITOR
         [MenuItem("GameObject/UI/UI Lib/Linear Progress Bar")]
         public static void AddLinearProgressBar()
@@ -27,15 +28,16 @@ namespace UILib
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
         }
 #endif
-        #endregion
+#endregion
 
         public float min;
         public float max = 1;
         public float current = 0;
-        public Color fillColor = Color.red;
+        public Color fillerColor = Color.red;
         public bool isRadial;
         [Range(0,1)] public float innerRadius;
         public Sprite innerCircleIcon;
+        public Color innerCircleIconColor;
         public Color innerCircleColor;
 
         [SerializeField] private Image mask;
@@ -58,13 +60,14 @@ namespace UILib
             if (mask)
                 mask.fillAmount = fillAmount;
 
-            filler.color = fillColor;
+            filler.DOColor(fillerColor,.4f);
         }
 
         private void UpdateInnerCircle()
         {
             innerCircle.GetComponent<RectTransform>().localScale = Vector2.one * innerRadius;
             innerCircle.transform.Find("Icon").GetComponent<Image>().sprite = innerCircleIcon;
+            innerCircle.transform.Find("Icon").GetComponent<Image>().color = innerCircleIconColor;
             innerCircle.color = innerCircleColor;
         }
     }

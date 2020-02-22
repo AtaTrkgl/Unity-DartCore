@@ -21,17 +21,17 @@ namespace UILib
 #endif
         #endregion
 
-        [Header("Extras")]
+        [Header("Tooltip")]
         [SerializeField] private string toolTip;
-        [SerializeField] private Color textColor = new Color(70, 70, 70);
-        [SerializeField] private Color bgColor = new Color(240, 240, 240);
+        [SerializeField] private Color tooltipTextColor = new Color(70, 70, 70);
+        [SerializeField] private Color tooltipBgColor = new Color(240, 240, 240);
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
 
             if (toolTip.Length > 0)
-                Tooltip.ShowToolTip_Static(toolTip, textColor, bgColor);
+                Tooltip.ShowToolTip_Static(toolTip, tooltipTextColor, tooltipBgColor);
         }
 
         public override void OnPointerExit(PointerEventData eventData)

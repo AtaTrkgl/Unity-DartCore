@@ -13,8 +13,8 @@ namespace UILib
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("toolTip"), new GUIContent("Tooltip Text"));
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("textColor"), new GUIContent("Tooltip Text Color"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("bgColor"), new GUIContent("Tooltip BG Color"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipTextColor"), new GUIContent("Tooltip Text Color"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipBgColor"), new GUIContent("Tooltip BG Color"));
 
             serializedObject.ApplyModifiedProperties();
         }
