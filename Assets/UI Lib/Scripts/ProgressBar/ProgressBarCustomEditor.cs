@@ -20,10 +20,12 @@ namespace UILib
         {
             serializedObject.Update();
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("hasBoundries"), new GUIContent("Has Boundries"));
             EditorGUILayout.Slider(max, 0, 1000, new GUIContent("Max Value"));
             EditorGUILayout.Slider(serializedObject.FindProperty("min"), 0 , max.floatValue, new GUIContent("Minimum Value"));
             EditorGUILayout.Slider(serializedObject.FindProperty("current"), 0 , max.floatValue, new GUIContent("Current Value"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("fillerColor"), new GUIContent("Filler Color"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("fillSmoothly"), new GUIContent("Fill Smoothly"));
             
             EditorGUILayout.Separator();
 

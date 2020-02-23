@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -248,13 +248,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f68250b9c4c354998d6f05714fa9e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasBoundries: 1
   min: 0
   max: 10
   current: 5.15
+  fillSmoothly: 1
   fillerColor: {r: 1, g: 0, b: 0, a: 1}
   isRadial: 0
   innerRadius: 0
   innerCircleIcon: {fileID: 0}
+  innerCircleIconColor: {r: 0, g: 0, b: 0, a: 0}
   innerCircleColor: {r: 0, g: 0, b: 0, a: 0}
   mask: {fileID: 6538757975157428497}
   filler: {fileID: 4901565297569607235}

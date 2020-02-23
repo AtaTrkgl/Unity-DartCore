@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Material: {fileID: 0}
   m_Color: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -121,6 +121,10 @@ MonoBehaviour:
   toolTip: 
   tooltipTextColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
   tooltipBgColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
+  highlightedClip: {fileID: 8300000, guid: 56ead6e0567c063499e927f474db5e73, type: 3}
+  pressedClip: {fileID: 8300000, guid: 71c85efb49f94d24b8175c54410699a7, type: 3}
+  mixerGroup: {fileID: 0}
+  volume: 0.2
 --- !u!1 &6765715303828476971
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,13 +19,6 @@ namespace UILib
             GameObject obj = Instantiate(Resources.Load<GameObject>("ButtonPlus"));
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
         }
-
-        protected override void Reset()
-        {
-            base.Reset();
-            tooltipTextColor = new Color(70, 70, 70);
-            tooltipBgColor = new Color(240, 240, 240);
-        }
 #endif
         #endregion
 
