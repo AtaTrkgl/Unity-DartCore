@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,7 +13,7 @@ namespace UILib
     [ExecuteInEditMode]
     public class TogglePlus : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
-#region Unity Editor
+        #region Unity Editor
 #if UNITY_EDITOR
         [MenuItem("GameObject/UI/UI Lib/TogglePlus")]
         public static void AddTogglePlus()
@@ -21,7 +22,7 @@ namespace UILib
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
         }
 #endif
-#endregion
+        #endregion
 
         [Header("Configuration")]
         public bool isOn = false;
@@ -42,6 +43,12 @@ namespace UILib
         [SerializeField] private string toolTip;
         [SerializeField] private Color tooltipTextColor = new Color(70, 70, 70);
         [SerializeField] private Color tooltipBgColor = new Color(240, 240, 240);
+
+        [Header("Audio")]
+        [SerializeField] private AudioClip highlightedClip;
+        [SerializeField] private AudioClip pressedClip;
+        [SerializeField] private AudioMixerGroup mixerGroup;
+        [SerializeField, Range(0, 1)] private float volume = .2f;
 
         private Image mask;
         private Image fill;
@@ -78,7 +85,10 @@ namespace UILib
         private void Click()
         {
             if (isInteractive)
+            { 
                 isOn = !isOn;
+                UIAudioManager.PlayOneShotAudio(pressedClip, volume, mixerGroup);
+            }
         }
 
         private void Highlight()
@@ -88,6 +98,7 @@ namespace UILib
                 GetComponent<Image>().DOColor(highlightedColor, transitionDuration);
                 if (toolTip.Length > 0)
                     Tooltip.ShowToolTip_Static(toolTip, tooltipTextColor, tooltipBgColor);
+                UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
             }
         }
         private void NormalState()

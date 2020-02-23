@@ -16,6 +16,11 @@ namespace UILib
             EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipTextColor"), new GUIContent("Tooltip Text Color"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipBgColor"), new GUIContent("Tooltip BG Color"));
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("highlightedClip"), new GUIContent("Highlighted Clip"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("pressedClip"), new GUIContent("Pressed Clip"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("volume"), new GUIContent("Volume"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("mixerGroup"), new GUIContent("Audio Mixer Group"));
+            
             serializedObject.ApplyModifiedProperties();
         }
     }
