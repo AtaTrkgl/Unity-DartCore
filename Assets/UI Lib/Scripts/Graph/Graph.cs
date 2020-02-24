@@ -8,6 +8,13 @@ using UnityEditor;
 
 namespace UILib
 {
+    public enum GraphType : byte
+    {
+        Line = 0,
+        Dot = 1,
+        Bar = 2,
+    }
+
     public class Graph : MonoBehaviour
     {
         #region Unity Editor
@@ -24,7 +31,7 @@ namespace UILib
 
         [SerializeField] private Sprite markerSprite;
         [SerializeField] private Sprite barSprite;
-        [SerializeField] private float barPadding = 53f;
+        [SerializeField] private float padding = 53f;
         [SerializeField] private float markerScale = 11f;
         [SerializeField] private float markerConnectorScale = 3f;
         [SerializeField] private bool displayTooltips = true;
@@ -32,23 +39,25 @@ namespace UILib
 
         private RectTransform graphContainer;
         private RectTransform markersParent;
-        private RectTransform connectorsParrent;
+        private RectTransform connectorsParent;
 
         private void Awake()
         {
             graphContainer = transform.Find("Graphics Container").GetComponent<RectTransform>();
             markersParent = graphContainer.transform.Find("Markers").GetComponent<RectTransform>();
-            connectorsParrent = graphContainer.transform.Find("Connectors").GetComponent<RectTransform>();
+            connectorsParent = graphContainer.transform.Find("Connectors").GetComponent<RectTransform>();
         }
 
         public void ShowGraph(List<int> valueList, GraphType graphType, bool ignoreMaxHeight)
         {
+            ClearGraph();
+
             switch (graphType)
             {
                 case GraphType.Line:
                     CreateSimpleGraph(valueList, ignoreMaxHeight, false);
                     break;
-                case GraphType.Scatter:
+                case GraphType.Dot:
                     CreateSimpleGraph(valueList, ignoreMaxHeight, true);
                     break;
                 case GraphType.Bar:
@@ -65,7 +74,7 @@ namespace UILib
         /// <param name="valueList"> values</param>
         /// <param name="ignoreMaxHeight"> if the variable max height should be ignored or not</param>
         /// <param name="isScaterGraph"></param>
-        private void CreateSimpleGraph(List<int> valueList, bool ignoreMaxHeight, bool isScaterGraph)
+        private void CreateSimpleGraph(List<int> valueList, bool ignoreMaxHeight, bool isDotGraph)
         {
             float graphHeight = graphContainer.sizeDelta.y - 2 * markerScale;
 
@@ -80,16 +89,16 @@ namespace UILib
             if (ignoreMaxHeight || valueList[greatestIndex] > maxHeight)
                 yMax = valueList[greatestIndex];
 
-            float xSize = graphContainer.sizeDelta.x / (valueList.Count > 1 ? valueList.Count : 2);
+            float xSize = (graphContainer.sizeDelta.x - 2 * padding) / (valueList.Count > 1 ? valueList.Count : 2);
             GameObject lastMarker = null;
 
             for (int i = 0; i < valueList.Count; i++)
             {
                 valueList[i] = (int) Mathf.Clamp(valueList[i],0f , yMax);
-                float xPos = (i + .5f) * xSize;
+                float xPos = (i + .5f) * xSize + padding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
                 var marker = CreateMarker(new Vector2(xPos, yPos), displayTooltips, $"{i + 1}, {valueList[i]}");
-                if (lastMarker != null && !isScaterGraph)
+                if (lastMarker != null && !isDotGraph)
                 {
                     CreateMarkerConnection(lastMarker.GetComponent<RectTransform>().anchoredPosition,
                         marker.GetComponent<RectTransform>().anchoredPosition);
@@ -112,12 +121,12 @@ namespace UILib
             if (ignoreMaxHeight || valueList[greatestIndex] > maxHeight)
                 yMax = valueList[greatestIndex];
 
-            float xSize = (graphContainer.sizeDelta.x - 2 * barPadding) / (valueList.Count > 1 ? valueList.Count : 2);
+            float xSize = (graphContainer.sizeDelta.x - 2 * padding) / (valueList.Count > 1 ? valueList.Count : 2);
 
             for (int i = 0; i < valueList.Count; i++)
             {
                 valueList[i] = (int)Mathf.Clamp(valueList[i], 0f, yMax);
-                float xPos = (i + .5f) * xSize + barPadding;
+                float xPos = (i + .5f) * xSize + padding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
                 CreateBar(yPos, xPos, xSize/2, displayTooltips, $"{i + 1}, {valueList[i]}");
             }
@@ -127,7 +136,7 @@ namespace UILib
         private void CreateMarkerConnection(Vector2 markerPosA, Vector2 markerPosB)
         {
             GameObject gameObj = new GameObject("markerConnection", typeof(Image));
-            gameObj.transform.SetParent(connectorsParrent, false);
+            gameObj.transform.SetParent(connectorsParent, false);
             RectTransform rectTrans = gameObj.GetComponent<RectTransform>();
             rectTrans.anchorMin = Vector2.zero;
             rectTrans.anchorMax = Vector2.zero;
@@ -176,11 +185,14 @@ namespace UILib
             rectTrans.sizeDelta = new Vector2(width, height);
         }
 
-        public enum GraphType : byte
-        { 
-            Line = 0,
-            Scatter = 1,
-            Bar = 2,
+        public void ClearGraph()
+        {
+            foreach (Transform child in markersParent)
+                Destroy(child.gameObject);
+
+            foreach (Transform child in connectorsParent)
+                Destroy(child.gameObject);
         }
+
     }
 }

@@ -6,7 +6,10 @@ public class BarManager : MonoBehaviour
 {
     public ProgressBar healthBar;
     public ProgressBar hungerBar;
+    public TogglePlus togglePlus;
     public Graph graph;
+
+    List<int> values;
 
     private void Start()
     {
@@ -18,8 +21,7 @@ public class BarManager : MonoBehaviour
         hungerBar.min = 0;
         hungerBar.current = 100;
 
-        var values = new List<int>() {0,1,4,7,12,18,26,43,45,46,43,36,25,13,0,5,15,26,47,75};
-        graph.ShowGraph(values, Graph.GraphType.Scatter, true);
+        values = new List<int>() {0,1,4,7,12,18,26,43,45,46,43,36,25,13,0,5,15,26,47,75};
     }
 
     private void Update()
@@ -35,6 +37,14 @@ public class BarManager : MonoBehaviour
     public void Heal()
     {
         healthBar.current += 40;
+    }
+
+    public void UpdateGraph()
+    {
+        if (togglePlus.isOn)
+            graph.ShowGraph(values, GraphType.Line, true);
+        else
+            graph.ShowGraph(values, GraphType.Bar, true);
     }
 
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,6 +31,9 @@ namespace UILib
         public bool isInteractive = true;
         private bool wasInteractive = true;
 
+        [SerializeField] private UnityEvent OnToggle;
+
+        [Header("Cursor Interactions")]
         public float transitionDuration = .1f;
         public Color normalColor;
         public Color highlightedColor;
@@ -88,6 +92,7 @@ namespace UILib
             if (isInteractive)
             { 
                 isOn = !isOn;
+                OnToggle.Invoke();
                 UIAudioManager.PlayOneShotAudio(pressedClip, volume, mixerGroup);
             }
         }
