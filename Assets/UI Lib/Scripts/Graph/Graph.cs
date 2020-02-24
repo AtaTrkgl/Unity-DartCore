@@ -27,7 +27,7 @@ namespace UILib
         [SerializeField] private float barPadding = 53f;
         [SerializeField] private float markerScale = 11f;
         [SerializeField] private float markerConnectorScale = 3f;
-        [SerializeField] private bool addTooltips = true;
+        [SerializeField] private bool displayTooltips = true;
         public float maxHeight = 100;
 
         private RectTransform graphContainer;
@@ -88,7 +88,7 @@ namespace UILib
                 valueList[i] = (int) Mathf.Clamp(valueList[i],0f , yMax);
                 float xPos = (i + .5f) * xSize;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
-                var marker = CreateMarker(new Vector2(xPos, yPos), addTooltips, $"{i + 1}, {valueList[i]}");
+                var marker = CreateMarker(new Vector2(xPos, yPos), displayTooltips, $"{i + 1}, {valueList[i]}");
                 if (lastMarker != null && !isScaterGraph)
                 {
                     CreateMarkerConnection(lastMarker.GetComponent<RectTransform>().anchoredPosition,
@@ -119,7 +119,7 @@ namespace UILib
                 valueList[i] = (int)Mathf.Clamp(valueList[i], 0f, yMax);
                 float xPos = (i + .5f) * xSize + barPadding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
-                CreateBar(yPos, xPos, xSize/2);
+                CreateBar(yPos, xPos, xSize/2, displayTooltips, $"{i + 1}, {valueList[i]}");
             }
         }
 
@@ -159,11 +159,13 @@ namespace UILib
             return gameObj;
         }
         //Bar Plots
-        private void CreateBar(float height, float xPos, float width)
+        private void CreateBar(float height, float xPos, float width, bool displayTooltips, string tooltipText = "")
         {
             var gameObj = new GameObject("marker", typeof(Image));
             gameObj.transform.SetParent(markersParent, false);
             gameObj.GetComponent<Image>().sprite = barSprite;
+            gameObj.AddComponent<TooltipTarget>();
+            gameObj.GetComponent<TooltipTarget>().toolTip = tooltipText;
 
             var rectTrans = gameObj.GetComponent<RectTransform>();
             rectTrans.anchoredPosition = new Vector2(xPos, 0);

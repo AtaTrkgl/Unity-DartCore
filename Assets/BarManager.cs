@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UILib;
 
@@ -7,6 +6,7 @@ public class BarManager : MonoBehaviour
 {
     public ProgressBar healthBar;
     public ProgressBar hungerBar;
+    public Graph graph;
 
     private void Start()
     {
@@ -17,6 +17,9 @@ public class BarManager : MonoBehaviour
         hungerBar.max = 100;
         hungerBar.min = 0;
         hungerBar.current = 100;
+
+        var values = new List<int>() {0,1,4,7,12,18,26,43,45,46,43,36,25,13,0,5,15,26,47,75};
+        graph.ShowGraph(values, Graph.GraphType.Scatter, true);
     }
 
     private void Update()
