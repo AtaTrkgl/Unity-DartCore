@@ -20,6 +20,7 @@ namespace UILib
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("TogglePlus"));
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            obj.name = "New Toggle Plus";
         }
 #endif
         #endregion
@@ -41,8 +42,8 @@ namespace UILib
 
         [Header("Tooltip")]
         [SerializeField] private string toolTip;
-        [SerializeField] private Color tooltipTextColor = new Color(70, 70, 70);
-        [SerializeField] private Color tooltipBgColor = new Color(240, 240, 240);
+        [SerializeField] private Color tooltipTextColor = new Color(.2f, .2f, .2f);
+        [SerializeField] private Color tooltipBgColor = new Color(.85f, .85f, .85f);
 
         [Header("Audio")]
         [SerializeField] private AudioClip highlightedClip;

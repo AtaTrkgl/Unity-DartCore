@@ -38,6 +38,7 @@ namespace UILib
             text.GetComponent<RectTransform>().sizeDelta = bgSize;
             text.color = textColor;
 
+            FollowCursor();
             gameObject.SetActive(true);
         }
 

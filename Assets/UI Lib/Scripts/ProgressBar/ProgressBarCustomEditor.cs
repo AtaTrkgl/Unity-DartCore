@@ -25,7 +25,7 @@ namespace UILib
             EditorGUILayout.Slider(serializedObject.FindProperty("min"), 0 , max.floatValue, new GUIContent("Minimum Value"));
             EditorGUILayout.Slider(serializedObject.FindProperty("current"), 0 , max.floatValue, new GUIContent("Current Value"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("fillerColor"), new GUIContent("Filler Color"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("fillSmoothly"), new GUIContent("Fill Smoothly"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("fillTime"), new GUIContent("Filling Smoothness"));
             
             EditorGUILayout.Separator();
 

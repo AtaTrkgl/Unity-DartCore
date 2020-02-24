@@ -20,6 +20,7 @@ namespace UILib
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("Linear Progress Bar"));
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            obj.name = "New Linear Progress Bar";
         }
 
         [MenuItem("GameObject/UI/UI Lib/Radial Progress Bar")]
@@ -27,6 +28,7 @@ namespace UILib
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("Radial Progress Bar"));
             obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            obj.name = "New Radial Progress Bar";
         }
 #endif
         #endregion
@@ -35,7 +37,7 @@ namespace UILib
         public float min;
         public float max = 1;
         public float current = 0;
-        public bool fillSmoothly = true;
+        [Range(0,.5f)] public float fillTime = .1f;
         public Color fillerColor = Color.red;
         public bool isRadial;
         [Range(0,1)] public float innerRadius;
@@ -64,12 +66,7 @@ namespace UILib
 
             float desiredFillAmount = currentOffset / maxOffset;
             if (mask)
-            {
-                if (fillSmoothly)
-                    mask.DOFillAmount(desiredFillAmount, .1f);
-                else
-                    mask.fillAmount = desiredFillAmount;
-            }
+                mask.DOFillAmount(desiredFillAmount, fillTime);
 
             filler.DOColor(fillerColor,.4f);
         }
