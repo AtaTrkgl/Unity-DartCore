@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
-namespace UILib
+namespace DartCore.UI
 {
     public enum GraphType : byte
     {
@@ -19,7 +19,7 @@ namespace UILib
     {
         #region Unity Editor
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/UI Lib/Graph")]
+        [MenuItem("DartCore/UI/Graph"), MenuItem("GameObject/UI/DartCore/Graph")]
         public static void AddGraph()
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("Graph"));
@@ -97,7 +97,7 @@ namespace UILib
                 valueList[i] = (int) Mathf.Clamp(valueList[i],0f , yMax);
                 float xPos = (i + .5f) * xSize + padding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
-                var marker = CreateMarker(new Vector2(xPos, yPos), displayTooltips, $"{i + 1}, {valueList[i]}");
+                var marker = CreateMarker(new Vector2(xPos, yPos), displayTooltips, valueList[i].ToString());
                 if (lastMarker != null && !isDotGraph)
                 {
                     CreateMarkerConnection(lastMarker.GetComponent<RectTransform>().anchoredPosition,
@@ -128,7 +128,7 @@ namespace UILib
                 valueList[i] = (int)Mathf.Clamp(valueList[i], 0f, yMax);
                 float xPos = (i + .5f) * xSize + padding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
-                CreateBar(yPos, xPos, xSize/2, displayTooltips, $"{i + 1}, {valueList[i]}");
+                CreateBar(yPos, xPos, xSize/2, displayTooltips, valueList[i].ToString());
             }
         }
 

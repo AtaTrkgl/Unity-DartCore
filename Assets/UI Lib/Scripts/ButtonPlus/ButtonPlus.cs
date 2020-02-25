@@ -7,13 +7,13 @@ using UnityEngine.Audio;
 using UnityEditor;
 #endif
 
-namespace UILib
+namespace DartCore.UI
 {
     public class ButtonPlus : Button, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         #region Unity Editor
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/UI Lib/ButtonPlus")]
+        [MenuItem("DartCore/UI/ButtonPlus"), MenuItem("GameObject/UI/DartCore/ButtonPlus")]
         public static void AddButtonPlus()
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("ButtonPlus"));

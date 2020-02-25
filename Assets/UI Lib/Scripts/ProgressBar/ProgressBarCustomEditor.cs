@@ -2,7 +2,7 @@
 using UnityEditor;
 
 
-namespace UILib
+namespace DartCore.UI
 {
     [CustomEditor(typeof(ProgressBar))]
     public class ProgressBarCustomEditor : Editor

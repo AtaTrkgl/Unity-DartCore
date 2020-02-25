@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 
-namespace UILib
+namespace DartCore.UI
 {
     public class Tooltip : MonoBehaviour
     {

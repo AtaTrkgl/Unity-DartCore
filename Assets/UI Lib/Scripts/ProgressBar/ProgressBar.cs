@@ -7,15 +7,14 @@ using System;
 using UnityEditor;
 #endif
 
-namespace UILib
+namespace DartCore.UI
 {
-
     [ExecuteInEditMode]
     public class ProgressBar : MonoBehaviour
     {
 #region Unity Editor
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/UI Lib/Linear Progress Bar")]
+        [MenuItem("DartCore/UI/Linear Progress Bar"), MenuItem("GameObject/UI/DartCore/Linear Progress Bar")]
         public static void AddLinearProgressBar()
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("Linear Progress Bar"));
@@ -23,7 +22,7 @@ namespace UILib
             obj.name = "New Linear Progress Bar";
         }
 
-        [MenuItem("GameObject/UI/UI Lib/Radial Progress Bar")]
+        [MenuItem("DartCore/UI/Radial Progress Bar"), MenuItem("GameObject/UI/DartCore/Radial Progress Bar")]
         public static void AddRadialProgressBar()
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("Radial Progress Bar"));

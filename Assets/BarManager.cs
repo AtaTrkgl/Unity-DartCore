@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UILib;
+using DartCore.UI;
 
 public class BarManager : MonoBehaviour
 {
@@ -22,6 +22,7 @@ public class BarManager : MonoBehaviour
         hungerBar.current = 100;
 
         values = new List<int>() {0,1,4,7,12,18,26,43,45,46,43,36,25,13,0,5,15,26,47,75};
+        UpdateGraph();
     }
 
     private void Update()

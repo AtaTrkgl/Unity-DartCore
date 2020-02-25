@@ -2,7 +2,7 @@
 using UnityEditor.UI;
 using UnityEngine;
 
-namespace UILib
+namespace DartCore.UI
 {
     [CustomEditor(typeof(ButtonPlus))]
     public class ButtonPlusEditor : ButtonEditor

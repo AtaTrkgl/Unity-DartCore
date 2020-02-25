@@ -9,14 +9,14 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-namespace UILib
+namespace DartCore.UI
 {
     [ExecuteInEditMode]
     public class TogglePlus : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         #region Unity Editor
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/UI Lib/TogglePlus")]
+        [MenuItem("DartCore/UI/Toggle Plus"), MenuItem("GameObject/UI/DartCore/Toggle Plus")]
         public static void AddTogglePlus()
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("TogglePlus"));

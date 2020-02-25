@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 
-namespace UILib
+namespace DartCore.UI
 {
     public class UIAudioManager : MonoBehaviour
     {
