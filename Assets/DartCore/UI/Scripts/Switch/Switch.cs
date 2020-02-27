@@ -41,6 +41,17 @@ namespace DartCore
 
         private void Update()
         {
+            #region UnityEditor
+#if UNITY_EDITOR
+            if (Application.isEditor && !Application.isPlaying)
+            {
+                bgFill.fillAmount = isOn ? 1 : 0;
+                bg.color = bgColorOn;
+                bgFill.color = bgColorOff;
+            }
+#endif
+            #endregion
+
             if (!isInteractive)
                 DisabledState();
             if (isInteractive && !wasInteractive)

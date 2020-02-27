@@ -74,6 +74,18 @@ namespace DartCore.UI
 
         private void Update()
         {
+            #region UnityEditor
+#if UNITY_EDITOR
+            if (Application.isEditor && !Application.isPlaying)
+            {
+                bgImage.color = bgColor;
+                filler.color = fillerColor;
+                mask.fillAmount = (current - min)/(max - min);
+                currentOuterCircleRadius = outerCircleRadius;
+            }
+#endif
+            #endregion
+
             if (hasBoundries)
                 current = Mathf.Clamp(current, min, max);
 
