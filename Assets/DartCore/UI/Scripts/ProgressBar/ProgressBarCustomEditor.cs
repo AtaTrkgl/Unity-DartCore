@@ -24,20 +24,17 @@ namespace DartCore.UI
             EditorGUILayout.Slider(max, 0, 1000, new GUIContent("Max Value"));
             EditorGUILayout.Slider(serializedObject.FindProperty("min"), 0 , max.floatValue, new GUIContent("Minimum Value"));
             EditorGUILayout.Slider(serializedObject.FindProperty("current"), 0 , max.floatValue, new GUIContent("Current Value"));
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bgColor"), new GUIContent("Background Color"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("fillerColor"), new GUIContent("Filler Color"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("fillTime"), new GUIContent("Filling Smoothness"));
             
             EditorGUILayout.Separator();
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("mask"), new GUIContent("Mask"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("filler"), new GUIContent("Filler"));
-
-            EditorGUILayout.Separator();
-
             EditorGUILayout.PropertyField(isRadial, new GUIContent("Is Radial"));
             if (isRadial.boolValue)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("innerCircle"), new GUIContent("Inner Circle"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("outerCircleRadius"), new GUIContent("Outer Circle Radius"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("innerRadius"), new GUIContent("Inner Circle Radius"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("innerCircleColor"), new GUIContent("Inner Circle Color"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("innerCircleIcon"), new GUIContent("Inner Circle Icon"));
