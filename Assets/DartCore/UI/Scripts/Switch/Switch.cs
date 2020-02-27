@@ -29,7 +29,7 @@ namespace DartCore
         private Image bgFill;
         private Image bg;
         private float circleX;
-
+        private float padding = 1.5f;
 
         private void Awake()
         {
@@ -46,7 +46,7 @@ namespace DartCore
             if (isInteractive && !wasInteractive)
                 NormalState();
 
-            circleX = GetComponent<RectTransform>().sizeDelta.x / 2 - 26f;
+            circleX = GetComponent<RectTransform>().sizeDelta.x / 2 - circle.sizeDelta.x/2 - padding;
             circle.DOLocalMoveX(isOn ? circleX : -circleX, .1f);
             bgFill.DOFillAmount(isOn ? 1 : 0, .2f);
 
