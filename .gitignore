@@ -9,16 +9,6 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
-/[Aa]ssets/ExampleAssets/
-/[Aa]ssets/HDRPDefaultResources/
-/[Aa]ssets/Presets/
-/[Aa]ssets/Resources/
-/[Aa]ssets/Scenes/
-/[Aa]ssets/Scripts/
-/[Aa]ssets/Settings/
-/[Aa]ssets/TutorialInfo/
-/[Aa]ssets/BarManager.cs
-/[Aa]ssets/Readme.asset
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -68,3 +58,25 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+Assets/Scenes/
+
+Assets/ExampleAssets/
+
+Assets/HDRPDefaultResources/
+
+Assets/Presets/
+
+Assets/Resources/
+
+Assets/Scenes/
+
+Assets/Scripts/
+
+Assets/Settings/
+
+Assets/TutorialInfo/
+
+Assets/BarManager.cs
+
+Assets/Readme.asset
