@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
-namespace DartCore
+namespace DartCore.UI
 {
     public class Switch : DartCore.UI.TogglePlus
     {

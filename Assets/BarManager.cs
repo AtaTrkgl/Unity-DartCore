@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using DartCore.UI;
+using DartCore.Localization;
 
 public class BarManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class BarManager : MonoBehaviour
     public ProgressBar hungerBar;
     public TogglePlus togglePlus;
     public Graph graph;
+    public Switch lngSwitch;
 
     List<int> values;
 
@@ -38,6 +40,14 @@ public class BarManager : MonoBehaviour
     public void Heal()
     {
         healthBar.current += 40;
+    }
+
+    public void UpdateLang()
+    {
+        if (lngSwitch.isOn)
+            Localizator.UpdateLanguage(Language.English);
+        else
+            Localizator.UpdateLanguage(Language.German);
     }
 
     public void UpdateGraph()

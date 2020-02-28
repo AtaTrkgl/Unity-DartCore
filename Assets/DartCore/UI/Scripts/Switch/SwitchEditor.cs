@@ -7,7 +7,6 @@ namespace DartCore.UI
     [CustomEditor(typeof(Switch))]
     public class SwitchEditor : Editor
     {
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
