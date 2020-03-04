@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace DartCore.Localization
 {
-    public class LocalizationWindow : EditorWindow
+    public class KeyEditor : EditorWindow
     {
-        [MenuItem("DartCore/Localization/Localization Window")]
-        private static void OpenWindow()
+        [MenuItem("DartCore/Localization/Key Editor")]
+        public static void OpenWindow()
         {
-            var window = new LocalizationWindow();
-            window.titleContent = new GUIContent("Localization Manager");
-            window.minSize = new Vector2(600, 300);
+            var window = new KeyEditor();
+            window.titleContent = new GUIContent("Key Editor");
+            window.minSize = new Vector2(300, 300);
             window.Show();
         }
 

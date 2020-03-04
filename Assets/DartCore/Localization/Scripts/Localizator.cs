@@ -176,5 +176,12 @@ namespace DartCore.Localization
             }
             return -1;
         }
+
+        public static string[] GetKeys()
+        {
+            if (keysArray == null)
+                UpdateKeyFile();
+            return keysArray;
+        }
     }
 }
