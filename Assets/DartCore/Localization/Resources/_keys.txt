@@ -1,0 +1,9 @@
+﻿lng_name
+lng_error
+test_key
+test_key2
+test_key3
+test_key5
+test_key4
+new_key
+hyper_link

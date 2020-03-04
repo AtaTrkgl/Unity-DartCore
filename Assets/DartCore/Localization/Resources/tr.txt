@@ -1,0 +1,9 @@
+Türkçe
+Lokalizasyon Hatası
+Test Anahtarı 1
+Bu ikinci anahtar
+Test Anahtarı 3
+Test Anahtarı 5
+
+Yeni Anahtar
+<color=green><u><link=clear>Buraya</link></u></color> basarak tabloyu temizle

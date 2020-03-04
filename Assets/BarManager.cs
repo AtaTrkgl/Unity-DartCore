@@ -45,9 +45,9 @@ public class BarManager : MonoBehaviour
     public void UpdateLang()
     {
         if (lngSwitch.isOn)
-            Localizator.UpdateLanguage(Language.English);
+            Localizator.UpdateLanguage(SystemLanguage.Turkish);
         else
-            Localizator.UpdateLanguage(Language.German);
+            Localizator.UpdateLanguage(SystemLanguage.English);
     }
 
     public void UpdateGraph()
