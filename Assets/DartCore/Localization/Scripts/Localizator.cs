@@ -7,6 +7,7 @@ namespace DartCore.Localization
 {
     public class Localizator
     {
+        private static bool keysArrayInitlized = false;
         public static string[] keysArray;
         public static string[] currentLanguageArray;
 
@@ -23,30 +24,24 @@ namespace DartCore.Localization
         {
             if (currentLanguageArray == null)
                 LoadLanguageFile();
-            if (keysArray == null)
+            if (!keysArrayInitlized)
+            {
                 UpdateKeyFile();
-
+                keysArrayInitlized = true;
+            }
 
             int index = GetIndexOfKey(key);
-            bool doesLngFileContainsKey = currentLanguageArray.Length > index;
+            bool doesLngFileContainsKey = currentLanguageArray.Length > index && index >= 0;
 
             if (doesLngFileContainsKey)
-            {
-                if (index == -1 && returnErrorString)
-                    return currentLanguageArray[1];
-                else if (index == -1)
-                    return "";
-                else
-                    return currentLanguageArray[index];
-            }
+                return currentLanguageArray[index];
             else if (returnErrorString)
                 return currentLanguageArray[1];
             else
                 return "";
         }
 
-
-        private static void UpdateKeyFile()
+        public static void UpdateKeyFile()
         {
             keysArray = Resources.Load<TextAsset>("_keys").text.Split('\n');
         }
@@ -58,6 +53,7 @@ namespace DartCore.Localization
             if (!DoesContainKey(key))
             {
                 File.AppendAllText(lngFilesPath + keysFileName + ".txt", "\n"+key);
+                UnityEditor.AssetDatabase.Refresh();
                 UpdateKeyFile();
             }
         }
@@ -138,8 +134,11 @@ namespace DartCore.Localization
 
         public static string GetString(string key, SystemLanguage language, bool returnErrorString = true)
         {
-            if (keysArray == null)
+            if (!keysArrayInitlized)
+            {
                 UpdateKeyFile();
+                keysArrayInitlized = true;
+            }
 
             var languageArray = Resources.Load<TextAsset>(languageNames[language]).text.Split('\n');
 
@@ -164,14 +163,14 @@ namespace DartCore.Localization
         public static bool DoesContainKey(string key)
         {
             UpdateKeyFile();
-            return keysArray.Contains(key);
+            return GetIndexOfKey(key) != -1;
         }
 
         private static int GetIndexOfKey(string key)
         {
             for (int i = 0; i < keysArray.Length; i++)
             {
-                if (keysArray[i].Trim() == key)
+                if (keysArray[i].Trim() == key.Trim())
                     return i;
             }
             return -1;
@@ -179,8 +178,7 @@ namespace DartCore.Localization
 
         public static string[] GetKeys()
         {
-            if (keysArray == null)
-                UpdateKeyFile();
+            UpdateKeyFile();
             return keysArray;
         }
     }

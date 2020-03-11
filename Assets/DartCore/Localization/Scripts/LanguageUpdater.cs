@@ -15,10 +15,9 @@ namespace DartCore.Localization
 
         public void UpdateLanguage()
         {
-            if (text)
-                text.text = Localizator.GetString(key);
-            else
+            if (!text)
                 text = GetComponent<TextMeshProUGUI>();
+            text.text = Localizator.GetString(key);
         }
     }
 }

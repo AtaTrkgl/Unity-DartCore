@@ -2,6 +2,7 @@
 using UnityEngine;
 using DartCore.UI;
 using DartCore.Localization;
+using DartCore.Utilities;
 
 public class BarManager : MonoBehaviour
 {

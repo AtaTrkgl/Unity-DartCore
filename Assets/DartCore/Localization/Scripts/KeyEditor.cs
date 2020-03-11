@@ -10,36 +10,46 @@ namespace DartCore.Localization
         {
             var window = new KeyEditor();
             window.titleContent = new GUIContent("Key Editor");
-            window.minSize = new Vector2(300, 300);
+            window.minSize = new Vector2(100, 100);
             window.Show();
         }
 
-        public string key = "";
+        public static string key = "";
         public string keyLastValue;
         public string[] values;
 
         public void OnGUI()
         {
-            key = EditorGUILayout.TextField("Enter Key: ", key);
+            var keySearchBarStyle = new GUIStyle(EditorStyles.textField);
+            keySearchBarStyle.fixedWidth = position.width * .99f;
+            keySearchBarStyle.fixedHeight = 23f;
+            keySearchBarStyle.alignment = TextAnchor.MiddleCenter;
+            keySearchBarStyle.fontSize = 12;
+
+            key = GUILayout.TextField(key, keySearchBarStyle);
+            key = key.Replace(' ','_');
+            key = key.ToLower();
+
+            GUILayout.Space(10f);
 
             if (key != keyLastValue)
                 values = new string[Localizator.GetLanguageCount()];
 
             if (Localizator.DoesContainKey(key))
             {
-                EditorGUILayout.BeginScrollView(Vector2.zero, alwaysShowHorizontal: false, alwaysShowVertical: true);
+                GUILayout.BeginScrollView(Vector2.zero, false, true);
                 for (int i = 0; i < values.Length; i++)
                 {
                     if (values[i] == null)
                         values[i] = Localizator.GetString(key, Localizator.GetAvailableLanguages()[i], false);
-                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{Localizator.GetAvailableLanguages()[i]}: ", GUILayout.MaxWidth(50));
 
                     EditorStyles.textArea.wordWrap = true;
                     values[i] = EditorGUILayout.TextArea(values[i], EditorStyles.textField, GUILayout.Height(position.height * .1f), GUILayout.Width(position.width * .75f));
-                    EditorGUILayout.EndHorizontal();
+                    GUILayout.EndHorizontal();
                 }
-                EditorGUILayout.EndScrollView();
+                GUILayout.EndScrollView();
 
                 if (GUILayout.Button("Update Values"))
                 {
@@ -59,7 +69,7 @@ namespace DartCore.Localization
                         Localizator.RemoveKey(key);
                 }
             }
-            else if (GUILayout.Button("Add New Key"))
+            else if (GUILayout.Button("Add New Key") && !string.IsNullOrEmpty(key) && !string.IsNullOrWhiteSpace(key))
             {
                 Localizator.AddKey(key);
             }

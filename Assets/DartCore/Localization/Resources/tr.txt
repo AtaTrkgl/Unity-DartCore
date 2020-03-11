@@ -2,8 +2,8 @@ Türkçe
 Lokalizasyon Hatası
 Test Anahtarı 1
 Bu ikinci anahtar
-Test Anahtarı 3
-Test Anahtarı 5
 
+Test Anahtarı 5
+Merhabalar
 Yeni Anahtar
 <color=green><u><link=clear>Buraya</link></u></color> basarak tabloyu temizle
