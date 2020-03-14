@@ -6,11 +6,10 @@ namespace DartCore.Utilities
     public class Utils
     {
         #region Average
+
         /// <summary>
         /// Returns the average of the elements of given array/list
         /// </summary>
-        /// <param name="numbers"></param>
-        /// <returns></returns>
         public static float Average(int[] numbers)
         {
             var average = 0f;
@@ -24,8 +23,6 @@ namespace DartCore.Utilities
         /// <summary>
         /// Returns the average of the elements of given array/list
         /// </summary>
-        /// <param name="numbers"></param>
-        /// <returns></returns>
         public static float Average(float[] numbers)
         {
             var average = 0f;
@@ -39,8 +36,6 @@ namespace DartCore.Utilities
         /// <summary>
         /// Returns the average of the elements of given array/list
         /// </summary>
-        /// <param name="numbers"></param>
-        /// <returns></returns>
         public static float Average(List<int> numbers)
         {
             var average = 0f;
@@ -54,8 +49,6 @@ namespace DartCore.Utilities
         /// <summary>
         /// Returns the average of the elements of given array/list
         /// </summary>
-        /// <param name="numbers"></param>
-        /// <returns></returns>
         public static float Average(List<float> numbers)
         {
             var average = 0f;
@@ -69,6 +62,7 @@ namespace DartCore.Utilities
         #endregion
 
         #region UnitCirclePosition
+
         /// <summary>
         /// returns a position as Vector2(rcosθ, rsinθ)
         /// </summary>
@@ -92,6 +86,57 @@ namespace DartCore.Utilities
             var rawPos = new Vector2(Mathf.Cos(θ), Mathf.Sin(θ));
             return rawPos * r;
         }
-#endregion
+        #endregion
+
+        #region Random
+        public static bool RandomChance(float numerator, float denominator = 100f)
+        {
+            float randNum = Random.Range(0, denominator);
+            if (randNum <= numerator)
+                return true;
+            else
+                return false;
+        }
+
+        public static Vector2 RandomVector2()
+        {
+            return new Vector2(Random.Range(0,1), Random.Range(0, 1)).normalized;
+        }
+        public static Vector3 RandomVector3()
+        {
+            return new Vector3(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)).normalized;
+        }
+        public static Vector4 RandomVector4()
+        {
+            return new Vector4(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)).normalized;
+        }
+        #endregion
+
+        #region Range
+
+        /// <summary>
+        /// Order of the bounds does not matter. However
+        /// if both of them are equal to each other,
+        /// the function will return true if the number
+        ///  is equal to the bounds
+        /// </summary>
+        public static bool IsInRange(float num, float bound1, float bound2)
+        {
+            if (bound1 > bound2)
+                return bound1 > num && num > bound2;
+            else if (bound2 > bound1)
+                return bound2 > num && num > bound1;
+
+            // if the boundry is a number instead
+            // of a range, check if the number is
+            // equal to it
+            else if (num == bound1)
+                return true;
+            else
+                return false;
+
+        }
+
+        #endregion
     }
 }

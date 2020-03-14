@@ -1,10 +1,7 @@
 English
 Localization Error
 Test Key 1
-This is the second Key
-
-Test Key 5	
-This is the 4th test key	
 
 Click <color=green><u><link=clear>here</link></u></color> to clear the graph!
-za
+Test Key 3
+NewKey2

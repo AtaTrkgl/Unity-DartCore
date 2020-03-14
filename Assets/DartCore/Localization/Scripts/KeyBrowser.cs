@@ -1,6 +1,6 @@
-﻿using System;
+﻿using DartCore.Utilities;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,9 +11,8 @@ namespace DartCore.Localization
         [MenuItem("DartCore/Localization/Key Browser")]
         private static void OpenWindow()
         {
-            var window = new KeyBrowser();
+            var window = ScriptableObject.CreateInstance<KeyBrowser>();
             window.titleContent = new GUIContent("Key Browser");
-            window.minSize = new Vector2(100, 100);
             window.Show();
         }
 
@@ -24,31 +23,28 @@ namespace DartCore.Localization
 
         private Vector2 scrollPos;
         private GUIStyle languageDisplayerStyle;
-        private GUIStyle keyButtonStyle;
         private string search = "";
         private List<string> searchedKeys;
 
         public void OnEnable()
         {
+            minSize = new Vector2(200, 100);
             UpdateArrays();
-
-            languageDisplayerStyle = new GUIStyle();
-            languageDisplayerStyle.richText = true;
-            languageDisplayerStyle.fixedHeight = elementHeight;
-            languageDisplayerStyle.fontStyle = FontStyle.Bold;
-            languageDisplayerStyle.fontSize = 12;
-            languageDisplayerStyle.padding = new RectOffset(10, 10, 5, 5);
-
-            keyButtonStyle = new GUIStyle(/*EditorStyles.miniButton*/);
-            keyButtonStyle.fixedHeight = elementHeight;
-            keyButtonStyle.fontSize = 12;
-            keyButtonStyle.padding = new RectOffset(10,10,5,5);
+            
+            languageDisplayerStyle = new GUIStyle
+            {
+                richText = true,
+                fixedHeight = elementHeight,
+                fontStyle = FontStyle.Bold,
+                fontSize = 12,
+                padding = new RectOffset(10, 10, 5, 5)
+            };
         }
 
         private void OnGUI()
         {
             if (GUILayout.Button("Refresh", GUILayout.Height(buttonHeight)))
-            { 
+            {
                 UpdateArrays();
                 GUI.FocusControl(null);
                 Repaint();
@@ -62,15 +58,19 @@ namespace DartCore.Localization
             searchStyle.fontSize = 12;
 
             search = GUILayout.TextField(search, searchStyle);
-            search = search.Replace(' ', '_');
-            search = search.ToLower();
+            search = search.Replace(' ', '_').ToLower();
             Search(search);
 
             GUILayout.Space(10);
-            HorizontalLine(3);
+            EditorScriptingUtils.HorizontalLine(3);
 
-            scrollPos = GUILayout.BeginScrollView(scrollPos,
-                false, true);
+            scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
+
+            var keyButtonStyle = new GUIStyle(EditorStyles.miniButton);
+            keyButtonStyle.fixedHeight = elementHeight;
+            keyButtonStyle.fixedWidth = 100f;
+            keyButtonStyle.fontSize = 12;
+            keyButtonStyle.padding = new RectOffset(10, 10, 5, 5);
 
             for (int i = 0; i < searchedKeys.Count; i++)
             {
@@ -92,14 +92,6 @@ namespace DartCore.Localization
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndScrollView();
-        }
-
-        private void HorizontalLine(int height = 1)
-        {
-            Rect rect = EditorGUILayout.GetControlRect(false, height);
-            rect.height = height;
-
-            EditorGUI.DrawRect(rect, new Color(0.7f, 0.7f, 0.7f, 1));
         }
 
         private void UpdateArrays()

@@ -6,11 +6,10 @@ namespace DartCore.Localization
     public class KeyEditor : EditorWindow
     {
         [MenuItem("DartCore/Localization/Key Editor")]
-        public static void OpenWindow()
+        private static void OpenWindow()
         {
-            var window = new KeyEditor();
+            var window = ScriptableObject.CreateInstance<KeyEditor>();
             window.titleContent = new GUIContent("Key Editor");
-            window.minSize = new Vector2(100, 100);
             window.Show();
         }
 
@@ -18,17 +17,23 @@ namespace DartCore.Localization
         public string keyLastValue;
         public string[] values;
 
-        public void OnGUI()
+        private void OnEnable()
         {
-            var keySearchBarStyle = new GUIStyle(EditorStyles.textField);
-            keySearchBarStyle.fixedWidth = position.width * .99f;
-            keySearchBarStyle.fixedHeight = 23f;
-            keySearchBarStyle.alignment = TextAnchor.MiddleCenter;
-            keySearchBarStyle.fontSize = 12;
+            this.minSize = new Vector2(100f, 100f);
+        }
+
+        private void OnGUI()
+        {
+            var keySearchBarStyle = new GUIStyle(EditorStyles.textField)
+            {
+                fixedWidth = position.width * .99f,
+                fixedHeight = 23f,
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 12
+            };
 
             key = GUILayout.TextField(key, keySearchBarStyle);
-            key = key.Replace(' ','_');
-            key = key.ToLower();
+            key = key.Replace(' ','_').ToLower();
 
             GUILayout.Space(10f);
 
@@ -61,8 +66,8 @@ namespace DartCore.Localization
                 if (GUILayout.Button("Remove Key"))
                 {
                     bool dialogOutput = EditorUtility.DisplayDialog(
-                        $"{key} will be removed",
-                        "Are you sure you want to remove this key ?",
+                        $"{key} will be removed permanently",
+                        "Are you sure you want to remove this key?",
                         "Remove",
                         "Cancel");
                     if (dialogOutput)
