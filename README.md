@@ -44,7 +44,7 @@ SystemLanguage currentLanguage = Localization.GetCurrentLanguage();
 
 
 #### Localizator.GetString()
-This function is used for getting the localized string. It has 2 overloads:
+This function is used for getting the localized value of a given key. It has 2 overloads:
 - `GetString(string key, bool returnErrorString = true)`
 - `GetString(string key, SystemLanguage language, bool returnErrorString = true)`
 
