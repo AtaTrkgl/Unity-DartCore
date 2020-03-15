@@ -84,14 +84,14 @@ ButtonPlus functions same as the standart button of the Unity Engine. It has 2 e
 ![image of the ButtonPlus](https://imgur.com/OMbHuK8.png)
 Properties:
 1. **Tooltip**:
-1.1. **Tooltip Text**: The text of the tooltip. If left blank, tooltip will be disabled.
-1.2. **Tooltip Text Color**: Text color of the tooltip.
-1.3. **Tooltip BG Color**: Text bg of the tooltip.
+  * **Tooltip Text**: The text of the tooltip. If left blank, tooltip will be disabled.
+  * **Tooltip Text Color**: Text color of the tooltip.
+  * **Tooltip BG Color**: Text bg of the tooltip.
 2. **Audio**:
-2.1. **Highlighted Clip**: *AudioClip* that will be played on cursor enter.
-2.2. **Pressed Clip**: *AudioClip* that will be played on cursor click.
-2.3. **Volume**: Volume of the sound effects between 0 and 1.
-2.4. **Audio Mixer Group**: The mixergroup of the sound effects (not mandatory for SFXs).
+  * **Highlighted Clip**: *AudioClip* that will be played on cursor enter.
+  * **Pressed Clip**: *AudioClip* that will be played on cursor click.
+  * **Volume**: Volume of the sound effects between 0 and 1.
+  * **Audio Mixer Group**: The mixergroup of the sound effects (not mandatory for SFXs).
 
 You can access to all of these properties programmatically.
 
@@ -106,25 +106,25 @@ TogglePlus functions same as the standart toggle of the Unity Engine with a lot 
 ![image of the TogglePlus](https://imgur.com/GAwbhZV.png)
 Properties:
 1. **Colors**:
-1.1 **Normal Color**: Color of the background when not pressed or highligted.
-1.2 **Transition Duration**: Transition time between background colors.
-1.3 **Highligted Color**: Color of the background when the cursor is on the toggle.
-1.4 **Disabled Color**: Color of the background when the *isOn* boolean is set to *false*.
+  * **Normal Color**: Color of the background when not pressed or highligted.
+  * **Transition Duration**: Transition time between background colors.
+  * **Highligted Color**: Color of the background when the cursor is on the toggle.
+  * **Disabled Color**: Color of the background when the *isOn* boolean is set to *false*.
 2. **Filing**:
-2.1. **Fill Transition Duration**: The time it takes to transition between the on and off states.
-2.2. **Fill Color**: Color of the filler.
-2.3. **Color Transition Duration**: The time it takes to transition between fill colors.
-2.4. **Anim Type**: Animation of the filling.
-2.5. **Fill Scale**: Scale of the fill between 0 and 1.
+  * **Fill Transition Duration**: The time it takes to transition between the on and off states.
+  * **Fill Color**: Color of the filler.
+  * **Color Transition Duration**: The time it takes to transition between fill colors.
+  * **Anim Type**: Animation of the filling.
+  * **Fill Scale**: Scale of the fill between 0 and 1.
 3. **Tooltip**:
-3.1. **Tooltip Text**: The text of the tooltip. If left blank, tooltip will be disabled.
-3.2. **Tooltip Text Color**: Text color of the tooltip.
-3.3. **Tooltip BG Color**: Text bg of the tooltip.
+  * **Tooltip Text**: The text of the tooltip. If left blank, tooltip will be disabled.
+  * **Tooltip Text Color**: Text color of the tooltip.
+  * **Tooltip BG Color**: Text bg of the tooltip.
 4. **Audio**:
-4.1. **Highlighted Clip**: *AudioClip* that will be played on cursor enter.
-4.2. **Pressed Clip**: *AudioClip* that will be played on cursor click.
-4.3. **Volume**: Volume of the sound effects between 0 and 1.
-4.4. **Audio Mixer Group**: The mixergroup of the sound effects (not mandatory for SFXs).
+  * **Highlighted Clip**: *AudioClip* that will be played on cursor enter.
+  * **Pressed Clip**: *AudioClip* that will be played on cursor click.
+  * **Volume**: Volume of the sound effects between 0 and 1.
+  * **Audio Mixer Group**: The mixergroup of the sound effects (not mandatory for SFXs).
 
 You can access to all of these properties programmatically.
 
