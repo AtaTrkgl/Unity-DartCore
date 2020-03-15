@@ -30,6 +30,7 @@ namespace DartCore.Localization
             if (!keysArrayInitilized)
             {
                 UpdateKeyFile();
+                LoadLanguageFile();
                 keysArrayInitilized = true;
             }
 
@@ -233,6 +234,7 @@ namespace DartCore.Localization
 
             if (!lngDictIsInitilized)
             {
+                LoadLanguageFile();
                 UpdateLanguageDictionary();
                 lngDictIsInitilized = true;
             }

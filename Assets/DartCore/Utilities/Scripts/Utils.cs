@@ -8,7 +8,7 @@ namespace DartCore.Utilities
         #region Average
 
         /// <summary>
-        /// Returns the average of the elements of given array/list
+        /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
         public static float Average(int[] numbers)
         {
@@ -21,7 +21,7 @@ namespace DartCore.Utilities
             return average;
         }
         /// <summary>
-        /// Returns the average of the elements of given array/list
+        /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
         public static float Average(float[] numbers)
         {
@@ -34,7 +34,7 @@ namespace DartCore.Utilities
             return average;
         }
         /// <summary>
-        /// Returns the average of the elements of given array/list
+        /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
         public static float Average(List<int> numbers)
         {
@@ -47,7 +47,7 @@ namespace DartCore.Utilities
             return average;
         }
         /// <summary>
-        /// Returns the average of the elements of given array/list
+        /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
         public static float Average(List<float> numbers)
         {
@@ -97,7 +97,6 @@ namespace DartCore.Utilities
             else
                 return false;
         }
-
         public static Vector2 RandomVector2()
         {
             return new Vector2(Random.Range(0,1), Random.Range(0, 1)).normalized;

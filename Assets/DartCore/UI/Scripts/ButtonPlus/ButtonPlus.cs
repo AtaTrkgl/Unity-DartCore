@@ -24,15 +24,15 @@ namespace DartCore.UI
         #endregion
 
         [Header("Tooltip")]
-        [SerializeField] private string toolTip;
-        [SerializeField] private Color tooltipTextColor = new Color(.2f, .2f, .2f);
-        [SerializeField] private Color tooltipBgColor = new Color(.85f, .85f, .85f);
+        public string toolTip;
+        public Color tooltipTextColor = new Color(.2f, .2f, .2f);
+        public Color tooltipBgColor = new Color(.85f, .85f, .85f);
 
         [Header("Audio")]
-        [SerializeField] private AudioClip highlightedClip;
-        [SerializeField] private AudioClip pressedClip;
-        [SerializeField] private AudioMixerGroup mixerGroup;
-        [SerializeField, Range(0,1)] private float volume = .2f;
+        public AudioClip highlightedClip;
+        public AudioClip pressedClip;
+        public AudioMixerGroup mixerGroup;
+        [Range(0,1)] public float volume = .2f;
 
         private void Click()
         {

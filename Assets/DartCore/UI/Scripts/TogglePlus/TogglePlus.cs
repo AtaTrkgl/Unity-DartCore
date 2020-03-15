@@ -40,19 +40,22 @@ namespace DartCore.UI
 
         [Header("Filling")]
         public float fillTransitionDuration = .1f;
+        private float fillTransDur;
         public Color fillColor = Color.red;
-        public Image.FillMethod animType;
+        public float colorTransitionDuration = .1f;
+        public ToggleFillAnimation animType;
+        [Range(0, 1)] public float fillScale = .8f;
 
         [Header("Tooltip")]
-        [SerializeField] protected string toolTip;
-        [SerializeField] protected Color tooltipTextColor = new Color(.2f, .2f, .2f);
-        [SerializeField] protected Color tooltipBgColor = new Color(.85f, .85f, .85f);
+        public string toolTip;
+        public Color tooltipTextColor = new Color(.2f, .2f, .2f);
+        public Color tooltipBgColor = new Color(.85f, .85f, .85f);
 
         [Header("Audio")]
-        [SerializeField] protected AudioClip highlightedClip;
-        [SerializeField] protected AudioClip pressedClip;
-        [SerializeField] protected AudioMixerGroup mixerGroup;
-        [SerializeField, Range(0, 1)] protected float volume = .2f;
+        public AudioClip highlightedClip;
+        public AudioClip pressedClip;
+        public AudioMixerGroup mixerGroup;
+        [Range(0, 1)] public float volume = .2f;
 
         private Image mask;
         private Image fill;
@@ -78,22 +81,60 @@ namespace DartCore.UI
 #endif
             #endregion
 
+            fillTransDur = fillTransitionDuration;
+
             UpdateFill();
             if (!isInteractive)
                 DisabledState();
             if (isInteractive && !wasInteractive)
                 NormalState();
 
-            DOTween.To(() => fillAmount, x => fillAmount = x, isOn ? 1 : 0, fillTransitionDuration);
-            fill.DOColor(fillColor, .4f);
+            DOTween.To(() => fillAmount, x => fillAmount = x, isOn ? 1 : 0, fillTransDur);
+            if (isOn)
+                fill.DOColor(fillColor, animType == ToggleFillAnimation.Fade ? fillTransDur : colorTransitionDuration);
 
             wasInteractive = isInteractive;
         }
 
         private void UpdateFill()
         {
-            mask.fillMethod = animType;
-            mask.fillAmount = fillAmount;
+            fillScale = Mathf.Clamp(fillScale, 0f, 1f);
+
+            mask.GetComponent<RectTransform>().localScale = Vector2.one * fillScale;
+            switch (animType)
+            {
+                case ToggleFillAnimation.Horizontal:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillMethod = Image.FillMethod.Horizontal;
+                    break;
+                case ToggleFillAnimation.Vertical:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillMethod = Image.FillMethod.Vertical;
+                    break;
+                case ToggleFillAnimation.Radial90:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillMethod = Image.FillMethod.Radial90;
+                    break;
+                case ToggleFillAnimation.Radial180:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillMethod = Image.FillMethod.Radial180;
+                    break;
+                case ToggleFillAnimation.Radial360:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillMethod = Image.FillMethod.Radial360;
+                    break;
+                case ToggleFillAnimation.Fade:
+                    if (!isOn)
+                        fill.DOColor(Color.clear, fillTransDur);
+                    break;
+                case ToggleFillAnimation.None:
+                    fillTransDur = 0f;
+                    break;
+                default:
+                    break;
+            }
+            if (animType != ToggleFillAnimation.Fade)
+                mask.fillAmount = fillAmount;
         }
 
         private void Click()
@@ -136,5 +177,16 @@ namespace DartCore.UI
         public void OnPointerEnter(PointerEventData eventData) => Highlight();
         public void OnPointerExit(PointerEventData eventData) => NormalState();
         #endregion
+    }
+
+    public enum ToggleFillAnimation : byte
+    { 
+        Horizontal = 0,
+        Vertical = 1,
+        Radial90 = 2,
+        Radial180 = 3,
+        Radial360 = 4,
+        Fade = 5,
+        None = 6,
     }
 }

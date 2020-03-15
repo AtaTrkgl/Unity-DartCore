@@ -1,11 +1,26 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DartCore.UI
 {
     public class Tooltip : MonoBehaviour
     {
+        #region Unity Editor
+#if UNITY_EDITOR
+        [MenuItem("DartCore/UI/Tooltip"), MenuItem("GameObject/UI/DartCore/Tooltip")]
+        public static void AddTogglePlus()
+        {
+            GameObject obj = Instantiate(Resources.Load<GameObject>("Tooltip"));
+            obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            obj.name = "Tooltip";
+        }
+#endif
+        #endregion
+
         public static Tooltip instance;
         public static float screenEdgePadding = 10;
 

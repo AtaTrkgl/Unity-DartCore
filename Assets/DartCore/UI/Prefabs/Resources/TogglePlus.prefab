@@ -98,7 +98,9 @@ MonoBehaviour:
   disabledColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
   fillTransitionDuration: 0.1
   fillColor: {r: 1, g: 0, b: 0, a: 1}
+  colorTransitionDuration: 0.7
   animType: 0
+  fillScale: 0.8
   toolTip: 
   tooltipTextColor: {r: 0.36862746, g: 0.36862746, b: 0.36862746, a: 1}
   tooltipBgColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
