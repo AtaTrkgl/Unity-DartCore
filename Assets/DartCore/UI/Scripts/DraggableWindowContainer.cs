@@ -36,6 +36,7 @@ namespace DartCore.UI
 
         private RectTransform containerTrans;
         private RectTransform draggableWindowTrans;
+        private RectTransform canvas;
         private DraggableWindow draggableWindow;
         private Vector2 cursorOffset;
         private bool isDragging = false;
@@ -46,6 +47,7 @@ namespace DartCore.UI
             containerTrans = GetComponent<RectTransform>();
             draggableWindowTrans = transform.Find("DraggableWindow").GetComponent<RectTransform>();
             draggableWindow = transform.Find("DraggableWindow").GetComponent<DraggableWindow>();
+            canvas = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
             UpdatePadding();
         }
 
@@ -53,7 +55,7 @@ namespace DartCore.UI
         {
             if (draggableWindow.isCursorOn && Input.GetMouseButtonDown(0))
             {
-                cursorOffset = Input.mousePosition - draggableWindowTrans.localPosition;
+                cursorOffset = (Vector2)Input.mousePosition/ canvas.lossyScale - (Vector2)draggableWindowTrans.localPosition;
                 isDragging = true;
             }
 
@@ -69,7 +71,7 @@ namespace DartCore.UI
 
         private void FollowCursor()
         {
-            var desiredPos = (Vector2) Input.mousePosition - cursorOffset;
+            var desiredPos = (Vector2)Input.mousePosition/canvas.lossyScale - cursorOffset;
             draggableWindowTrans.DOLocalMove(new Vector2(
                 Mathf.Clamp(desiredPos.x,boundries.x,boundries.y),
                 Mathf.Clamp(desiredPos.y,boundries.z,boundries.w)),

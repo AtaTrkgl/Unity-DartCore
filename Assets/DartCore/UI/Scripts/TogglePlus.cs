@@ -81,8 +81,6 @@ namespace DartCore.UI
 #endif
             #endregion
 
-            fillTransDur = fillTransitionDuration;
-
             UpdateFill();
             if (!isInteractive)
                 DisabledState();
@@ -124,6 +122,8 @@ namespace DartCore.UI
                     mask.fillMethod = Image.FillMethod.Radial360;
                     break;
                 case ToggleFillAnimation.Fade:
+                    fillTransDur = fillTransitionDuration;
+                    mask.fillAmount = 1;
                     if (!isOn)
                         fill.DOColor(Color.clear, fillTransDur);
                     break;

@@ -36,6 +36,7 @@ namespace DartCore.Localization
             key = key.Replace(' ','_').ToLower();
 
             GUILayout.Space(10f);
+            Localizator.UpdateKeyFile();
 
             if (key != keyLastValue)
                 values = new string[Localizator.GetLanguageCount()];
@@ -51,7 +52,7 @@ namespace DartCore.Localization
                     EditorGUILayout.LabelField($"{Localizator.GetAvailableLanguages()[i]}: ", GUILayout.MaxWidth(50));
 
                     EditorStyles.textArea.wordWrap = true;
-                    values[i] = EditorGUILayout.TextArea(values[i], EditorStyles.textField, GUILayout.Height(position.height * .1f), GUILayout.Width(position.width * .75f));
+                    values[i] = EditorGUILayout.TextArea(values[i], EditorStyles.textField, GUILayout.Height(position.height * .23f), GUILayout.Width(position.width * .75f));
                     GUILayout.EndHorizontal();
                 }
                 GUILayout.EndScrollView();

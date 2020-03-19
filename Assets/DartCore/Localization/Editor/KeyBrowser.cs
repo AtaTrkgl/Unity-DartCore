@@ -17,6 +17,7 @@ namespace DartCore.Localization
         }
 
         public string[] keys;
+        private bool keysInit = false;
         public SystemLanguage[] currentLanguages;
         public const int buttonHeight = 30;
         public const int elementHeight = 23;
@@ -29,8 +30,10 @@ namespace DartCore.Localization
         public void OnEnable()
         {
             minSize = new Vector2(200, 100);
-            UpdateArrays();
-            
+        }
+
+        private void OnGUI()
+        {
             languageDisplayerStyle = new GUIStyle
             {
                 richText = true,
@@ -39,16 +42,14 @@ namespace DartCore.Localization
                 fontSize = 12,
                 padding = new RectOffset(10, 10, 5, 5)
             };
-        }
 
-        private void OnGUI()
-        {
-            if (GUILayout.Button("Refresh", GUILayout.Height(buttonHeight)))
+            if (GUILayout.Button("Refresh", GUILayout.Height(buttonHeight)) || !keysInit)
             {
+                keysInit = true;
                 UpdateArrays();
-                GUI.FocusControl(null);
                 Repaint();
             }
+
             GUILayout.Space(10);
 
             var searchStyle = new GUIStyle(EditorStyles.textField);
@@ -66,12 +67,15 @@ namespace DartCore.Localization
 
             scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
 
-            var keyButtonStyle = new GUIStyle(EditorStyles.miniButton);
-            keyButtonStyle.fixedHeight = elementHeight;
-            keyButtonStyle.fixedWidth = 100f;
-            keyButtonStyle.fontSize = 12;
-            keyButtonStyle.padding = new RectOffset(10, 10, 5, 5);
+            var keyButtonStyle = new GUIStyle(EditorStyles.miniButton)
+            {
+                fixedHeight = elementHeight,
+                fixedWidth = 100f,
+                fontSize = 12,
+                padding = new RectOffset(10, 10, 5, 5)
+            };
 
+            Localizator.UpdateKeyFile();
             for (int i = 0; i < searchedKeys.Count; i++)
             {
                 GUILayout.BeginHorizontal();
@@ -96,10 +100,10 @@ namespace DartCore.Localization
 
         private void UpdateArrays()
         {
+            Localizator.RefreshAll();
             keys = Localizator.GetKeys();
             Array.Sort(keys);
             currentLanguages = Localizator.GetAvailableLanguages();
-            Repaint();
         }
 
         private void Search(string search)

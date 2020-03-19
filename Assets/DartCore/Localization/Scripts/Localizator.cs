@@ -57,7 +57,9 @@ namespace DartCore.Localization
             if (!DoesContainKey(key))
             {
                 File.AppendAllText(lngFilesPath + keysFileName + ".txt", "\n"+key);
+#if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
+#endif
                 UpdateKeyFile();
             }
         }
@@ -103,7 +105,9 @@ namespace DartCore.Localization
                     File.WriteAllText(lngFilesPath + languageNames[language] + ".txt", newText);
                 }
             }
+#if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
+#endif
             UpdateKeyFile();
             LoadLanguageFile();
         }
@@ -138,17 +142,16 @@ namespace DartCore.Localization
                 }
 
                 File.WriteAllText(lngFilesPath + languageNames[language] + ".txt", endString);
+#if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
+#endif
             }
         }
 
         private static void LoadLanguageFile()
         {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
+            UpdateLanguageDictionary();
+            lngDictIsInitilized = true;
 
             currentLanguageArray = Resources.Load<TextAsset>(languageNames[currentLanguage]).text.Split('\n');
         }
@@ -223,9 +226,6 @@ namespace DartCore.Localization
 
         public static string GetString(string key, SystemLanguage language, bool returnErrorString = true)
         {
-            if (!languageNames.ContainsKey(language))
-                return "";
-
             if (!keysArrayInitilized)
             {
                 UpdateKeyFile();
@@ -238,6 +238,9 @@ namespace DartCore.Localization
                 UpdateLanguageDictionary();
                 lngDictIsInitilized = true;
             }
+
+            if (!languageNames.ContainsKey(language))
+                return "";
 
             var languageArray = Resources.Load<TextAsset>(languageNames[language]).text.Split('\n');
 
@@ -261,7 +264,12 @@ namespace DartCore.Localization
 
         public static bool DoesContainKey(string key)
         {
-            UpdateKeyFile();
+            if (!keysArrayInitilized)
+            {
+                UpdateKeyFile();
+                keysArrayInitilized = true;
+            }
+
             return GetIndexOfKey(key) != -1;
         }
 
@@ -283,7 +291,7 @@ namespace DartCore.Localization
 
         public static void CreateLanguage(SystemLanguage language, string fileName, string lngName, string lngErrorMessage)
         {
-            fileName = fileName.Trim();
+            fileName = fileName.Trim().Replace(' ','_');
             if (lngName == "")
                 lngName = language.ToString();
             if (lngErrorMessage == "")
@@ -309,7 +317,9 @@ namespace DartCore.Localization
                 }
                 text = text.Remove(text.Length - 1);
                 File.WriteAllText(lngFilesPath + lngNamesFile + ".txt", text);
+#if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
+#endif
                 UpdateLanguageDictionary();
             }
             
@@ -319,7 +329,7 @@ namespace DartCore.Localization
         {
             if (languageNames.Values.Count == 1)
             {
-                Debug.Log("You can not remove the only language available");
+                Debug.LogError("You can not remove the only language available");
                 return;
             }
 
@@ -356,6 +366,15 @@ namespace DartCore.Localization
         public static SystemLanguage GetCurrentLanguage()
         {
             return currentLanguage;
+        }
+
+        public static void RefreshAll()
+        {
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+            UpdateKeyFile();
+            LoadLanguageFile();
         }
     }
 }

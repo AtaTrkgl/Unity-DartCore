@@ -22,7 +22,7 @@ namespace DartCore.UI
         #endregion
 
         public static Tooltip instance;
-        public static float screenEdgePadding = 10;
+        public static float screenEdgePadding = 10f;
 
         private TextMeshProUGUI text;
         private RectTransform bg;
@@ -65,17 +65,22 @@ namespace DartCore.UI
 
         private void FollowCursor()
         {
-            float maxX = canvas.sizeDelta.x / 2 * canvas.lossyScale.x;
-            float maxY = canvas.sizeDelta.y / 2 * canvas.lossyScale.y;
+            float screenWidth = canvas.sizeDelta.x;
+            float screenHeight = canvas.sizeDelta.y;
 
             // Input.MousePos returns cordinates where the bottom left 
-            // side of the screen is 0,0 and the top right part is w,h
-            var desiredPos = (Vector2) Input.mousePosition - new Vector2(maxX, maxY);
+            // side of the screen is (0,0) and the top right corner is (w * canvas scale,h * canvas scale)
+            Vector2 realMosPos = (Vector2)Input.mousePosition / canvas.lossyScale;
+            var desiredPos = realMosPos - new Vector2(screenWidth / 2, screenHeight / 2);
 
             desiredPos = new Vector2(
-                Mathf.Clamp(desiredPos.x, -maxX + screenEdgePadding, maxX - bg.sizeDelta.x - screenEdgePadding),
-                Mathf.Clamp(desiredPos.y, -maxY + screenEdgePadding, maxY - bg.sizeDelta.y - screenEdgePadding));
-            transform.localPosition = desiredPos;
+                Mathf.Clamp(desiredPos.x,
+                -screenWidth / 2 + screenEdgePadding, // no bg size because of the pivot of it
+                screenWidth / 2 - screenEdgePadding - bg.sizeDelta.x),
+                Mathf.Clamp(desiredPos.y,
+                -screenHeight / 2 + screenEdgePadding, // no bg size because of the pivot of it
+                screenHeight / 2 - screenEdgePadding - bg.sizeDelta.y));
+            GetComponent<RectTransform>().localPosition = desiredPos;
         }
 
         public static void ShowToolTip_Static(string tooltipString, Color textColor, Color bgColor)
