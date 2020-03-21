@@ -84,11 +84,25 @@ namespace DartCore.UI
         }
 
         public static void ShowToolTip_Static(string tooltipString, Color textColor, Color bgColor)
-            => instance.ShowToolTip(tooltipString, textColor, bgColor);
+        {
+            CheckInstance();
+
+            instance.ShowToolTip(tooltipString, textColor, bgColor);
+        }
         public static void HideToolTip_Static()
-        { 
-            if (instance)
-                 instance.HideToolTip();
+        {
+            CheckInstance();
+
+            instance.HideToolTip();
+        }
+
+        private static void CheckInstance()
+        {
+            if (!instance)
+            { 
+                instance = Instantiate(Resources.Load<GameObject>("Tooltip")).GetComponent<Tooltip>();
+                instance.transform.SetParent(GameObject.FindObjectOfType<Canvas>().transform);
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace DartCore.UI
         Bar = 2,
     }
 
+    [SelectionBase, ExecuteInEditMode]
     public class Graph : MonoBehaviour
     {
         #region Unity Editor
@@ -31,7 +32,8 @@ namespace DartCore.UI
 
         [SerializeField] private Sprite markerSprite;
         [SerializeField] private Sprite barSprite;
-        [SerializeField] private float padding = 53f;
+        [SerializeField] private float graphElementsPadding = 53f;
+        [SerializeField] private float graphBGPadding = 25f;
         [SerializeField] private float markerScale = 11f;
         [SerializeField] private float markerConnectorScale = 3f;
         [SerializeField] private bool displayTooltips = true;
@@ -46,6 +48,14 @@ namespace DartCore.UI
             graphContainer = transform.Find("Graphics Container").GetComponent<RectTransform>();
             markersParent = graphContainer.transform.Find("Markers").GetComponent<RectTransform>();
             connectorsParent = graphContainer.transform.Find("Connectors").GetComponent<RectTransform>();
+
+            graphContainer.anchorMin = Vector2.zero;
+            graphContainer.anchorMax = Vector2.zero;
+        }
+
+        private void Update()
+        {
+            UpdateGraphicsContainerSize();
         }
 
         public void ShowGraph(List<int> valueList, GraphType graphType, bool ignoreMaxHeight)
@@ -89,13 +99,13 @@ namespace DartCore.UI
             if (ignoreMaxHeight || valueList[greatestIndex] > maxHeight)
                 yMax = valueList[greatestIndex];
 
-            float xSize = (graphContainer.sizeDelta.x - 2 * padding) / (valueList.Count > 1 ? valueList.Count : 2);
+            float xSize = (graphContainer.sizeDelta.x - 2 * graphElementsPadding) / (valueList.Count > 1 ? valueList.Count : 2);
             GameObject lastMarker = null;
 
             for (int i = 0; i < valueList.Count; i++)
             {
                 valueList[i] = (int) Mathf.Clamp(valueList[i],0f , yMax);
-                float xPos = (i + .5f) * xSize + padding;
+                float xPos = (i + .5f) * xSize + graphElementsPadding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
                 var marker = CreateMarker(new Vector2(xPos, yPos), displayTooltips, valueList[i].ToString());
                 if (lastMarker != null && !isDotGraph)
@@ -121,12 +131,12 @@ namespace DartCore.UI
             if (ignoreMaxHeight || valueList[greatestIndex] > maxHeight)
                 yMax = valueList[greatestIndex];
 
-            float xSize = (graphContainer.sizeDelta.x - 2 * padding) / (valueList.Count > 1 ? valueList.Count : 2);
+            float xSize = (graphContainer.sizeDelta.x - 2 * graphElementsPadding) / (valueList.Count > 1 ? valueList.Count : 2);
 
             for (int i = 0; i < valueList.Count; i++)
             {
                 valueList[i] = (int)Mathf.Clamp(valueList[i], 0f, yMax);
-                float xPos = (i + .5f) * xSize + padding;
+                float xPos = (i + .5f) * xSize + graphElementsPadding;
                 float yPos = (valueList[i] / yMax) * graphHeight + markerScale;
                 CreateBar(yPos, xPos, xSize/2, displayTooltips, valueList[i].ToString());
             }
@@ -192,6 +202,12 @@ namespace DartCore.UI
 
             foreach (Transform child in connectorsParent)
                 Destroy(child.gameObject);
+        }
+
+        private void UpdateGraphicsContainerSize()
+        {
+            graphContainer.sizeDelta = GetComponent<RectTransform>().sizeDelta - Vector2.one * 2 * graphBGPadding;
+            graphContainer.anchoredPosition = Vector2.one * graphBGPadding;
         }
 
     }
