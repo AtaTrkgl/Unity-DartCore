@@ -5,7 +5,7 @@ using DartCore.Utilities;
 
 namespace DartCore.UI
 {
-    [ExecuteInEditMode]
+    [ExecuteInEditMode, RequireComponent(typeof(Image))]
     public class InputVisualizer : MonoBehaviour
     {
         public bool autoPickController = false;
@@ -34,11 +34,18 @@ namespace DartCore.UI
 
         private void UpdateImage()
         {
-            string path = "Input Icons/Controller Icons/" + currentController.ToString() + "/" + key.ToString() + "_" + style;
+            string folderName = "XBox"; // Default Folder
+            if (currentController == ControllerType.Dualshock3 || currentController == ControllerType.Dualshock4)
+                folderName = "PS";
+            else if (currentController == ControllerType.XBoxOne || currentController == ControllerType.XBox360)
+                folderName = "XBox";
+
+            string path = "Input Icons/Controller Icons/" + folderName + "/" + key.ToString() + "_" + style;
             if (Resources.Load(path))
             {
                 var image = Resources.Load<Sprite>(path);
                 GetComponent<Image>().sprite = image;
+                return;
             }
         }
 

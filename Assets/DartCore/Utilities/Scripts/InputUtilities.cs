@@ -103,8 +103,10 @@ namespace DartCore.Utilities
 
     public enum ControllerKey
     { 
-        Trigger = 0,
-        Bumper = 1,
+        RightTrigger = 0,
+        LeftTrigger = 15,
+        RightBumper = 1,
+        LeftBumper = 16,
         LeftStick = 2,
         LeftStickButton = 3,
         RightStick =  4,
