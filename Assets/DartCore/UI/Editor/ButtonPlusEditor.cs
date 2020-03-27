@@ -12,6 +12,7 @@ namespace DartCore.UI
             base.OnInspectorGUI();
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("toolTip"), new GUIContent("Tooltip Text"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("localizeText"), new GUIContent("Localize Tooltip"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipTextColor"), new GUIContent("Tooltip Text Color"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipBgColor"), new GUIContent("Tooltip BG Color"));

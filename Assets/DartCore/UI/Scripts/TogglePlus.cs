@@ -48,6 +48,7 @@ namespace DartCore.UI
 
         [Header("Tooltip")]
         public string toolTip;
+        [Tooltip("toolTip will be used as a key if set to true")] public bool localizeTooltip = false;
         public Color tooltipTextColor = new Color(.2f, .2f, .2f);
         public Color tooltipBgColor = new Color(.85f, .85f, .85f);
 
@@ -153,7 +154,7 @@ namespace DartCore.UI
             { 
                 GetComponent<Image>().DOColor(highlightedColor, transitionDuration);
                 if (toolTip.Length > 0)
-                    Tooltip.ShowToolTip_Static(toolTip, tooltipTextColor, tooltipBgColor);
+                    Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeTooltip);
                 UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
             }
         }
@@ -163,7 +164,7 @@ namespace DartCore.UI
             { 
                 GetComponent<Image>().DOColor(normalColor, transitionDuration);
                 if (toolTip.Length > 0)
-                    Tooltip.HideToolTip_Static();
+                    Tooltip.HideTooltipStatic();
             }
         }
         protected void DisabledState()

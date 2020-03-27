@@ -11,6 +11,8 @@ namespace DartCore.Localization
         {
             text = GetComponent<TextMeshProUGUI>();
             UpdateLanguage();
+
+            Localizator.OnLanguageChange += UpdateLanguage;
         }
 
         public void UpdateLanguage()

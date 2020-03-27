@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using System.IO;
+using System;
 
 namespace DartCore.Localization
 {
@@ -164,8 +165,10 @@ namespace DartCore.Localization
             currentLanguage = language;
             LoadLanguageFile();
 
-            foreach (LanguageUpdater lngUpdater in GameObject.FindObjectsOfType<LanguageUpdater>())
-                lngUpdater.UpdateLanguage();
+            //foreach (LanguageUpdater lngUpdater in GameObject.FindObjectsOfType<LanguageUpdater>())
+            //    lngUpdater.UpdateLanguage();
+            if (OnLanguageChange != null)
+                OnLanguageChange();
 
             return true;
         }
@@ -376,5 +379,9 @@ namespace DartCore.Localization
             UpdateKeyFile();
             LoadLanguageFile();
         }
+
+        public delegate void LanguageChange();
+
+        public static event LanguageChange OnLanguageChange;
     }
 }

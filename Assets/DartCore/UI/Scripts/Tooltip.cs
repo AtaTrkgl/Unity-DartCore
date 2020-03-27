@@ -1,32 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using DartCore.Localization;
 
 namespace DartCore.UI
 {
     public class Tooltip : MonoBehaviour
     {
-        #region Unity Editor
-#if UNITY_EDITOR
-        [MenuItem("DartCore/UI/Tooltip"), MenuItem("GameObject/UI/DartCore/Tooltip")]
-        public static void AddTogglePlus()
-        {
-            GameObject obj = Instantiate(Resources.Load<GameObject>("Tooltip"));
-            obj.transform.SetParent(Selection.activeGameObject.transform, false);
-            obj.name = "Tooltip";
-        }
-#endif
-        #endregion
-
         public static Tooltip instance;
         public static float screenEdgePadding = 10f;
+
+        private static Color textColor;
+        private static Color bgColor;
+        private static bool localizeText;
+        private static string tooltipString;
 
         private TextMeshProUGUI text;
         private RectTransform bg;
         private RectTransform canvas;
+
 
         private void Awake()
         {
@@ -35,7 +27,7 @@ namespace DartCore.UI
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
             canvas = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
 
-            HideToolTip();
+            Localizator.OnLanguageChange += UpdateTooltip;
         }
 
         private void Update()
@@ -47,18 +39,26 @@ namespace DartCore.UI
             FollowCursor();
         }
 
-        private void ShowToolTip(string tooltipString, Color textColor, Color bgColor)
+        private void ShowTooltip(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
         {
-            text.text = tooltipString;
-            bg.GetComponent<Image>().color = bgColor;
+            Tooltip.textColor = textColor;
+            Tooltip.bgColor = bgColor;
+            Tooltip.localizeText = localizeText;
+            Tooltip.tooltipString = tooltipString;
 
-            text.color = textColor;
-
+            instance.UpdateTooltip();
             FollowCursor();
             gameObject.SetActive(true);
         }
 
-        private void HideToolTip()
+        private void UpdateTooltip()
+        {
+            bg.GetComponent<Image>().color = bgColor;
+            text.color = textColor;
+            text.text = localizeText ? Localizator.GetString(tooltipString) : tooltipString;
+        }
+
+        private void HideTooltip()
         {
             gameObject.SetActive(false);
         }
@@ -83,26 +83,52 @@ namespace DartCore.UI
             GetComponent<RectTransform>().localPosition = desiredPos;
         }
 
-        public static void ShowToolTip_Static(string tooltipString, Color textColor, Color bgColor)
+        public static void ShowTooltipStatic(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
         {
             CheckInstance();
 
-            instance.ShowToolTip(tooltipString, textColor, bgColor);
+            instance.ShowTooltip(tooltipString, textColor, bgColor, localizeText);
         }
-        public static void HideToolTip_Static()
+        public static void HideTooltipStatic()
         {
             CheckInstance();
 
-            instance.HideToolTip();
+            instance.HideTooltip();
+        }
+        public static void UpdateTooltipStatic()
+        {
+            CheckInstance();
+
+            instance.UpdateTooltip();
         }
 
         private static void CheckInstance()
         {
             if (!instance)
-            { 
-                instance = Instantiate(Resources.Load<GameObject>("Tooltip")).GetComponent<Tooltip>();
-                instance.transform.SetParent(GameObject.FindObjectOfType<Canvas>().transform);
+            {
+                if(GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip"))
+                {
+                    if (GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").GetComponent<Tooltip>())
+                    {
+                        GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").gameObject.SetActive(true);
+                        instance = GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").GetComponent<Tooltip>();
+                        return;
+                    }
+                }
+
+                var obj = Instantiate(Resources.Load<GameObject>("Tooltip")) as GameObject;
+                obj.name = "Tooltip";
+                instance = obj.GetComponent<Tooltip>();
+                instance = instance.GetComponent<Tooltip>();
+                instance.transform.SetParent(GameObject.FindObjectOfType<Canvas>().transform, false);
             }
+        }
+
+        public void ChangeFont(TMP_FontAsset desiredFont)
+        {
+            CheckInstance();
+
+            instance.transform.Find("text").GetComponent<TextMeshProUGUI>().font = desiredFont;
         }
     }
 }

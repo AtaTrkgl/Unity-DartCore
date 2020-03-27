@@ -3,3 +3,7 @@ Lokalizasyon Hatası
 Test Anahtarı 1
 
 <color=green><u><link=clear>Buraya</link></u></color> basarak tabloyu temizle!
+
+
+Tooltip Tr
+Dil Değiştir

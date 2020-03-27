@@ -5,3 +5,5 @@ test_key2
 hyper_link
 test_key3
 new_key2
+tooltip0
+switch_key

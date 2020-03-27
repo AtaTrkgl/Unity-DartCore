@@ -50,7 +50,7 @@ namespace DartCore.UI
         private Image innerCircle;
         private Image outerCircleMask;
         private Image bgImage;
-        [Range(0f,5.5f)] public float outerCircleRadius = 5f;
+        [Range(0f,10f)] public float outerCircleRadius = 5f;
         private float currentOuterCircleRadius;
 
         private void Awake()

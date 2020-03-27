@@ -5,3 +5,5 @@ Test Key 1
 Click <color=green><u><link=clear>here</link></u></color> to clear the graph!
 Test Key 3
 NewKey2
+Tooltip En
+Change Language

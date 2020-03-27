@@ -27,6 +27,7 @@ namespace DartCore.UI
         public string toolTip;
         public Color tooltipTextColor = new Color(.2f, .2f, .2f);
         public Color tooltipBgColor = new Color(.85f, .85f, .85f);
+        [Tooltip("toolTip will be used as a key if set to true")] public bool localizeText = false;
 
         [Header("Audio")]
         public AudioClip highlightedClip;
@@ -47,7 +48,7 @@ namespace DartCore.UI
             if (base.interactable)
             {
                 if (toolTip.Length > 0)
-                    Tooltip.HideToolTip_Static();
+                    Tooltip.HideTooltipStatic();
             }
         }
 
@@ -56,7 +57,7 @@ namespace DartCore.UI
             if (base.interactable)
             {
                 if (toolTip.Length > 0)
-                    Tooltip.ShowToolTip_Static(toolTip, tooltipTextColor, tooltipBgColor);
+                    Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeText);
                 UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
             }
         }
