@@ -60,6 +60,32 @@ namespace DartCore.Utilities
         {
             return !string.IsNullOrWhiteSpace(Input.GetJoystickNames()[0]);
         }
+
+        public static ControllerType GetMainController()
+        {
+            if (Input.GetJoystickNames().Length <= 0)
+                return ControllerType.None;
+
+            switch (Input.GetJoystickNames()[0])
+            {
+                case "PlayStation 3 Controller":
+                    return ControllerType.Dualshock3;
+                case "Wireless Controller":
+                    return ControllerType.Dualshock4;
+                case "XBox 360 Controller":
+                    return ControllerType.XBox360;
+                case "XBox One Controller":
+                    return ControllerType.XBoxOne;
+                case "Logitech F310 Controller":
+                    return ControllerType.LogitechF310;
+                case "Logitech F510 Controller":
+                    return ControllerType.LogitechF510;
+                case "Logitech F710 Controller":
+                    return ControllerType.LogitechF710;
+                default:
+                    return ControllerType.None;
+            }
+        }
     }
 
     public enum ControllerType
@@ -72,5 +98,25 @@ namespace DartCore.Utilities
         LogitechF510 = 5,
         LogitechF710 = 6,
         Other = 100,
+        None = 101,
+    }
+
+    public enum ControllerKey
+    { 
+        Trigger = 0,
+        Bumper = 1,
+        LeftStick = 2,
+        LeftStickButton = 3,
+        RightStick =  4,
+        RightStickButton = 5,
+        Dpad = 6,
+        DpadTop = 7,
+        DpadBottom = 8,
+        DpadRight = 9,
+        DpadLeft = 10,
+        TopButton = 11,
+        BottomButton = 12,
+        LeftButton = 13,
+        RightButton = 14
     }
 }
