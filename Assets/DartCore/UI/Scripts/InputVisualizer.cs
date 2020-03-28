@@ -3,26 +3,38 @@ using UnityEngine;
 using UnityEngine.UI;
 using DartCore.Utilities;
 
+# if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace DartCore.UI
 {
     [ExecuteInEditMode, RequireComponent(typeof(Image))]
     public class InputVisualizer : MonoBehaviour
     {
+        #region Unity Editor
+#if UNITY_EDITOR
+        [MenuItem("DartCore/UI/Input Visualizer"), MenuItem("GameObject/UI/DartCore/Input Visualizer")]
+        public static void AddButtonPlus()
+        {
+            GameObject obj = Instantiate(Resources.Load<GameObject>("InputVisualizer"));
+            obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            obj.name = "New Input Visualizer";
+        }
+#endif
+        #endregion
+
         public bool autoPickController = false;
+        public bool disableOnKeyboard = false;
         public ControllerType currentController = ControllerType.XBoxOne;
         [Range(0,3)]public int style = 0;
         public ControllerKey key;
 
-        void Start()
+        private void Update()
         {
             if (autoPickController)
                 AutoPickController();
 
-            UpdateImage();
-        }
-
-        private void Update()
-        {
             UpdateImage();
         }
 
@@ -39,12 +51,18 @@ namespace DartCore.UI
                 folderName = "PS";
             else if (currentController == ControllerType.XBoxOne || currentController == ControllerType.XBox360)
                 folderName = "XBox";
+            else if (disableOnKeyboard && currentController == ControllerType.None)
+            {
+                GetComponent<Image>().enabled = false;
+                return;
+            }
 
             string path = "Input Icons/Controller Icons/" + folderName + "/" + key.ToString() + "_" + style;
             if (Resources.Load(path))
             {
                 var image = Resources.Load<Sprite>(path);
                 GetComponent<Image>().sprite = image;
+                GetComponent<Image>().enabled = true;
                 return;
             }
         }
