@@ -58,5 +58,4 @@ public class BarManager : MonoBehaviour
         else
             graph.ShowGraph(values, GraphType.Bar, true);
     }
-
 }
