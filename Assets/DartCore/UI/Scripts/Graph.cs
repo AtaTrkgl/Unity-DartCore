@@ -30,13 +30,21 @@ namespace DartCore.UI
 #endif
         #endregion
 
+        [Header("Marker")]
         [SerializeField] private Sprite markerSprite;
         [SerializeField] private Sprite barSprite;
-        [SerializeField] private float graphElementsPadding = 53f;
-        [SerializeField] private float graphBGPadding = 25f;
         [SerializeField] private float markerScale = 11f;
         [SerializeField] private float markerConnectorScale = 3f;
+        [SerializeField] private Color markerColor;
+
+        [Header("Graph")]
+        [SerializeField] private float graphElementsPadding = 53f;
+        [SerializeField] private float graphBGPadding = 25f;
+
+        [Header("Tooltip")]
         [SerializeField] private bool displayTooltips = true;
+        [SerializeField] private Color tooltipBgColor;
+        [SerializeField] private Color tooltipTextColor;
         public float maxHeight = 100;
 
         private RectTransform graphContainer;
@@ -162,6 +170,7 @@ namespace DartCore.UI
             var gameObj = new GameObject("marker", typeof(Image));
             gameObj.transform.SetParent(markersParent, false);
             gameObj.GetComponent<Image>().sprite = markerSprite;
+            gameObj.GetComponent<Image>().color = markerColor;
 
             var rectTrans = gameObj.GetComponent<RectTransform>();
             rectTrans.anchoredPosition = anchoredPos;
@@ -173,6 +182,8 @@ namespace DartCore.UI
             {
                 gameObj.AddComponent<TooltipTarget>();
                 gameObj.GetComponent<TooltipTarget>().toolTip = toolTipText;
+                gameObj.GetComponent<TooltipTarget>().tooltipBgColor = tooltipBgColor;
+                gameObj.GetComponent<TooltipTarget>().tooltipTextColor = tooltipTextColor;
             }
 
             return gameObj;
@@ -183,8 +194,16 @@ namespace DartCore.UI
             var gameObj = new GameObject("marker", typeof(Image));
             gameObj.transform.SetParent(markersParent, false);
             gameObj.GetComponent<Image>().sprite = barSprite;
-            gameObj.AddComponent<TooltipTarget>();
-            gameObj.GetComponent<TooltipTarget>().toolTip = tooltipText;
+            gameObj.GetComponent<Image>().color = markerColor;
+
+            if (displayTooltips)
+            {
+                gameObj.AddComponent<TooltipTarget>();
+                gameObj.GetComponent<TooltipTarget>().toolTip = tooltipText;
+                gameObj.GetComponent<TooltipTarget>().tooltipBgColor = tooltipBgColor;
+                gameObj.GetComponent<TooltipTarget>().tooltipTextColor = tooltipTextColor;
+            }
+            
 
             var rectTrans = gameObj.GetComponent<RectTransform>();
             rectTrans.anchoredPosition = new Vector2(xPos, 0);

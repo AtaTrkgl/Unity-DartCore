@@ -109,6 +109,39 @@ namespace DartCore.Utilities
         {
             return new Vector4(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)).normalized;
         }
+
+        public static float[] RandomFloatArray(int length, float minVal, float maxVal)
+        {
+            float[] array = new float[length];
+            for (int i = 0; i < length; i++)
+                array[i] = Random.Range(minVal, maxVal);
+
+            return array;
+        }
+        public static List<float> RandomFloatList(int length, float minVal, float maxVal)
+        {
+            List<float> list = new List<float>();
+            for (int i = 0; i < length; i++)
+                list.Add(Random.Range(minVal, maxVal));
+
+            return list;
+        }
+        public static int[] RandomIntArray(int length, int minVal, int maxVal)
+        {
+            int[] array = new int[length];
+            for (int i = 0; i < length; i++)
+                array[i] = Random.Range(minVal, maxVal);
+
+            return array;
+        }
+        public static List<int> RandomIntList(int length, int minVal, int maxVal)
+        {
+            List<int> list = new List<int>();
+            for (int i = 0; i < length; i++)
+                list.Add(Random.Range(minVal, maxVal));
+
+            return list;
+        }
         #endregion
 
         #region Range
@@ -134,6 +167,31 @@ namespace DartCore.Utilities
             else
                 return false;
 
+        }
+
+        #endregion
+
+        #region sum
+
+        public static float SumList(List<int> listToSum)
+        {
+            float sum = 0;
+            if (listToSum == null)
+                return sum;
+
+            foreach (var item in listToSum)
+                sum += item;
+            return sum;
+        }
+        public static float SumList(List<float> listToSum)
+        {
+            float sum = 0;
+            if (listToSum == null)
+                return sum;
+
+            foreach (var item in listToSum)
+                sum += item;
+            return sum;
         }
 
         #endregion
