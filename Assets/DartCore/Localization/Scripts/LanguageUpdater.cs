@@ -20,6 +20,9 @@ namespace DartCore.Localization
             if (!text)
                 text = GetComponent<TextMeshProUGUI>();
             text.text = Localizator.GetString(key);
+
+            if (GetComponent<HyperLink>())
+                GetComponent<HyperLink>().UpdateLinkColors();
         }
     }
 }

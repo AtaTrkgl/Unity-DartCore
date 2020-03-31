@@ -35,7 +35,8 @@ namespace DartCore.UI
         [SerializeField] private Sprite barSprite;
         [SerializeField] private float markerScale = 11f;
         [SerializeField] private float markerConnectorScale = 3f;
-        [SerializeField] private Color markerColor;
+        [SerializeField] private Color markerColor = Color.white;
+        [SerializeField] private Color markerConnectorColor = Color.white;
 
         [Header("Graph")]
         [SerializeField] private float graphElementsPadding = 53f;
@@ -155,6 +156,9 @@ namespace DartCore.UI
         {
             GameObject gameObj = new GameObject("markerConnection", typeof(Image));
             gameObj.transform.SetParent(connectorsParent, false);
+
+            gameObj.GetComponent<Image>().color = markerConnectorColor;
+
             RectTransform rectTrans = gameObj.GetComponent<RectTransform>();
             rectTrans.anchorMin = Vector2.zero;
             rectTrans.anchorMax = Vector2.zero;
