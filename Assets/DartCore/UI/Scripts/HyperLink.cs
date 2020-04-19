@@ -48,46 +48,87 @@ public class HyperLink : MonoBehaviour, IPointerClickHandler
 
     public void UpdateLinkColors()
     {
-        foreach (var link in links)
-        {
-            // Locating the link
-            string value = text.text;
-
-            string desiredStart = $"<link={link.name}>";
-            string desiredEnd = "</link>";
-
-            int startIndex = value.IndexOf(desiredStart);
-            int endIndex = value.IndexOf(desiredEnd, startIndex + desiredStart.Length) + desiredEnd.Length;
-
-            // Customizing the link
-
-            string start;
-            if (calculateAlpha)
-                start = $"<color=#{ColorUtility.ToHtmlStringRGB(linkColor)}ff>";
-            else
-                start = $"<color=#{ColorUtility.ToHtmlStringRGBA(linkColor)}>";
-
-            string end = "</color>";
-
-            if (makeBold)
-            {
-                start = start.Insert(0,"<b>");
-                end = end.Insert(0,"</b>");
-            }
-            if (addUnderLines)
-            {
-                // adding the underline inside colors so that the
-                // underlines are not set white.
-                start = start.Insert(start.Length, "<u>");
-                end = end.Insert(end.Length, "</u>");
-            }
-
-            value = value.Insert(endIndex, end);
-            value = value.Insert(startIndex, start);
-
-            Debug.Log(value);
-            text.text = value;
+        int[] indexes = new int[links.Length];
+        bool[] foundLink = new bool[links.Length];
+        for (int i = 0; i < links.Length; i++)
+        { 
+            foundLink[i] = true;
+            indexes[i] = 0;
         }
+
+        string start;
+        if (!calculateAlpha)
+            start = $"<color=#{ColorUtility.ToHtmlStringRGB(linkColor)}ff>";
+        else
+            start = $"<color=#{ColorUtility.ToHtmlStringRGBA(linkColor)}>";
+
+        string end = "</color>";
+
+        if (makeBold)
+        {
+            start = start.Insert(0, "<b>");
+            end = end.Insert(0, "</b>");
+        }
+        if (addUnderLines)
+        {
+            // adding the underline inside colors so that the
+            // underlines are not set white.
+            start = start.Insert(start.Length, "<u>");
+            end = end.Insert(end.Length, "</u>");
+        }
+
+        while (ContainsTrue(foundLink))
+        {
+            for (int i = 0; i < links.Length; i++)
+            {
+                if (!foundLink[i])
+                    continue;
+
+                // Locating the link
+                string value = text.text;
+
+                string desiredStart = $"<link={links[i].name}>";
+                string desiredEnd = "</link>";
+
+                int startIndex = value.IndexOf(desiredStart, indexes[i]);
+                if (startIndex == -1)
+                {
+                    foundLink[i] = false;
+                    continue;
+                }
+                if (startIndex - start.Length >= 0)
+                {
+                    if (value.Substring(startIndex - start.Length, start.Length) == start)
+                    {
+                        foundLink[i] = false;
+                        continue;
+                    }
+                }
+
+                int endIndex = value.IndexOf(desiredEnd, startIndex + desiredStart.Length);
+                if (endIndex == -1)
+                {
+                    foundLink[i] = false;
+                    continue;
+                }
+                // Customizing the link
+
+                value = value.Insert(endIndex, end);
+                value = value.Insert(startIndex, start);
+
+                text.text = value;
+                indexes[i] = endIndex + start.Length + end.Length;
+            }
+        }
+    }
+
+    private bool ContainsTrue(bool[] array)
+    {
+        foreach (var item in array)
+            if (item)
+                return true;
+
+        return false;
     }
 
     [System.Serializable]

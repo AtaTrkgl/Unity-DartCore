@@ -16,6 +16,7 @@ namespace DartCore.Localization
         public static string key = "";
         public string keyLastValue;
         public string[] values;
+        private Vector2 scrollPos = Vector2.zero;
 
         private void OnEnable()
         {
@@ -43,7 +44,7 @@ namespace DartCore.Localization
 
             if (Localizator.DoesContainKey(key))
             {
-                GUILayout.BeginScrollView(Vector2.zero, false, true);
+                scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
                 for (int i = 0; i < values.Length; i++)
                 {
                     if (values[i] == null)
@@ -51,8 +52,14 @@ namespace DartCore.Localization
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{Localizator.GetAvailableLanguages()[i]}: ", GUILayout.MaxWidth(50));
 
-                    EditorStyles.textArea.wordWrap = true;
-                    values[i] = EditorGUILayout.TextArea(values[i], EditorStyles.textField, GUILayout.Height(position.height * .23f), GUILayout.Width(position.width * .75f));
+                    var customTextAreaStyle = EditorStyles.textArea;
+                    customTextAreaStyle.wordWrap = true;
+
+                    values[i] = EditorGUILayout.TextArea(
+                        values[i], customTextAreaStyle,
+                        GUILayout.Height( Mathf.Clamp(((position.height - 97) / values.Length), 100f, float.PositiveInfinity)),
+                        GUILayout.Width(position.width * .75f));
+                    
                     GUILayout.EndHorizontal();
                 }
                 GUILayout.EndScrollView();

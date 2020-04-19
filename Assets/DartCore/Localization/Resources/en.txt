@@ -2,7 +2,7 @@ English
 Localization Error
 Test Key 1
 
-Click <link=clear>here</link> to clear the graph!
+you can click <link=clear>here</link> or <link=clear>here</link> to clear the graph.
 Test Key 3
 NewKey2
 Tooltip En

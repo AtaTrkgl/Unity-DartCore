@@ -2,7 +2,7 @@ Türkçe
 Lokalizasyon Hatası
 Test Anahtarı 1
 
-<link=clear>Buraya</link> basarak tabloyu temizle!
+<link=clear>Buraya</link> basarak tabloyu temizle, yada <link=clear>buraya</link>.
 
 
 Tooltip Tr
