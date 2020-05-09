@@ -77,6 +77,9 @@ public class HyperLink : MonoBehaviour, IPointerClickHandler
             end = end.Insert(end.Length, "</u>");
         }
 
+        if (!text)
+        	text = GetComponent<TextMeshProUGUI>();
+
         while (ContainsTrue(foundLink))
         {
             for (int i = 0; i < links.Length; i++)

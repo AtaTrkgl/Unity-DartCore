@@ -6,13 +6,25 @@ namespace DartCore.Utilities
 {
     public class EditorScriptingUtils : Editor
     {
-        public static void HorizontalLine(int height = 1, float color = .7f)
+        public static void HorizontalLine(int height = 1)
         {
-            color = Mathf.Clamp(color, 0f, 1f);
+            var color = new Color(.7f, .7f, .7f, 1f);
+
             Rect rect = EditorGUILayout.GetControlRect(false, height);
             rect.height = height;
 
-            EditorGUI.DrawRect(rect, new Color(color, color, color, 1));
+            EditorGUI.DrawRect(rect, color);
+        }
+
+        public static void HorizontalLine(Color color, int height = 1)
+        {
+            if (color.Equals(Color.clear))
+                color = new Color(.7f, .7f, .7f, 1f);
+
+            Rect rect = EditorGUILayout.GetControlRect(false, height);
+            rect.height = height;
+
+            EditorGUI.DrawRect(rect, color);
         }
 
         /// <summary>

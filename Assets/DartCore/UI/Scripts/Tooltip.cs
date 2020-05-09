@@ -9,6 +9,7 @@ namespace DartCore.UI
     {
         public static Tooltip instance;
         public static float screenEdgePadding = 10f;
+        public static int tooltipCanvasSortOrder = 100;
 
         private static Color textColor;
         private static Color bgColor;
@@ -19,24 +20,31 @@ namespace DartCore.UI
         private RectTransform bg;
         private RectTransform canvas;
 
-
         private void Awake()
         {
             instance = this;
             bg = transform.Find("bg").GetComponent<RectTransform>();
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
-            canvas = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
 
             Localizator.OnLanguageChange += UpdateTooltip;
         }
 
+        private void Start()
+        {
+            canvas = transform.parent.GetComponent<RectTransform>();
+        }
+
         private void Update()
+        {
+            UpdateTextSize();
+            FollowCursor();
+        }
+
+        private void UpdateTextSize()
         {
             Vector2 bgSize = new Vector2(text.preferredWidth, text.preferredHeight);
             bg.sizeDelta = bgSize;
             text.GetComponent<RectTransform>().sizeDelta = bgSize;
-
-            FollowCursor();
         }
 
         private void ShowTooltip(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
@@ -47,6 +55,7 @@ namespace DartCore.UI
             Tooltip.tooltipString = tooltipString;
 
             instance.UpdateTooltip();
+            UpdateTextSize();
             FollowCursor();
             gameObject.SetActive(true);
         }
@@ -65,6 +74,9 @@ namespace DartCore.UI
 
         private void FollowCursor()
         {
+            if (!canvas)
+                canvas = transform.parent.GetComponent<RectTransform>();
+
             float screenWidth = canvas.sizeDelta.x;
             float screenHeight = canvas.sizeDelta.y;
 
@@ -106,21 +118,27 @@ namespace DartCore.UI
         {
             if (!instance)
             {
-                if(GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip"))
+                if (GameObject.FindGameObjectWithTag("Tooltip Canvas"))
                 {
-                    if (GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").GetComponent<Tooltip>())
-                    {
-                        GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").gameObject.SetActive(true);
-                        instance = GameObject.FindObjectOfType<Canvas>().transform.Find("Tooltip").GetComponent<Tooltip>();
+                    if (GameObject.FindGameObjectWithTag("Tooltip Canvas").transform.GetChild(0).GetComponent<Tooltip>())
+                    { 
+                        instance = GameObject.FindGameObjectWithTag("Tooltip Canvas").transform.GetChild(0).GetComponent<Tooltip>();
+                        instance.gameObject.SetActive(true);
                         return;
                     }
+                    else
+                        Debug.LogError("Tooltip Canvas has an unknown child");
                 }
 
                 var obj = Instantiate(Resources.Load<GameObject>("Tooltip")) as GameObject;
                 obj.name = "Tooltip";
                 instance = obj.GetComponent<Tooltip>();
                 instance = instance.GetComponent<Tooltip>();
-                instance.transform.SetParent(GameObject.FindObjectOfType<Canvas>().transform, false);
+
+                var canvas = Instantiate(Resources.Load<GameObject>("TooltipCanvas")) as GameObject;
+                canvas.name = "Tooltip Canvas";
+                instance.transform.SetParent(canvas.transform, false);
+                canvas.GetComponent<Canvas>().sortingOrder = tooltipCanvasSortOrder;
             }
         }
 

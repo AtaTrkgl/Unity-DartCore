@@ -193,6 +193,26 @@ namespace DartCore.Utilities
                 sum += item;
             return sum;
         }
+		public static float SumArray(int[] arrayToSum)
+        {
+            float sum = 0;
+            if (arrayToSum == null)
+                return sum;
+
+            foreach (var item in arrayToSum)
+                sum += item;
+            return sum;
+        }
+        public static float SumArray(float[] arrayToSum)
+        {
+            float sum = 0;
+            if (arrayToSum == null)
+                return sum;
+
+            foreach (var item in arrayToSum)
+                sum += item;
+            return sum;
+        }
 
         #endregion
 

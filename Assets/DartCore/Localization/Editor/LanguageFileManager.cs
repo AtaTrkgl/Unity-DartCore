@@ -35,7 +35,7 @@ namespace DartCore.Localization
             GUILayout.Label("Current Language(s)", EditorStyles.largeLabel);
             EditorScriptingUtils.EndCenter();
 
-            EditorScriptingUtils.HorizontalLine(3,.7f);
+            EditorScriptingUtils.HorizontalLine(3);
 
             var languageButtonStyle = new GUIStyle(EditorStyles.miniButton);
             languageButtonStyle.fixedHeight = 30f;
@@ -63,7 +63,7 @@ namespace DartCore.Localization
             }
             GUILayout.EndScrollView();
 
-            EditorScriptingUtils.HorizontalLine(3, .7f);
+            EditorScriptingUtils.HorizontalLine(3);
 
             // Language
             GUILayout.BeginHorizontal();
