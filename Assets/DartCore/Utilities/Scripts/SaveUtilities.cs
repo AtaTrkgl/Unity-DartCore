@@ -44,7 +44,7 @@ namespace DartCore.Utilities
             }
         }
 
-        public static void CleanValue(string fileName)
+        public static void ClearValue(string fileName)
         {
             string path = GetPathFromFileName(fileName);
 
