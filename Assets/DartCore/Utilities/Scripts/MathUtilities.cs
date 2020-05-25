@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DartCore.Utilities
 {
-    public class Mathd
+    public class MathUtilities
     {
         #region Average
 

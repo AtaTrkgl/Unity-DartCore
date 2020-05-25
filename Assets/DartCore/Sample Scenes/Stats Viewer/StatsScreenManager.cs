@@ -54,8 +54,8 @@ public class StatsScreenManager : MonoBehaviour
                 rewardText.text = "left to unlock\n<color=\"yellow\">the golden skin </color>";
                 unlockProgressBar.fillerColor = Color.yellow;
 
-                list = Mathd.RandomIntList(30, 0, 20);
-                unlockText.text = Mathd.SumList(list).ToString() + "/1000 Kills";
+                list = MathUtilities.RandomIntList(30, 0, 20);
+                unlockText.text = MathUtilities.SumList(list).ToString() + "/1000 Kills";
                 unlockProgressBar.min = 0;
                 unlockProgressBar.max = 1000;
                 break;
@@ -65,8 +65,8 @@ public class StatsScreenManager : MonoBehaviour
                 rewardText.text = "left to unlock\n<color=\"green\">the emerald banner </color>";
                 unlockProgressBar.fillerColor = Color.green;
 
-                list = Mathd.RandomIntList(30, 0, 5);
-                unlockText.text = Mathd.SumList(list).ToString() + "/150 Wins";
+                list = MathUtilities.RandomIntList(30, 0, 5);
+                unlockText.text = MathUtilities.SumList(list).ToString() + "/150 Wins";
                 unlockProgressBar.min = 0;
                 unlockProgressBar.max = 150;
                 break;
@@ -74,7 +74,7 @@ public class StatsScreenManager : MonoBehaviour
                 break;
         }
         graph.ShowGraph(list, GraphType.Bar, false);
-        unlockProgressBar.current = Mathd.SumList(list);
+        unlockProgressBar.current = MathUtilities.SumList(list);
     }
 
     public void PreviousSection()
