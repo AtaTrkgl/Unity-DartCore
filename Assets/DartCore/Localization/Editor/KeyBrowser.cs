@@ -74,23 +74,33 @@ namespace DartCore.Localization
                 fontSize = 12,
                 padding = new RectOffset(10, 10, 5, 5)
             };
+            var keyButtonStyleBold = new GUIStyle(EditorStyles.miniButton)
+            {
+                fixedHeight = elementHeight,
+                fixedWidth = 100f,
+                fontSize = 12,
+                fontStyle = FontStyle.BoldAndItalic,
+                padding = new RectOffset(10, 10, 5, 5)
+            };
 
             Localizator.UpdateKeyFile();
             for (int i = 0; i < searchedKeys.Count; i++)
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button(searchedKeys[i], keyButtonStyle))
+
+                var currentKey = searchedKeys[i];
+                if (GUILayout.Button(currentKey, (currentKey == "lng_name" || currentKey == "lng_error") ? keyButtonStyleBold : keyButtonStyle))
                 {
-                    KeyEditor.key = searchedKeys[i];
+                    KeyEditor.key = currentKey;
                     FocusWindowIfItsOpen(typeof(KeyEditor));
                 }
                 GUILayout.FlexibleSpace();
                 foreach (var language in currentLanguages)
                 {
-                    string localizedValue = Localizator.GetString(searchedKeys[i], language, false);
-                    GUILayout.Label((localizedValue == "" ?
+                    string localizedValue = Localizator.GetString(currentKey, language, false);
+                    GUILayout.Label(localizedValue == "" ?
                             $"<color=red>{language.ToString()}</color>" :
-                            $"<color=green>{language.ToString()}</color>"),
+                            $"<color=green>{language.ToString()}</color>",
                         languageDisplayerStyle);
                 }
                 GUILayout.EndHorizontal();

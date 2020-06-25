@@ -10,9 +10,17 @@ namespace DartCore.Localization
         private void Awake()
         {
             text = GetComponent<TextMeshProUGUI>();
-            UpdateLanguage();
+        }
 
+        private void OnEnable()
+        {
+            UpdateLanguage();
             Localizator.OnLanguageChange += UpdateLanguage;
+        }
+
+        private void OnDisable()
+        {
+            Localizator.OnLanguageChange -= UpdateLanguage;
         }
 
         public void UpdateLanguage()
