@@ -215,6 +215,29 @@ namespace DartCore.Utilities
         }
 
         #endregion
+        
+        #region Abs
+        public static Vector2 AbsVec2(Vector2 vec)
+        {
+            return new Vector2(Mathf.Abs(vec.x), Mathf.Abs(vec.y));
+        }
+        public static Vector3 AbsVec3(Vector3 vec)
+        {
+            return new Vector3(Mathf.Abs(vec.x), Mathf.Abs(vec.y), Mathf.Abs(vec.z));
+        }
+        public static Vector4 AbsVec4(Vector4 vec)
+        {
+            return new Vector4(Mathf.Abs(vec.x), Mathf.Abs(vec.y), Mathf.Abs(vec.z), Mathf.Abs(vec.w));
+        }
+        #endregion
+
+        public static Vector3 Direction(Vector3 start, Vector3 target)
+        {
+            var heading = target - start;
+
+            var distance = heading.magnitude;
+            return heading / distance; // This is now the normalized direction.
+        }
 
     }
 }
