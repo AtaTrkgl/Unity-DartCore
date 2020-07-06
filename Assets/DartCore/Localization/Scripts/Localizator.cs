@@ -39,9 +39,9 @@ namespace DartCore.Localization
             bool doesLngFileContainsKey = currentLanguageArray.Length > index && index >= 0;
 
             if (doesLngFileContainsKey)
-                return currentLanguageArray[index];
+                return currentLanguageArray[index].Trim();
             else if (returnErrorString)
-                return currentLanguageArray[1];
+                return currentLanguageArray[1].Trim();
             else
                 return "";
         }
