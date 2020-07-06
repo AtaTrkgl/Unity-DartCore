@@ -11,7 +11,7 @@ using UnityEditor;
 
 namespace DartCore.UI
 {
-    [ExecuteInEditMode]
+    [ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#2-toggleplus")]
     public class TogglePlus : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         #region Unity Editor

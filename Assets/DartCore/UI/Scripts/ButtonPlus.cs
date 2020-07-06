@@ -9,6 +9,7 @@ using UnityEditor;
 
 namespace DartCore.UI
 {
+    [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#1-buttonplus")]
     public class ButtonPlus : Button, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         #region Unity Editor

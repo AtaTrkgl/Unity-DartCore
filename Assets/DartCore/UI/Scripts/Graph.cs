@@ -15,7 +15,7 @@ namespace DartCore.UI
         Bar = 2,
     }
 
-    [SelectionBase, ExecuteInEditMode]
+    [SelectionBase, ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#5-tooltip")]
     public class Graph : MonoBehaviour
     {
         #region Unity Editor

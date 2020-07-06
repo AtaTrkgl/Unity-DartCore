@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using DartCore.UI;
 
 namespace DartCore.Localization
 {

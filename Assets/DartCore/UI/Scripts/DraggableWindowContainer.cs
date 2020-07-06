@@ -7,6 +7,7 @@ using UnityEditor;
 
 namespace DartCore.UI
 {
+    [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#5-tooltip")]
     public class DraggableWindowContainer : MonoBehaviour
     {
         #region Unity Editor

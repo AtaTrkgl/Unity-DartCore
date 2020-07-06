@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -8,7 +6,7 @@ namespace DartCore.Utilities
 {
     public class SaveUtilities : MonoBehaviour
     {
-        public static void SaveValue(string fileName, object value)
+        public static void SaveValue<T>(string fileName, T value)
         {
             if (value == null)
                 Debug.LogWarning("Tried to save a null value to the \"" + fileName + "\" save file");
@@ -24,7 +22,7 @@ namespace DartCore.Utilities
             stream.Close();
         }
 
-        public static object GetValue(string fileName, object defaultValue)
+        public static T ReadValue<T>(string fileName, T defaultValue)
         {
             string path = GetPathFromFileName(fileName);
 
@@ -33,7 +31,7 @@ namespace DartCore.Utilities
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
 
-                var value = binaryFormatter.Deserialize(stream) as object;
+                T value = (T)binaryFormatter.Deserialize(stream);
                 stream.Close();
 
                 return value;
@@ -55,7 +53,7 @@ namespace DartCore.Utilities
         }
 
         private static string GetPathFromFileName(string fileName)
-        { 
+        {
             return Application.persistentDataPath + "/saves/" + fileName + ".save";
         }
 

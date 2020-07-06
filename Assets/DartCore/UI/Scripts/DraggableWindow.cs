@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace DartCore.UI
 {
+    [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#8-draggable-window")]
     public class DraggableWindow : MonoBehaviour
     {
         public bool isCursorOn = false;

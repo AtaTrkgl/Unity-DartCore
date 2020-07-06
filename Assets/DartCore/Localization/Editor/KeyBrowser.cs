@@ -1,6 +1,7 @@
 ﻿using DartCore.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -52,11 +53,13 @@ namespace DartCore.Localization
 
             GUILayout.Space(10);
 
-            var searchStyle = new GUIStyle(EditorStyles.textField);
-            searchStyle.fixedWidth = position.width * .99f;
-            searchStyle.fixedHeight = 23f;
-            searchStyle.alignment = TextAnchor.MiddleCenter;
-            searchStyle.fontSize = 12;
+            var searchStyle = new GUIStyle(EditorStyles.textField)
+            {
+                fixedWidth = position.width * .99f,
+                fixedHeight = 23f,
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 12
+            };
 
             search = GUILayout.TextField(search, searchStyle);
             search = search.Replace(' ', '_').ToLower();

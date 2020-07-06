@@ -5,6 +5,7 @@ using DartCore.Localization;
 
 namespace DartCore.UI
 {
+    [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#5-tooltip")]
     public class Tooltip : MonoBehaviour
     {
         public static Tooltip instance;

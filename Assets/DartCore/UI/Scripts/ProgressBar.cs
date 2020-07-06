@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace DartCore.UI
 {
-    [ExecuteInEditMode]
+    [ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#4-progress-bar")]
     public class ProgressBar : MonoBehaviour
     {
 #region Unity Editor

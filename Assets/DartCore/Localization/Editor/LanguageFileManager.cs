@@ -50,14 +50,36 @@ namespace DartCore.Localization
                 EditorScriptingUtils.BeginCenter();
                 if (GUILayout.Button(language.ToString(), languageButtonStyle))
                 {
-                    bool dialogOutput = EditorUtility.DisplayDialog(
-                        $"{language} language will be removed from the project permanently",
-                        $"Are you sure you want to remove {language} language from your project?",
-                        "Remove",
-                        "Cancel");
+                    int input = EditorUtility.DisplayDialogComplex(
+                        $"What do you want to do with {language} language",
+                        $"Do you want to remove or switch to {language} language?",
+                        "Switch",
+                        "Delete",
+                        "Nothing, go back"
+                        );
+                    if (input == 0)
+                    {
+                        bool dialogOutput = EditorUtility.DisplayDialog(
+                                $"Current language will be set to {language}",
+                                $"Are you sure you want to switch to {language}?",
+                                "Yes",
+                                "No");
 
-                    if (dialogOutput)
-                        Localizator.RemoveLanguage(language);
+                        if (dialogOutput)
+                            Localizator.UpdateLanguage(language);
+                    }
+                    else if (input == 1)
+                    {
+                        bool dialogOutput = EditorUtility.DisplayDialog(
+                            $"{language} language will be removed from the project permanently",
+                            $"Are you sure you want to remove {language} language from your project?",
+                            "Yes",
+                            "No");
+
+                        if (dialogOutput)
+                            Localizator.RemoveLanguage(language);
+                    }
+                    
                 }
                 EditorScriptingUtils.EndCenter();
             }

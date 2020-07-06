@@ -8,6 +8,7 @@ using UnityEditor;
 
 namespace DartCore.UI
 {
+    [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#3-switch")]
     public class Switch : DartCore.UI.TogglePlus
     {
         #region Unity Editor
