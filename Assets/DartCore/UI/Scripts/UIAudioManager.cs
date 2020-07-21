@@ -9,11 +9,8 @@ namespace DartCore.UI
         {
             if (clip)
             {
-                var obj = new GameObject();
-                obj.name = "Temp. AudioSource";
-                obj.AddComponent<AudioSource>();
-
-                var audioSource = obj.GetComponent<AudioSource>();
+                var obj = new GameObject {name = "Temp. AudioSource"};
+                var audioSource = obj.AddComponent<AudioSource>();
 
                 audioSource.loop = false;
                 audioSource.clip = clip;

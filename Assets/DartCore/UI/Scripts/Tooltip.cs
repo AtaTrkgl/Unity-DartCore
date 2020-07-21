@@ -19,6 +19,7 @@ namespace DartCore.UI
         private static string tooltipString;
 
         private TextMeshProUGUI text;
+        private RectTransform textRect;
         private RectTransform bg;
         private RectTransform canvas;
 
@@ -30,6 +31,7 @@ namespace DartCore.UI
             rect = GetComponent<RectTransform>();
             bg = transform.Find("bg").GetComponent<RectTransform>();
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
+            textRect = text.GetComponent<RectTransform>();
 
             Localizator.OnLanguageChange += UpdateTooltip;
         }
@@ -47,9 +49,9 @@ namespace DartCore.UI
 
         private void UpdateTextSize()
         {
-            Vector2 bgSize = new Vector2(text.preferredWidth, text.preferredHeight);
+            var bgSize = new Vector2(text.preferredWidth, text.preferredHeight);
             bg.sizeDelta = bgSize;
-            text.GetComponent<RectTransform>().sizeDelta = bgSize;
+            textRect.sizeDelta = bgSize;
         }
 
         private void ShowTooltip(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
@@ -92,11 +94,11 @@ namespace DartCore.UI
 
             desiredPos = new Vector2(
                 Mathf.Clamp(desiredPos.x,
-                -screenWidth / 2 + screenEdgePadding, // no bg size because of the pivot of it
-                screenWidth / 2 - screenEdgePadding - bg.sizeDelta.x),
+                -screenWidth * .5f + screenEdgePadding, // no bg size because of the pivot of it
+                screenWidth * .5f - screenEdgePadding - bg.sizeDelta.x),
                 Mathf.Clamp(desiredPos.y,
-                -screenHeight / 2 + screenEdgePadding, // no bg size because of the pivot of it
-                screenHeight / 2 - screenEdgePadding - bg.sizeDelta.y));
+                -screenHeight * .5f + screenEdgePadding, // no bg size because of the pivot of it
+                screenHeight * .5f - screenEdgePadding - bg.sizeDelta.y));
             rect.localPosition = desiredPos;
         }
 

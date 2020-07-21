@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using DG.Tweening;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace DartCore.UI
@@ -11,28 +11,33 @@ namespace DartCore.UI
     public class DraggableWindowContainer : MonoBehaviour
     {
         #region Unity Editor
+
 #if UNITY_EDITOR
-        [MenuItem("DartCore/UI/Draggable Window Container"), MenuItem("GameObject/UI/DartCore/Draggable Window Container")]
+        [MenuItem("DartCore/UI/Draggable Window Container"),
+         MenuItem("GameObject/UI/DartCore/Draggable Window Container")]
         public static void CreateDraggableWindowContainer()
         {
-            GameObject obj = Instantiate(Resources.Load<GameObject>("DraggableWindowContainer"));
-            obj.transform.SetParent(Selection.activeGameObject.transform, false);
+            GameObject obj = Instantiate(Resources.Load<GameObject>("DraggableWindowContainer"),
+                Selection.activeGameObject.transform, false);
             obj.name = "New Draggable Window Container";
         }
 #endif
+
         #endregion
 
-        [Header("Configuration")]
-        [SerializeField] private float padding;
+        [Header("Configuration")] [SerializeField]
+        private float padding;
+
         public float Padding
         {
             get { return padding; }
-            set 
+            set
             {
-                padding = value; 
+                padding = value;
                 UpdatePadding();
             }
         }
+
         public float followTime = .1f;
 
         private RectTransform containerTrans;
@@ -41,7 +46,7 @@ namespace DartCore.UI
         private DraggableWindow draggableWindow;
         private Vector2 cursorOffset;
         private bool isDragging = false;
-        private Vector4 boundries;
+        private Vector4 boundaries;
 
         private void Awake()
         {
@@ -56,7 +61,8 @@ namespace DartCore.UI
         {
             if (draggableWindow.isCursorOn && Input.GetMouseButtonDown(0))
             {
-                cursorOffset = (Vector2)Input.mousePosition/ canvas.lossyScale - (Vector2)draggableWindowTrans.localPosition;
+                cursorOffset = (Vector2) Input.mousePosition / canvas.lossyScale -
+                               (Vector2) draggableWindowTrans.localPosition;
                 isDragging = true;
             }
 
@@ -67,26 +73,28 @@ namespace DartCore.UI
                 if (Input.GetMouseButtonUp(0))
                     isDragging = false;
             }
-            
         }
 
         private void FollowCursor()
         {
-            var desiredPos = (Vector2)Input.mousePosition/canvas.lossyScale - cursorOffset;
+            var desiredPos = (Vector2) Input.mousePosition / canvas.lossyScale - cursorOffset;
             draggableWindowTrans.DOLocalMove(new Vector2(
-                Mathf.Clamp(desiredPos.x,boundries.x,boundries.y),
-                Mathf.Clamp(desiredPos.y,boundries.z,boundries.w)),
+                    Mathf.Clamp(desiredPos.x, boundaries.x, boundaries.y),
+                    Mathf.Clamp(desiredPos.y, boundaries.z, boundaries.w)),
                 followTime);
         }
 
         private void UpdatePadding()
         {
-            boundries = new Vector4(
-                -containerTrans.sizeDelta.x / 2 + draggableWindowTrans.sizeDelta.x / 2 + padding,
-                containerTrans.sizeDelta.x / 2 - draggableWindowTrans.sizeDelta.x / 2 - padding,
-                -containerTrans.sizeDelta.y / 2 + draggableWindowTrans.sizeDelta.y / 2 + padding,
-                containerTrans.sizeDelta.y / 2 - draggableWindowTrans.sizeDelta.y / 2 - padding
-                );
+            var sizeDelta = containerTrans.sizeDelta;
+            var delta = draggableWindowTrans.sizeDelta;
+
+            boundaries = new Vector4(
+                -sizeDelta.x / 2 + delta.x / 2 + padding,
+                sizeDelta.x / 2 - delta.x / 2 - padding,
+                -sizeDelta.y / 2 + delta.y / 2 + padding,
+                sizeDelta.y / 2 - delta.y / 2 - padding
+            );
         }
     }
 }

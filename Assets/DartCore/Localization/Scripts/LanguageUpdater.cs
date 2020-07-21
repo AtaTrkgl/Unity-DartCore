@@ -6,8 +6,9 @@ namespace DartCore.Localization
 {
     public class LanguageUpdater : MonoBehaviour
     {
-        [SerializeField] private string key; 
+        [SerializeField] private string key;
         private TextMeshProUGUI text;
+
         private void Awake()
         {
             text = GetComponent<TextMeshProUGUI>();

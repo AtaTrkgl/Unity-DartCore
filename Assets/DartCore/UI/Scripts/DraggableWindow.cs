@@ -12,7 +12,7 @@ namespace DartCore.UI
 
         private GraphicRaycaster raycaster;
 
-        void Awake()
+        private void Awake()
         {
             raycaster = GameObject.FindObjectOfType<GraphicRaycaster>().GetComponent<GraphicRaycaster>();
         }
@@ -38,6 +38,7 @@ namespace DartCore.UI
                     return;
                 }
             }
+
             isCursorOn = false;
         }
     }

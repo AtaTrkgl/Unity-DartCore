@@ -3,8 +3,6 @@ using UnityEngine;
 using System.Linq;
 using System.IO;
 using System;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 namespace DartCore.Localization
 {

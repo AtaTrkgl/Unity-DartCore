@@ -34,7 +34,7 @@ namespace DartCore.Localization
             };
 
             key = GUILayout.TextField(key, keySearchBarStyle);
-            key = key.Replace(' ','_').ToLower();
+            key = key.Replace(' ', '_').ToLower();
 
             GUILayout.Space(10f);
             Localizator.UpdateKeyFile();
@@ -45,7 +45,7 @@ namespace DartCore.Localization
             if (Localizator.DoesContainKey(key))
             {
                 scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
-                for (int i = 0; i < values.Length; i++)
+                for (var i = 0; i < values.Length; i++)
                 {
                     if (values[i] == null)
                         values[i] = Localizator.GetString(key, Localizator.GetAvailableLanguages()[i], false);
@@ -57,23 +57,26 @@ namespace DartCore.Localization
 
                     values[i] = EditorGUILayout.TextArea(
                         values[i], customTextAreaStyle,
-                        GUILayout.Height( Mathf.Clamp(((position.height - 97) / values.Length), 100f, float.PositiveInfinity)),
+                        GUILayout.Height(Mathf.Clamp(((position.height - 97) / values.Length), 100f,
+                            float.PositiveInfinity)),
                         GUILayout.Width(position.width * .75f));
-                    
+
                     GUILayout.EndHorizontal();
                 }
+
                 GUILayout.EndScrollView();
 
                 if (GUILayout.Button("Update Values"))
                 {
-                    for (int i = 0; i < values.Length; i++)
+                    for (var i = 0; i < values.Length; i++)
                     {
                         Localizator.AddLocalizedValue(key, values[i], Localizator.GetAvailableLanguages()[i]);
                     }
                 }
+
                 if (GUILayout.Button("Remove Key"))
                 {
-                    bool dialogOutput = EditorUtility.DisplayDialog(
+                    var dialogOutput = EditorUtility.DisplayDialog(
                         $"{key} will be removed permanently",
                         "Are you sure you want to remove this key?",
                         "Remove",

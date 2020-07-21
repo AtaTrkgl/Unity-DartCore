@@ -4,9 +4,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Events;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace DartCore.UI
@@ -15,6 +15,7 @@ namespace DartCore.UI
     public class TogglePlus : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         #region Unity Editor
+
 #if UNITY_EDITOR
         [MenuItem("DartCore/UI/Toggle Plus"), MenuItem("GameObject/UI/DartCore/Toggle Plus")]
         public static void AddTogglePlus()
@@ -24,6 +25,7 @@ namespace DartCore.UI
             obj.name = "New Toggle Plus";
         }
 #endif
+
         #endregion
 
         public bool isOn = false;
@@ -32,28 +34,27 @@ namespace DartCore.UI
 
         [SerializeField] private UnityEvent OnToggle;
 
-        [Header("Colors")]
-        public Color normalColor;
-        [Range(0f,1f)] public float transitionDuration = .1f;
+        [Header("Colors")] public Color normalColor;
+        [Range(0f, 1f)] public float transitionDuration = .1f;
         public Color highlightedColor;
         public Color disabledColor;
 
-        [Header("Filling")]
-        public float fillTransitionDuration = .1f;
+        [Header("Filling")] public float fillTransitionDuration = .1f;
         private float fillTransDur;
         public Color fillColor = Color.red;
         public float colorTransitionDuration = .1f;
         public ToggleFillAnimation animType;
         [Range(0, 1)] public float fillScale = .8f;
 
-        [Header("Tooltip")]
-        public string toolTip;
-        [Tooltip("toolTip will be used as a key if set to true")] public bool localizeTooltip = false;
+        [Header("Tooltip")] public string toolTip;
+
+        [Tooltip("toolTip will be used as a key if set to true")]
+        public bool localizeTooltip = false;
+
         public Color tooltipTextColor = new Color(.2f, .2f, .2f);
         public Color tooltipBgColor = new Color(.85f, .85f, .85f);
 
-        [Header("Audio")]
-        public AudioClip highlightedClip;
+        [Header("Audio")] public AudioClip highlightedClip;
         public AudioClip pressedClip;
         public AudioMixerGroup mixerGroup;
         [Range(0, 1)] public float volume = .2f;
@@ -70,7 +71,7 @@ namespace DartCore.UI
             mask = transform.Find("Mask").GetComponent<Image>();
             maskRect = mask.GetComponent<RectTransform>();
             image = GetComponent<Image>();
-            
+
             fill = mask.transform.Find("Fill").GetComponent<Image>();
             fillAmount = isOn ? 1 : 0;
             NormalState();
@@ -79,6 +80,7 @@ namespace DartCore.UI
         private void Update()
         {
             #region UnityEditor
+
 #if UNITY_EDITOR
             if (Application.isEditor && !Application.isPlaying)
             {
@@ -86,6 +88,7 @@ namespace DartCore.UI
                 fillAmount = isOn ? 1 : 0;
             }
 #endif
+
             #endregion
 
             UpdateFill();
@@ -140,39 +143,39 @@ namespace DartCore.UI
                 default:
                     break;
             }
+
             if (animType != ToggleFillAnimation.Fade)
                 mask.fillAmount = fillAmount;
         }
 
         private void Click()
         {
-            if (isInteractive)
-            { 
-                isOn = !isOn;
-                OnToggle.Invoke();
-                UIAudioManager.PlayOneShotAudio(pressedClip, volume, mixerGroup);
-            }
+            if (!isInteractive) return;
+            
+            isOn = !isOn;
+            OnToggle.Invoke();
+            UIAudioManager.PlayOneShotAudio(pressedClip, volume, mixerGroup);
         }
 
         private void Highlight()
         {
-            if (isInteractive)
-            { 
-                GetComponent<Image>().DOColor(highlightedColor, transitionDuration);
-                if (toolTip.Length > 0)
-                    Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeTooltip);
-                UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
-            }
+            if (!isInteractive) return;
+            
+            GetComponent<Image>().DOColor(highlightedColor, transitionDuration);
+            if (toolTip.Length > 0)
+                Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeTooltip);
+            UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
         }
+
         protected void NormalState()
         {
-            if (isInteractive)
-            { 
-                image.DOColor(normalColor, transitionDuration);
-                if (toolTip.Length > 0)
-                    Tooltip.HideTooltipStatic();
-            }
+            if (!isInteractive) return;
+            
+            image.DOColor(normalColor, transitionDuration);
+            if (toolTip.Length > 0)
+                Tooltip.HideTooltipStatic();
         }
+
         protected void DisabledState()
         {
             if (!isInteractive)
@@ -180,14 +183,16 @@ namespace DartCore.UI
         }
 
         #region Cursor Detection
+
         public void OnPointerClick(PointerEventData eventData) => Click();
         public void OnPointerEnter(PointerEventData eventData) => Highlight();
         public void OnPointerExit(PointerEventData eventData) => NormalState();
+
         #endregion
     }
 
     public enum ToggleFillAnimation : byte
-    { 
+    {
         Horizontal = 0,
         Vertical = 1,
         Radial90 = 2,

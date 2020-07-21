@@ -1,22 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace DartCore.UI
 {
-    [RequireComponent(typeof(TMP_Text)), HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#9-hyperlink")]
+    [RequireComponent(typeof(TMP_Text)),
+     HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#9-hyperlink")]
     public class HyperLink : MonoBehaviour, IPointerClickHandler
     {
-        [Header("Link Customization")]
-        public Color linkColor = Color.green;
+        [Header("Link Customization")] public Color linkColor = Color.green;
         public bool calculateAlpha = false;
         public bool addUnderLines = true;
         public bool makeBold = false;
 
-        [Space]
-
-        [SerializeField] public Link[] links;
+        [Space] [SerializeField] public Link[] links;
 
         private TextMeshProUGUI text;
 
@@ -32,7 +31,7 @@ namespace DartCore.UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            int linkIndex = TMP_TextUtilities.FindIntersectingLink(text, eventData.position, null);
+            var linkIndex = TMP_TextUtilities.FindIntersectingLink(text, eventData.position, null);
 
             if (linkIndex != -1)
             {
@@ -50,9 +49,9 @@ namespace DartCore.UI
 
         public void UpdateLinkColors()
         {
-            int[] indexes = new int[links.Length];
-            bool[] foundLink = new bool[links.Length];
-            for (int i = 0; i < links.Length; i++)
+            var indexes = new int[links.Length];
+            var foundLink = new bool[links.Length];
+            for (var i = 0; i < links.Length; i++)
             {
                 foundLink[i] = true;
                 indexes[i] = 0;
@@ -64,13 +63,14 @@ namespace DartCore.UI
             else
                 start = $"<color=#{ColorUtility.ToHtmlStringRGBA(linkColor)}>";
 
-            string end = "</color>";
+            var end = "</color>";
 
             if (makeBold)
             {
                 start = start.Insert(0, "<b>");
                 end = end.Insert(0, "</b>");
             }
+
             if (addUnderLines)
             {
                 // adding the underline inside colors so that the
@@ -84,23 +84,24 @@ namespace DartCore.UI
 
             while (ContainsTrue(foundLink))
             {
-                for (int i = 0; i < links.Length; i++)
+                for (var i = 0; i < links.Length; i++)
                 {
                     if (!foundLink[i])
                         continue;
 
                     // Locating the link
-                    string value = text.text;
+                    var value = text.text;
 
-                    string desiredStart = $"<link={links[i].name}>";
-                    string desiredEnd = "</link>";
+                    var desiredStart = $"<link={links[i].name}>";
+                    var desiredEnd = "</link>";
 
-                    int startIndex = value.IndexOf(desiredStart, indexes[i]);
+                    var startIndex = value.IndexOf(desiredStart, indexes[i]);
                     if (startIndex == -1)
                     {
                         foundLink[i] = false;
                         continue;
                     }
+
                     if (startIndex - start.Length >= 0)
                     {
                         if (value.Substring(startIndex - start.Length, start.Length) == start)
@@ -110,7 +111,7 @@ namespace DartCore.UI
                         }
                     }
 
-                    int endIndex = value.IndexOf(desiredEnd, startIndex + desiredStart.Length);
+                    var endIndex = value.IndexOf(desiredEnd, startIndex + desiredStart.Length);
                     if (endIndex == -1)
                     {
                         foundLink[i] = false;
@@ -127,7 +128,7 @@ namespace DartCore.UI
             }
         }
 
-        private bool ContainsTrue(bool[] array)
+        private static bool ContainsTrue(bool[] array)
         {
             foreach (var item in array)
                 if (item)

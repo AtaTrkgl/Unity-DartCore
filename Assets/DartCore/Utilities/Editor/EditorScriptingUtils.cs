@@ -34,8 +34,8 @@ namespace DartCore.Utilities
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            
         }
+
         /// <summary>
         /// Must be used after the BeginCenter() function.
         /// </summary>

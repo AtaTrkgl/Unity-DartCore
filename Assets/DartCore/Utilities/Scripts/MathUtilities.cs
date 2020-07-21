@@ -20,6 +20,7 @@ namespace DartCore.Utilities
                 average /= numbers.Length;
             return average;
         }
+
         /// <summary>
         /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
@@ -33,6 +34,7 @@ namespace DartCore.Utilities
                 average /= numbers.Length;
             return average;
         }
+
         /// <summary>
         /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
@@ -46,6 +48,7 @@ namespace DartCore.Utilities
                 average /= numbers.Count;
             return average;
         }
+
         /// <summary>
         /// Returns the arithmetic mean of the elements of given array/list
         /// </summary>
@@ -59,6 +62,7 @@ namespace DartCore.Utilities
                 average /= numbers.Count;
             return average;
         }
+
         #endregion
 
         #region UnitCirclePosition
@@ -70,10 +74,11 @@ namespace DartCore.Utilities
         /// <param name="r">radius</param>
         /// <returns></returns>
         public static Vector2 UnitCirclePosRadians(float θ, float r = 1f)
-        { 
-            var rawPos =  new Vector2(Mathf.Cos(θ), Mathf.Sin(θ));
+        {
+            var rawPos = new Vector2(Mathf.Cos(θ), Mathf.Sin(θ));
             return rawPos * r;
         }
+
         /// <summary>
         /// returns a position as Vector2(rcosθ, rsinθ)
         /// </summary>
@@ -86,9 +91,11 @@ namespace DartCore.Utilities
             var rawPos = new Vector2(Mathf.Cos(θ), Mathf.Sin(θ));
             return rawPos * r;
         }
+
         #endregion
 
         #region Random
+
         public static bool RandomChance(float numerator, float denominator = 100f)
         {
             float randNum = Random.Range(0, denominator);
@@ -97,17 +104,21 @@ namespace DartCore.Utilities
             else
                 return false;
         }
+
         public static Vector2 RandomVector2()
         {
-            return new Vector2(Random.Range(0,1), Random.Range(0, 1)).normalized;
+            return new Vector2(Random.Range(0, 1), Random.Range(0, 1)).normalized;
         }
+
         public static Vector3 RandomVector3()
         {
             return new Vector3(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)).normalized;
         }
+
         public static Vector4 RandomVector4()
         {
-            return new Vector4(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)).normalized;
+            return new Vector4(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1))
+                .normalized;
         }
 
         public static float[] RandomFloatArray(int length, float minVal, float maxVal)
@@ -118,6 +129,7 @@ namespace DartCore.Utilities
 
             return array;
         }
+
         public static List<float> RandomFloatList(int length, float minVal, float maxVal)
         {
             List<float> list = new List<float>();
@@ -126,6 +138,7 @@ namespace DartCore.Utilities
 
             return list;
         }
+
         public static int[] RandomIntArray(int length, int minVal, int maxVal)
         {
             int[] array = new int[length];
@@ -134,6 +147,7 @@ namespace DartCore.Utilities
 
             return array;
         }
+
         public static List<int> RandomIntList(int length, int minVal, int maxVal)
         {
             List<int> list = new List<int>();
@@ -142,6 +156,7 @@ namespace DartCore.Utilities
 
             return list;
         }
+
         #endregion
 
         #region Range
@@ -166,7 +181,6 @@ namespace DartCore.Utilities
                 return true;
             else
                 return false;
-
         }
 
         #endregion
@@ -183,6 +197,7 @@ namespace DartCore.Utilities
                 sum += item;
             return sum;
         }
+
         public static float SumList(List<float> listToSum)
         {
             float sum = 0;
@@ -193,7 +208,8 @@ namespace DartCore.Utilities
                 sum += item;
             return sum;
         }
-		public static float SumArray(int[] arrayToSum)
+
+        public static float SumArray(int[] arrayToSum)
         {
             float sum = 0;
             if (arrayToSum == null)
@@ -203,6 +219,7 @@ namespace DartCore.Utilities
                 sum += item;
             return sum;
         }
+
         public static float SumArray(float[] arrayToSum)
         {
             float sum = 0;
@@ -215,20 +232,24 @@ namespace DartCore.Utilities
         }
 
         #endregion
-        
+
         #region Abs
-        public static Vector2 AbsVec2(Vector2 vec)
+
+        public static Vector2 AbsVec(Vector2 vec)
         {
             return new Vector2(Mathf.Abs(vec.x), Mathf.Abs(vec.y));
         }
-        public static Vector3 AbsVec3(Vector3 vec)
+
+        public static Vector3 AbsVec(Vector3 vec)
         {
             return new Vector3(Mathf.Abs(vec.x), Mathf.Abs(vec.y), Mathf.Abs(vec.z));
         }
-        public static Vector4 AbsVec4(Vector4 vec)
+
+        public static Vector4 AbsVec(Vector4 vec)
         {
             return new Vector4(Mathf.Abs(vec.x), Mathf.Abs(vec.y), Mathf.Abs(vec.z), Mathf.Abs(vec.w));
         }
+
         #endregion
 
         public static Vector3 Direction(Vector3 start, Vector3 target)
@@ -236,8 +257,7 @@ namespace DartCore.Utilities
             var heading = target - start;
 
             var distance = heading.magnitude;
-            return heading / distance; // This is now the normalized direction.
+            return (heading / distance).normalized;
         }
-
     }
 }

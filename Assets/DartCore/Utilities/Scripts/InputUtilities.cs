@@ -40,13 +40,16 @@ namespace DartCore.Utilities
                         {
                             dict = TryIncrementValue(dict, ControllerType.Other);
                         }
+
                         break;
                 }
             }
+
             return dict;
         }
 
-        private static Dictionary<ControllerType, int> TryIncrementValue(Dictionary<ControllerType, int> dict, ControllerType controller)
+        private static Dictionary<ControllerType, int> TryIncrementValue(Dictionary<ControllerType, int> dict,
+            ControllerType controller)
         {
             if (dict.ContainsKey(controller))
                 dict[controller] += 1;
@@ -89,7 +92,7 @@ namespace DartCore.Utilities
     }
 
     public enum ControllerType
-    { 
+    {
         Dualshock3 = 0,
         Dualshock4 = 1,
         XBox360 = 2,
@@ -102,14 +105,14 @@ namespace DartCore.Utilities
     }
 
     public enum ControllerKey
-    { 
+    {
         RightTrigger = 0,
         LeftTrigger = 15,
         RightBumper = 1,
         LeftBumper = 16,
         LeftStick = 2,
         LeftStickButton = 3,
-        RightStick =  4,
+        RightStick = 4,
         RightStickButton = 5,
         Dpad = 6,
         DpadTop = 7,

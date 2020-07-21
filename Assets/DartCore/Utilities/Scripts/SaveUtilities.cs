@@ -13,7 +13,7 @@ namespace DartCore.Utilities
 
             CreateSaveDirectoryIfNecessary();
 
-            string path = GetPathFromFileName(fileName);
+            var path = GetPathFromFileName(fileName);
 
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Create);
@@ -24,14 +24,14 @@ namespace DartCore.Utilities
 
         public static T ReadValue<T>(string fileName, T defaultValue)
         {
-            string path = GetPathFromFileName(fileName);
+            var path = GetPathFromFileName(fileName);
 
             if (File.Exists(path))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
 
-                T value = (T)binaryFormatter.Deserialize(stream);
+                T value = (T) binaryFormatter.Deserialize(stream);
                 stream.Close();
 
                 return value;
@@ -44,7 +44,7 @@ namespace DartCore.Utilities
 
         public static void ClearValue(string fileName)
         {
-            string path = GetPathFromFileName(fileName);
+            var path = GetPathFromFileName(fileName);
 
             if (File.Exists(path))
             {
@@ -63,5 +63,4 @@ namespace DartCore.Utilities
                 Directory.CreateDirectory(Application.persistentDataPath + "/saves");
         }
     }
-
 }
