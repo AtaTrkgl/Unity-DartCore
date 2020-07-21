@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DartCore.Localization;
@@ -21,9 +22,12 @@ namespace DartCore.UI
         private RectTransform bg;
         private RectTransform canvas;
 
+        private RectTransform rect;
+        
         private void Awake()
         {
             instance = this;
+            rect = GetComponent<RectTransform>();
             bg = transform.Find("bg").GetComponent<RectTransform>();
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
 
@@ -78,13 +82,13 @@ namespace DartCore.UI
             if (!canvas)
                 canvas = transform.parent.GetComponent<RectTransform>();
 
-            float screenWidth = canvas.sizeDelta.x;
-            float screenHeight = canvas.sizeDelta.y;
+            var screenWidth = canvas.sizeDelta.x;
+            var screenHeight = canvas.sizeDelta.y;
 
             // Input.MousePos returns cordinates where the bottom left 
             // side of the screen is (0,0) and the top right corner is (w * canvas scale,h * canvas scale)
             Vector2 realMosPos = (Vector2)Input.mousePosition / canvas.lossyScale;
-            var desiredPos = realMosPos - new Vector2(screenWidth / 2, screenHeight / 2);
+            var desiredPos = realMosPos - new Vector2(screenWidth * .5f, screenHeight * .5f);
 
             desiredPos = new Vector2(
                 Mathf.Clamp(desiredPos.x,
@@ -93,7 +97,7 @@ namespace DartCore.UI
                 Mathf.Clamp(desiredPos.y,
                 -screenHeight / 2 + screenEdgePadding, // no bg size because of the pivot of it
                 screenHeight / 2 - screenEdgePadding - bg.sizeDelta.y));
-            GetComponent<RectTransform>().localPosition = desiredPos;
+            rect.localPosition = desiredPos;
         }
 
         public static void ShowTooltipStatic(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
@@ -119,11 +123,13 @@ namespace DartCore.UI
         {
             if (!instance)
             {
-                if (GameObject.FindGameObjectWithTag("Tooltip Canvas"))
+                var toolTipCanvas = GameObject.FindGameObjectWithTag("Tooltip Canvas");
+                if (toolTipCanvas)
                 {
-                    if (GameObject.FindGameObjectWithTag("Tooltip Canvas").transform.GetChild(0).GetComponent<Tooltip>())
+                    var tooltipChild = toolTipCanvas.transform.GetChild(0).GetComponent<Tooltip>();
+                    if (tooltipChild)
                     { 
-                        instance = GameObject.FindGameObjectWithTag("Tooltip Canvas").transform.GetChild(0).GetComponent<Tooltip>();
+                        instance = tooltipChild;
                         instance.gameObject.SetActive(true);
                         return;
                     }
@@ -134,7 +140,6 @@ namespace DartCore.UI
                 var obj = Instantiate(Resources.Load<GameObject>("Tooltip")) as GameObject;
                 obj.name = "Tooltip";
                 instance = obj.GetComponent<Tooltip>();
-                instance = instance.GetComponent<Tooltip>();
 
                 var canvas = Instantiate(Resources.Load<GameObject>("TooltipCanvas")) as GameObject;
                 canvas.name = "Tooltip Canvas";

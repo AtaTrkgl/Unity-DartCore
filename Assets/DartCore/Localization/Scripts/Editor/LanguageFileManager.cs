@@ -30,6 +30,7 @@ namespace DartCore.Localization
         private void OnGUI()
         {
             var languages = Localizator.GetAvailableLanguages();
+            var localizationPercentages = Localizator.GetLocalizationPercentages();
 
             EditorScriptingUtils.BeginCenter();
             GUILayout.Label("Current Language(s)", EditorStyles.largeLabel);
@@ -37,18 +38,24 @@ namespace DartCore.Localization
 
             EditorScriptingUtils.HorizontalLine(3);
 
-            var languageButtonStyle = new GUIStyle(EditorStyles.miniButton);
-            languageButtonStyle.fixedHeight = 30f;
-            languageButtonStyle.fixedWidth = position.width * .9f;
-            languageButtonStyle.fontSize = 12;
-            languageButtonStyle.padding = new RectOffset(10, 10, 5, 5);
-            languageButtonStyle.alignment = TextAnchor.MiddleCenter;
+            var languageButtonStyle = new GUIStyle(EditorStyles.miniButton)
+            {
+                fixedHeight = 30f,
+                fixedWidth = position.width * .9f,
+                fontSize = 12,
+                padding = new RectOffset(10, 10, 5, 5),
+                alignment = TextAnchor.MiddleCenter,
+                richText = true
+            };
 
             scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
             foreach (var language in languages)
             {
                 EditorScriptingUtils.BeginCenter();
-                if (GUILayout.Button(language.ToString(), languageButtonStyle))
+                var localizationPercentage = localizationPercentages[language];
+                if (GUILayout.Button(
+                    $"<color={(localizationPercentage > 90f ? "green" : "red")}><b>{language.ToString()}</b>, {localizationPercentage}% Localized</color>",
+                    languageButtonStyle))
                 {
                     int input = EditorUtility.DisplayDialogComplex(
                         $"What do you want to do with {language} language",
@@ -56,21 +63,21 @@ namespace DartCore.Localization
                         "Switch",
                         "Delete",
                         "Nothing, go back"
-                        );
+                    );
                     if (input == 0)
                     {
-                        bool dialogOutput = EditorUtility.DisplayDialog(
-                                $"Current language will be set to {language}",
-                                $"Are you sure you want to switch to {language}?",
-                                "Yes",
-                                "No");
+                        var dialogOutput = EditorUtility.DisplayDialog(
+                            $"Current language will be set to {language}",
+                            $"Are you sure you want to switch to {language}?",
+                            "Yes",
+                            "No");
 
                         if (dialogOutput)
                             Localizator.UpdateLanguage(language);
                     }
                     else if (input == 1)
                     {
-                        bool dialogOutput = EditorUtility.DisplayDialog(
+                        var dialogOutput = EditorUtility.DisplayDialog(
                             $"{language} language will be removed from the project permanently",
                             $"Are you sure you want to remove {language} language from your project?",
                             "Yes",
@@ -79,10 +86,11 @@ namespace DartCore.Localization
                         if (dialogOutput)
                             Localizator.RemoveLanguage(language);
                     }
-                    
                 }
+
                 EditorScriptingUtils.EndCenter();
             }
+
             GUILayout.EndScrollView();
 
             EditorScriptingUtils.HorizontalLine(3);
@@ -90,14 +98,14 @@ namespace DartCore.Localization
             // Language
             GUILayout.BeginHorizontal();
             GUILayout.Label("Language to add: ");
-            languageToAdd = (SystemLanguage)EditorGUILayout.EnumPopup(languageToAdd, GUILayout.Width(200f));
+            languageToAdd = (SystemLanguage) EditorGUILayout.EnumPopup(languageToAdd, GUILayout.Width(200f));
             GUILayout.EndHorizontal();
 
             // File Name
             GUILayout.BeginHorizontal();
             GUILayout.Label("File Name: ");
             languageFileName = GUILayout.TextField(languageFileName, GUILayout.Width(200f));
-            languageFileName = languageFileName.Replace(' ','_').ToLower();
+            languageFileName = languageFileName.Replace(' ', '_').ToLower();
             GUILayout.EndHorizontal();
 
             // Language Name
@@ -113,28 +121,29 @@ namespace DartCore.Localization
             GUILayout.EndHorizontal();
 
             bool canCreateLanguage = Array.IndexOf(Localizator.GetCurrentLanguageFiles(), languageFileName.Trim()) == -1
-                && !string.IsNullOrWhiteSpace(languageFileName)
-                && Array.IndexOf(Localizator.GetAvailableLanguages(), languageToAdd) == -1;
+                                     && !string.IsNullOrWhiteSpace(languageFileName)
+                                     && Array.IndexOf(Localizator.GetAvailableLanguages(), languageToAdd) == -1;
 
             if (canCreateLanguage)
             {
                 if (GUILayout.Button($"Add {languageToAdd} language"))
                 {
                     bool dialogOutput = EditorUtility.DisplayDialog(
-                                $"{languageToAdd} language file will be created",
-                                "Are you sure you want to add this language ?",
-                                "Add",
-                                "Cancel");
+                        $"{languageToAdd} language file will be created",
+                        "Are you sure you want to add this language ?",
+                        "Add",
+                        "Cancel");
 
                     if (dialogOutput)
-                        Localizator.CreateLanguage(languageToAdd, languageFileName.Replace('.','_'), languageName, localizationErrorMessage);
+                        Localizator.CreateLanguage(languageToAdd, languageFileName.Replace('.', '_'), languageName,
+                            localizationErrorMessage);
                 }
             }
             else
             {
-                EditorGUILayout.HelpBox("The file name entered or the desired language is invalid", MessageType.Warning);
+                EditorGUILayout.HelpBox("The file name entered or the desired language is invalid",
+                    MessageType.Warning);
             }
-            
         }
     }
 }

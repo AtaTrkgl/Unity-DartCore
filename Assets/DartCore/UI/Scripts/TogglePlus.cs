@@ -62,9 +62,15 @@ namespace DartCore.UI
         private Image fill;
         private float fillAmount = 0;
 
+        private RectTransform maskRect;
+        private Image image;
+
         private void Awake()
         {
             mask = transform.Find("Mask").GetComponent<Image>();
+            maskRect = mask.GetComponent<RectTransform>();
+            image = GetComponent<Image>();
+            
             fill = mask.transform.Find("Fill").GetComponent<Image>();
             fillAmount = isOn ? 1 : 0;
             NormalState();
@@ -99,7 +105,7 @@ namespace DartCore.UI
         {
             fillScale = Mathf.Clamp(fillScale, 0f, 1f);
 
-            mask.GetComponent<RectTransform>().localScale = Vector2.one * fillScale;
+            if (maskRect) maskRect.localScale = Vector2.one * fillScale;
             switch (animType)
             {
                 case ToggleFillAnimation.Horizontal:
@@ -162,7 +168,7 @@ namespace DartCore.UI
         {
             if (isInteractive)
             { 
-                GetComponent<Image>().DOColor(normalColor, transitionDuration);
+                image.DOColor(normalColor, transitionDuration);
                 if (toolTip.Length > 0)
                     Tooltip.HideTooltipStatic();
             }
@@ -170,7 +176,7 @@ namespace DartCore.UI
         protected void DisabledState()
         {
             if (!isInteractive)
-                GetComponent<Image>().DOColor(disabledColor, transitionDuration);
+                image.DOColor(disabledColor, transitionDuration);
         }
 
         #region Cursor Detection
