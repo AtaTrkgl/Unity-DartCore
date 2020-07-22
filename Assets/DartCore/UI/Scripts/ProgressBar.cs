@@ -99,7 +99,7 @@ namespace DartCore.UI
             if (hasBoundries)
                 current = Mathf.Clamp(current, min, max);
 
-            bgImage.DOColor(bgColor, fillTime);
+            bgImage.DOColor(bgColor, fillTime).SetUpdate(true);
             GetCurrentFill();
             if (isRadial)
             {
@@ -117,9 +117,9 @@ namespace DartCore.UI
 
             var desiredFillAmount = currentOffset / maxOffset;
             if (mask)
-                mask.DOFillAmount(desiredFillAmount, fillTime);
+                mask.DOFillAmount(desiredFillAmount, fillTime).SetUpdate(true);
 
-            filler.DOColor(fillerColor, .4f);
+            filler.DOColor(fillerColor, .4f).SetUpdate(true);
         }
 
         private void UpdateInnerCircle()

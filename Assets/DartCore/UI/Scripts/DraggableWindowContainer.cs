@@ -81,7 +81,7 @@ namespace DartCore.UI
             draggableWindowTrans.DOLocalMove(new Vector2(
                     Mathf.Clamp(desiredPos.x, boundaries.x, boundaries.y),
                     Mathf.Clamp(desiredPos.y, boundaries.z, boundaries.w)),
-                followTime);
+                followTime).SetUpdate(true);
         }
 
         private void UpdatePadding()

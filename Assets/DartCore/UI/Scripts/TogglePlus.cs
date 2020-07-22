@@ -61,7 +61,6 @@ namespace DartCore.UI
 
         private Image mask;
         private Image fill;
-        private float fillAmount = 0;
 
         private RectTransform maskRect;
         private Image image;
@@ -73,7 +72,6 @@ namespace DartCore.UI
             image = GetComponent<Image>();
 
             fill = mask.transform.Find("Fill").GetComponent<Image>();
-            fillAmount = isOn ? 1 : 0;
             NormalState();
         }
 
@@ -85,7 +83,6 @@ namespace DartCore.UI
             if (Application.isEditor && !Application.isPlaying)
             {
                 fill.color = fillColor;
-                fillAmount = isOn ? 1 : 0;
             }
 #endif
 
@@ -97,9 +94,8 @@ namespace DartCore.UI
             if (isInteractive && !wasInteractive)
                 NormalState();
 
-            DOTween.To(() => fillAmount, x => fillAmount = x, isOn ? 1 : 0, fillTransDur);
             if (isOn)
-                fill.DOColor(fillColor, animType == ToggleFillAnimation.Fade ? fillTransDur : colorTransitionDuration);
+                fill.DOColor(fillColor, animType == ToggleFillAnimation.Fade ? fillTransDur : colorTransitionDuration).SetUpdate(true);
 
             wasInteractive = isInteractive;
         }
@@ -135,7 +131,7 @@ namespace DartCore.UI
                     fillTransDur = fillTransitionDuration;
                     mask.fillAmount = 1;
                     if (!isOn)
-                        fill.DOColor(Color.clear, fillTransDur);
+                        fill.DOColor(Color.clear, fillTransDur).SetUpdate(true);
                     break;
                 case ToggleFillAnimation.None:
                     fillTransDur = 0f;
@@ -145,7 +141,7 @@ namespace DartCore.UI
             }
 
             if (animType != ToggleFillAnimation.Fade)
-                mask.fillAmount = fillAmount;
+                mask.DOFillAmount(isOn ? 1 : 0, fillTransDur).SetUpdate(true);
         }
 
         private void Click()
@@ -161,7 +157,7 @@ namespace DartCore.UI
         {
             if (!isInteractive) return;
             
-            GetComponent<Image>().DOColor(highlightedColor, transitionDuration);
+            GetComponent<Image>().DOColor(highlightedColor, transitionDuration).SetUpdate(true);
             if (toolTip.Length > 0)
                 Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeTooltip);
             UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
@@ -171,7 +167,7 @@ namespace DartCore.UI
         {
             if (!isInteractive) return;
             
-            image.DOColor(normalColor, transitionDuration);
+            image.DOColor(normalColor, transitionDuration).SetUpdate(true);
             if (toolTip.Length > 0)
                 Tooltip.HideTooltipStatic();
         }
@@ -179,7 +175,7 @@ namespace DartCore.UI
         protected void DisabledState()
         {
             if (!isInteractive)
-                image.DOColor(disabledColor, transitionDuration);
+                image.DOColor(disabledColor, transitionDuration).SetUpdate(true);
         }
 
         #region Cursor Detection

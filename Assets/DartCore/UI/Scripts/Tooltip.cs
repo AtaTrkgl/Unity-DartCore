@@ -21,6 +21,7 @@ namespace DartCore.UI
         private TextMeshProUGUI text;
         private RectTransform textRect;
         private RectTransform bg;
+        private Image bgImage;
         private RectTransform canvas;
 
         private RectTransform rect;
@@ -30,6 +31,7 @@ namespace DartCore.UI
             instance = this;
             rect = GetComponent<RectTransform>();
             bg = transform.Find("bg").GetComponent<RectTransform>();
+            bgImage = bg.GetComponent<Image>();
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
             textRect = text.GetComponent<RectTransform>();
 
@@ -69,9 +71,13 @@ namespace DartCore.UI
 
         private void UpdateTooltip()
         {
-            bg.GetComponent<Image>().color = bgColor;
-            text.color = textColor;
-            text.text = localizeText ? Localizator.GetString(tooltipString) : tooltipString;
+            if (bgImage) bgImage.color = bgColor;
+            
+            if (text)
+            {
+                text.color = textColor;
+                text.text = localizeText ? Localizator.GetString(tooltipString) : tooltipString;
+            }
         }
 
         private void HideTooltip()

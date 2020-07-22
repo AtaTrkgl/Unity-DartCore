@@ -66,11 +66,11 @@ namespace DartCore.UI
                 NormalState();
 
             circleX = rectTrans.sizeDelta.x * .5f - circle.sizeDelta.x * .5f - padding;
-            circle.DOLocalMoveX(isOn ? circleX : -circleX, .1f);
-            bgFill.DOFillAmount(isOn ? 1 : 0, .2f);
+            circle.DOLocalMoveX(isOn ? circleX : -circleX, .1f).SetUpdate(true);
+            bgFill.DOFillAmount(isOn ? 1 : 0, .2f).SetUpdate(true);
 
-            bg.DOColor(bgColorOn, transitionDuration);
-            bgFill.DOColor(bgColorOff, transitionDuration);
+            bg.DOColor(bgColorOn, transitionDuration).SetUpdate(true);
+            bgFill.DOColor(bgColorOff, transitionDuration).SetUpdate(true);
 
             wasInteractive = isInteractive;
         }
