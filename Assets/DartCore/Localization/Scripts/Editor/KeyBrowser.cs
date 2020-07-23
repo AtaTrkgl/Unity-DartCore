@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace DartCore.Localization
         private GUIStyle languageDisplayerStyle;
         private string search = "";
         private List<string> searchedKeys;
+        private LocalizationStatus statusToDisplay = LocalizationStatus.All;
 
         public void OnEnable()
         {
@@ -65,6 +67,9 @@ namespace DartCore.Localization
             search = search.Replace(' ', '_').ToLower();
             Search(search);
 
+            // Search Options
+            statusToDisplay = (LocalizationStatus) EditorGUILayout.EnumPopup(statusToDisplay);
+
             GUILayout.Space(10);
             EditorScriptingUtils.HorizontalLine(3);
 
@@ -89,11 +94,24 @@ namespace DartCore.Localization
             Localizator.UpdateKeyFile();
             foreach (var searchedKey in searchedKeys)
             {
+                var languageLocalizationDict = new Dictionary<SystemLanguage, bool>();
+                foreach (var language in currentLanguages)
+                    languageLocalizationDict.Add(language,
+                        !string.IsNullOrWhiteSpace(Localizator.GetString(searchedKey, language, false)));
+
+                // Filtering
+                if (statusToDisplay == LocalizationStatus.Localized &&
+                    languageLocalizationDict.Values.Contains(false)) continue;
+
+                if (statusToDisplay == LocalizationStatus.NotLocalized &&
+                    !languageLocalizationDict.Values.Contains(false)) continue;
+
+                // Displaying
                 GUILayout.BeginHorizontal();
 
                 var currentKey = searchedKey;
                 if (GUILayout.Button(currentKey,
-                    (currentKey == "lng_name" || currentKey == "lng_error") ? keyButtonStyleBold : keyButtonStyle))
+                    currentKey == "lng_name" || currentKey == "lng_error" ? keyButtonStyleBold : keyButtonStyle))
                 {
                     KeyEditor.key = currentKey;
                     FocusWindowIfItsOpen(typeof(KeyEditor));
@@ -102,11 +120,10 @@ namespace DartCore.Localization
                 GUILayout.FlexibleSpace();
                 foreach (var language in currentLanguages)
                 {
-                    var localizedValue = Localizator.GetString(currentKey, language, false);
                     GUILayout.Label(
-                        string.IsNullOrWhiteSpace(localizedValue)
-                            ? $"<color=red>{language.ToString()}</color>"
-                            : $"<color=green>{language.ToString()}</color>",
+                        languageLocalizationDict[language]
+                            ? $"<color=green>{language.ToString()}</color>"
+                            : $"<color=red>{language.ToString()}</color>",
                         languageDisplayerStyle);
                 }
 
@@ -134,5 +151,15 @@ namespace DartCore.Localization
                     searchedKeys.Add(key.Trim());
             }
         }
+    }
+
+    /// <summary>
+    /// Used to filter the KeyBrowser's search results.
+    /// </summary>
+    public enum LocalizationStatus
+    {
+        All = 0,
+        Localized = 1,
+        NotLocalized = 2,
     }
 }
