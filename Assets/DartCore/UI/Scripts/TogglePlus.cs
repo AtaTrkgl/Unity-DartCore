@@ -35,9 +35,9 @@ namespace DartCore.UI
         [SerializeField] private UnityEvent OnToggle;
 
         [Header("Colors")] public Color normalColor;
-        [Range(0f, 1f)] public float transitionDuration = .1f;
         public Color highlightedColor;
         public Color disabledColor;
+        [Range(0f, 1f)] public float transitionDuration = .1f;
 
         [Header("Filling")] public float fillTransitionDuration = .1f;
         private float fillTransDur;

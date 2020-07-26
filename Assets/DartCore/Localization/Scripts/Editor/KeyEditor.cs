@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using DartCore.Utilities;
+using UnityEditor;
 using UnityEngine;
 
 namespace DartCore.Localization
@@ -17,6 +18,7 @@ namespace DartCore.Localization
         public string keyLastValue;
         public string[] values;
         private Vector2 scrollPos = Vector2.zero;
+        private string newName = "";
 
         private void OnEnable()
         {
@@ -84,6 +86,31 @@ namespace DartCore.Localization
                     if (dialogOutput)
                         Localizator.RemoveKey(key);
                 }
+                
+                // Renaming
+                EditorScriptingUtils.BeginCenter();
+
+                var canRename = !Localizator.DoesContainKey(newName.Trim()) &&
+                                 !string.IsNullOrWhiteSpace(newName.Trim());
+                if (GUILayout.Button("Rename Key", GUILayout.Width(this.position.width * .5f)))
+                {
+                    if (canRename)
+                    {
+                        Localizator.AddKey(newName.Trim());
+                        foreach (var language in Localizator.GetAvailableLanguages())
+                            Localizator.AddLocalizedValue(newName.Trim(), Localizator.GetString(key, language), language);
+                        
+                        Localizator.RemoveKey(key);
+
+                        key = newName.Trim();
+                    }
+                }
+
+                newName = GUILayout.TextField(newName, GUILayout.Width(this.position.width * .5f)).Trim();
+                EditorScriptingUtils.EndCenter();
+                if (Localizator.DoesContainKey(newName.Trim()))
+                    EditorGUILayout.HelpBox("The key name entered is already in use.",
+                        MessageType.Warning);
             }
             else if (GUILayout.Button("Add New Key") && !string.IsNullOrEmpty(key) && !string.IsNullOrWhiteSpace(key))
             {
