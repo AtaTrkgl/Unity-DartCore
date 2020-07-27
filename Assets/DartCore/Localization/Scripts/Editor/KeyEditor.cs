@@ -103,6 +103,7 @@ namespace DartCore.Localization
                         Localizator.RemoveKey(key);
 
                         key = newName.Trim();
+                        newName = "";
                     }
                 }
 

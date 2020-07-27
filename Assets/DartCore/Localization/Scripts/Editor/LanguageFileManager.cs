@@ -7,7 +7,7 @@ namespace DartCore.Localization
 {
     public class LanguageFileManager : EditorWindow
     {
-        [MenuItem("DartCore/Localization/Add or Remove Languages")]
+        [MenuItem("DartCore/Localization/Language File Manager")]
         private static void OpenWindow()
         {
             var window = ScriptableObject.CreateInstance<LanguageFileManager>();
