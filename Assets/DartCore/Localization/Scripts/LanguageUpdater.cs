@@ -4,9 +4,10 @@ using DartCore.UI;
 
 namespace DartCore.Localization
 {
+    [ExecuteInEditMode]
     public class LanguageUpdater : MonoBehaviour
     {
-        [SerializeField] private string key;
+        public string key;
         private TextMeshProUGUI text;
 
         private void Awake()

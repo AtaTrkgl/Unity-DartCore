@@ -1,7 +1,7 @@
 Türkçe
 Lokalizasyon Hatası
 Test Anahtarı 1
-
+Test Anahtarı 2
 <link=clear>Buraya</link> basarak tabloyu temizle, yada <link=clear>buraya</link>.
 
 

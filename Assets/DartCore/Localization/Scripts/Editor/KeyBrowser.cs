@@ -148,8 +148,14 @@ namespace DartCore.Localization
             foreach (var key in keys)
             {
                 if (key.Trim().Contains(search) || search == "")
-                    searchedKeys.Add(key.Trim());
+                {
+                    if (key.Trim() == "lng_name" || key.Trim() == "lng_error")
+                        searchedKeys.Insert(0, key.Trim());
+                    else 
+                        searchedKeys.Add(key.Trim());
+                }
             }
+            
         }
     }
 
