@@ -23,11 +23,10 @@ namespace DartCore.Localization
             if (serializedObject.ApplyModifiedProperties())
                 lngUpdaterComponent.UpdateLanguage();
 
-            var keyIsValid = !string.IsNullOrWhiteSpace(Localizator.GetString(lngUpdaterComponent.key, false));
-            if (!keyIsValid)
+            if (!Localizator.DoesContainKey(lngUpdaterComponent.key))
                 EditorGUILayout.HelpBox("The key does not exist in the current context", MessageType.Warning);
             
-            if (GUILayout.Button(keyIsValid ? $"Edit the '{lngUpdaterComponent.key}' key" 
+            if (GUILayout.Button(Localizator.DoesContainKey(lngUpdaterComponent.key) ? $"Edit the '{lngUpdaterComponent.key}' key" 
                 : $"Create a key named '{lngUpdaterComponent.key}'"))
             {
                 OpenKeyOnEditor();

@@ -45,6 +45,17 @@ namespace DartCore.Localization
             return returnErrorString ? currentLanguageArray[1].Trim() : "";
         }
 
+        public static string GetStringWithFallBackLanguage(string key, SystemLanguage fallBackLanguage, bool returnErrorString = true)
+        {
+            var result = GetString(key, returnErrorString: false);
+            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
+
+            result = GetString(key, fallBackLanguage, returnErrorString: false);
+            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
+
+            return returnErrorString ? GetString("lng_error") : "";
+        }
+
         public static string GetString(string key, SystemLanguage language, bool returnErrorString = true)
         {
             if (!keysArrayInitilized)
@@ -61,7 +72,10 @@ namespace DartCore.Localization
             }
 
             if (!languageNames.ContainsKey(language))
+            {
+                Debug.LogWarning(language.ToString() + " is not present in the project.");
                 return "";
+            }
 
             var languageArray = Resources.Load<TextAsset>(languageNames[language]).text.Split('\n');
 
@@ -72,17 +86,13 @@ namespace DartCore.Localization
             {
                 if (index == -1 && returnErrorString)
                     return languageArray[1];
-                else if (index == -1)
+                if (index == -1)
                     return "";
-                else
-                    return languageArray[index];
+                return languageArray[index];
             }
-            else if (returnErrorString)
-                return languageArray[1];
-            else
-                return "";
+            return returnErrorString ? languageArray[1].Trim() : "";
         }
-
+        
         public static void UpdateKeyFile()
         {
             keysArray = ReadAllLines(KEYS_FILE_NAME);

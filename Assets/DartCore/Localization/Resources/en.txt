@@ -1,9 +1,2 @@
 English
-Localization Error
-Test Key 1
-Test key 2
-you can click <link=clear>here</link> or <link=clear>here</link> to clear the graph.
-Test Key 3
-NewKey2
-Tooltip En
-Change Language
+Localization Error

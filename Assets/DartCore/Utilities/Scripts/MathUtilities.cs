@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DartCore.Utilities
 {
@@ -259,5 +260,22 @@ namespace DartCore.Utilities
             var distance = heading.magnitude;
             return (heading / distance).normalized;
         }
+
+        #region Audio
+
+        public static float FloatToDecibel(float f)
+        {
+            // decibel = log_10(float_val) * 20
+            if (f < .00001f) return -80f;
+            return Mathf.Log10(f) * 20f;
+        }
+
+        public static float DecibelToFloat(float decibel)
+        {
+            // float_val =  10^(decibel / 20)
+            return Mathf.Pow(10, decibel * .05f);
+        }
+
+        #endregion
     }
 }
