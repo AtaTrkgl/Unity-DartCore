@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DartCore.Localization;
+using DartCore.Utilities;
 
 namespace DartCore.UI
 {
@@ -12,6 +13,7 @@ namespace DartCore.UI
         public static Tooltip instance;
         public static float screenEdgePadding = 10f;
         public static int tooltipCanvasSortOrder = 100;
+        public static int maxLineLength = 0;
 
         private static Color textColor;
         private static Color bgColor;
@@ -56,12 +58,13 @@ namespace DartCore.UI
             textRect.sizeDelta = bgSize;
         }
 
-        private void ShowTooltip(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
+        private void ShowTooltip(string tooltipString, Color textColor, Color bgColor, bool localizeText = false, int maxLineLength = 0)
         {
             Tooltip.textColor = textColor;
             Tooltip.bgColor = bgColor;
             Tooltip.localizeText = localizeText;
             Tooltip.tooltipString = tooltipString;
+            Tooltip.maxLineLength = maxLineLength;
 
             instance.UpdateTooltip();
             UpdateTextSize();
@@ -76,7 +79,7 @@ namespace DartCore.UI
             if (text)
             {
                 text.color = textColor;
-                text.text = localizeText ? Localizator.GetString(tooltipString) : tooltipString;
+                text.text = StringUtilities.IncreaseLinesIfNecessary(localizeText ? Localizator.GetString(tooltipString) : tooltipString, maxLineLength);
             }
         }
 
@@ -108,11 +111,11 @@ namespace DartCore.UI
             rect.localPosition = desiredPos;
         }
 
-        public static void ShowTooltipStatic(string tooltipString, Color textColor, Color bgColor, bool localizeText = false)
+        public static void ShowTooltipStatic(string tooltipString, Color textColor, Color bgColor, bool localizeText = false, int maxLineLength = 0)
         {
             CheckInstance();
 
-            instance.ShowTooltip(tooltipString, textColor, bgColor, localizeText);
+            instance.ShowTooltip(tooltipString, textColor, bgColor, localizeText, maxLineLength);
         }
         public static void HideTooltipStatic()
         {

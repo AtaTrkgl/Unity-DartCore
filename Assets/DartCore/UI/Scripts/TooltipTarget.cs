@@ -7,6 +7,8 @@ namespace DartCore.UI
     {
         [Header("Tooltip")] public string toolTip;
 
+        [Tooltip("Leaving this value at 0 will ignore length limit.")]
+        public int maxLineLength = 25;
         [Tooltip("toolTip will be used as a key if set to true")]
         public bool localizeToolTip = false;
 
@@ -16,7 +18,7 @@ namespace DartCore.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (toolTip.Length > 0)
-                Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeToolTip);
+                Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeToolTip, maxLineLength);
         }
 
         public void OnPointerExit(PointerEventData eventData)
