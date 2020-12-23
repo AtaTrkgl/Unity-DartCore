@@ -61,7 +61,7 @@ namespace DartCore.Localization
                         values[i], customTextAreaStyle,
                         GUILayout.Height(Mathf.Clamp((position.height - 97) / values.Length, 100f,
                             float.PositiveInfinity)),
-                        GUILayout.Width(position.width * .75f)).Replace('\n',' ');
+                        GUILayout.Width(position.width * .75f));
 
                     GUILayout.EndHorizontal();
                 }

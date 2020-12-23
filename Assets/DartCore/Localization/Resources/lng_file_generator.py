@@ -1,6 +1,8 @@
 import os
 import csv
 
+LINE_BREAK = "<line_break>"
+
 file_name = input("enter file name without the .csv: ") + ".csv"
 
 
@@ -19,7 +21,7 @@ with open(file_name, "r", encoding="utf-8") as f:
         keys.append(line.pop(0).strip())
         print(line)
         for j, value in enumerate(line):
-            languages[j].append(value.strip())
+            languages[j].append(value.strip().replace("\n", LINE_BREAK))
 
 # Converting the csv to language files
 

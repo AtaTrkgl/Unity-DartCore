@@ -8,6 +8,8 @@ namespace DartCore.Localization
     public class LanguageUpdater : MonoBehaviour
     {
         public string key;
+        [Tooltip("Should an error message get displayed when there is no value for the given key, if set to false will just remain empty.")]
+        public bool displayErrorMessage = true;
         private TextMeshProUGUI text;
 
         private void Awake()
@@ -30,7 +32,7 @@ namespace DartCore.Localization
         {
             if (!text)
                 text = GetComponent<TextMeshProUGUI>();
-            text.text = Localizator.GetString(key);
+            text.text = Localizator.GetString(key, returnErrorString:displayErrorMessage);
 
             if (GetComponent<HyperLink>())
                 GetComponent<HyperLink>().UpdateLinkColors();

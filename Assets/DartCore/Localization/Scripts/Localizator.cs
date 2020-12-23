@@ -20,42 +20,19 @@ namespace DartCore.Localization
         private const string LNG_FILES_PATH = "Assets/DartCore/Localization/Resources/";
         private const string KEYS_FILE_NAME = "_keys";
         private const string LNG_NAMES_FILE = "_lng_names";
+        private const string LINE_BREAK_TEXT = "<line_break>";
 
+        /// <summary>
+        /// Returns the localized value of the given key in the current language.
+        /// </summary>
         public static string GetString(string key, bool returnErrorString = true)
         {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            if (!keysArrayInitilized)
-            {
-                UpdateKeyFile();
-                LoadLanguageFile();
-                keysArrayInitilized = true;
-            }
-
-            int index = GetIndexOfKey(key);
-            bool doesLngFileContainsKey = currentLanguageArray.Length > index && index >= 0;
-
-            if (doesLngFileContainsKey && !string.IsNullOrWhiteSpace(currentLanguageArray[index].Trim()))
-                return currentLanguageArray[index].Trim();
-
-            return returnErrorString ? currentLanguageArray[1].Trim() : "";
+            return GetString(key, currentLanguage, returnErrorString: returnErrorString);
         }
-
-        public static string GetStringWithFallBackLanguage(string key, SystemLanguage fallBackLanguage, bool returnErrorString = true)
-        {
-            var result = GetString(key, returnErrorString: false);
-            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
-
-            result = GetString(key, fallBackLanguage, returnErrorString: false);
-            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
-
-            return returnErrorString ? GetString("lng_error") : "";
-        }
-
+        
+        /// <summary>
+        /// Returns the localized value of the given key in the specified language.
+        /// </summary>
         public static string GetString(string key, SystemLanguage language, bool returnErrorString = true)
         {
             if (!keysArrayInitilized)
@@ -73,26 +50,40 @@ namespace DartCore.Localization
 
             if (!languageNames.ContainsKey(language))
             {
-                Debug.LogWarning(language.ToString() + " is not present in the project.");
+                Debug.LogWarning(language + " is not present in the project.");
                 return "";
             }
 
             var languageArray = Resources.Load<TextAsset>(languageNames[language]).text.Split('\n');
 
             var index = GetIndexOfKey(key);
-            bool doesLngFileContainsKey = languageArray.Length > index;
+            var doesLngFileContainsKey = languageArray.Length > index && index >= 0;
 
-            if (doesLngFileContainsKey)
-            {
-                if (index == -1 && returnErrorString)
-                    return languageArray[1];
-                if (index == -1)
-                    return "";
-                return languageArray[index];
-            }
-            return returnErrorString ? languageArray[1].Trim() : "";
+            if (!doesLngFileContainsKey || index == -1)
+                return returnErrorString ? ConvertSavedStringToUsableString(languageArray[1]) : "";
+            
+            return ConvertSavedStringToUsableString(languageArray[index]);
         }
-        
+
+        private static string ConvertSavedStringToUsableString(string savedString) => savedString.Trim().Replace(LINE_BREAK_TEXT, "\n");
+        private static string ConvertUsableStringToSavedString(string usableString) => usableString.Replace("\n", LINE_BREAK_TEXT);
+
+        /// <summary>
+        /// Works like DartCore.Localization.GetString(), if there is no localized value for the given key in the current language
+        /// returns the localized value in the given fallBackLanguage, if the key is not present in the fallback language returns an
+        /// error string with the current language if returnErrorString is set to True else it will just return an empty string.
+        /// </summary>
+        public static string GetStringWithFallBackLanguage(string key, SystemLanguage fallBackLanguage, bool returnErrorString = true)
+        {
+            var result = GetString(key, returnErrorString: false);
+            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
+
+            result = GetString(key, fallBackLanguage, returnErrorString: false);
+            if (!string.IsNullOrWhiteSpace(result)) return result.Trim();
+
+            return returnErrorString ? GetString("lng_error") : "";
+        }
+
         public static void UpdateKeyFile()
         {
             keysArray = ReadAllLines(KEYS_FILE_NAME);
@@ -173,7 +164,7 @@ namespace DartCore.Localization
                     lngDictIsInitilized = true;
                 }
 
-                localizedValue = localizedValue.Replace('\n', new char()).Trim();
+                localizedValue = ConvertUsableStringToSavedString(localizedValue);
                 string value = File.ReadAllText(LNG_FILES_PATH + languageNames[language] + ".txt");
 
                 var index = GetIndexOfKey(key);
@@ -287,6 +278,12 @@ namespace DartCore.Localization
 
         private static int GetIndexOfKey(string key)
         {
+            if (!keysArrayInitilized)
+            {
+                UpdateKeyFile();
+                keysArrayInitilized = true;
+            }
+            
             for (int i = 0; i < keysArray.Length; i++)
             {
                 if (keysArray[i].Trim() == key.Trim())

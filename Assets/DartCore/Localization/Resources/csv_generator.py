@@ -13,10 +13,11 @@ import os
 import csv
 
 KEYS_FILE = "_keys.txt"
+LINE_BREAK = "<line_break>"
 
 def get_striped_list(list_to_strip: list) -> list:
     # strip to remove /n's.
-    return [i.strip() for i in list_to_strip]
+    return [i.strip().replace(LINE_BREAK, "\n") for i in list_to_strip]
 
 
 # Converting files to lists
