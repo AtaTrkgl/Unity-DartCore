@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ICSharpCode.NRefactory.PrettyPrinter;
 using UnityEngine;
 using UnityEditor;
 

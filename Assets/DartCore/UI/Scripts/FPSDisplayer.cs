@@ -26,9 +26,13 @@ namespace  DartCore.UI
         #endregion
 
         public static FPSDisplayer instance;
+        private static float avg = 0;
+
+        [SerializeField] private bool toggled = true;
+        [SerializeField] private KeyCode toggleKey = KeyCode.F6;
 
         [SerializeField] private Color textColor = Color.green;
-        private TMP_Text versionText;
+        private TMP_Text fpsText;
     
         private void Awake()
         {
@@ -37,7 +41,7 @@ namespace  DartCore.UI
             else
                 instance = this;
             
-            versionText = GetComponentInChildren<TMP_Text>();
+            fpsText = GetComponentInChildren<TMP_Text>();
             
             DontDestroyOnLoad(this);
             UpdateColor(textColor);
@@ -45,14 +49,27 @@ namespace  DartCore.UI
 
         private void Update()
         {
-            if (!versionText || Time.unscaledDeltaTime == 0f) return;
-            versionText.text = $"FPS: {Mathf.RoundToInt(1/Time.unscaledDeltaTime)}";
+            if (!fpsText || Time.unscaledDeltaTime == 0f) return;
+
+            if (Input.GetKeyDown(toggleKey)) toggled = !toggled;
+
+            var currentFPS = 1 / Time.unscaledDeltaTime;
+            var roundedFPS = Mathf.RoundToInt(currentFPS);
+            
+            avg = (avg * (Time.frameCount - 1) + currentFPS) / Time.frameCount;
+            
+            if (!toggled)
+            {
+                fpsText.text = "";
+                return;
+            }
+            fpsText.text = $"FPS: {(roundedFPS < 100 ? roundedFPS + " " : roundedFPS.ToString())}" + $" Avg: {Mathf.RoundToInt(avg)}";
         }
 
         public void UpdateColor(Color color)
         {
             textColor = color;
-            versionText.color = color;
+            fpsText.color = color;
         }
     }
 }

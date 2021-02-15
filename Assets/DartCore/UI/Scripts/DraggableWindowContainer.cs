@@ -28,16 +28,6 @@ namespace DartCore.UI
         [Header("Configuration")] [SerializeField]
         private float padding;
 
-        public float Padding
-        {
-            get { return padding; }
-            set
-            {
-                padding = value;
-                UpdatePadding();
-            }
-        }
-
         public float followTime = .1f;
 
         private RectTransform containerTrans;
@@ -73,6 +63,12 @@ namespace DartCore.UI
                 if (Input.GetMouseButtonUp(0))
                     isDragging = false;
             }
+        }
+
+        public void SetPadding(float val)
+        {
+            padding = val;
+            UpdatePadding();
         }
 
         private void FollowCursor()

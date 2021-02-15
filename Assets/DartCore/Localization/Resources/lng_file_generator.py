@@ -27,7 +27,7 @@ with open(file_name, "r", encoding="utf-8") as f:
 
 
 def convert_vals_to_lines(vals: list) -> list:
-    return [val + "\n" for val in vals]
+    return [val + ("\n" if i != len(vals) - 1 else "") for i, val in enumerate(vals)]
 
 
 lng_file_count = 0

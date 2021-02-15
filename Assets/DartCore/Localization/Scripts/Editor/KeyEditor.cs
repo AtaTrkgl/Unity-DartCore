@@ -41,7 +41,7 @@ namespace DartCore.Localization
             GUILayout.Space(10f);
             Localizator.UpdateKeyFile();
 
-            if (key != keyLastValue)
+            if (key != keyLastValue || values.Length != Localizator.GetLanguageCount())
                 values = new string[Localizator.GetLanguageCount()];
 
             if (Localizator.DoesContainKey(key))

@@ -61,8 +61,8 @@ namespace DartCore.Localization
                         $"What do you want to do with {language} language",
                         $"Do you want to remove or switch to {language} language?",
                         "Switch",
-                        "Delete",
-                        "Nothing, go back"
+                        "Nothing, go back",
+                        "Delete"
                     );
                     switch (input)
                     {
@@ -78,7 +78,7 @@ namespace DartCore.Localization
                                 Localizator.UpdateLanguage(language);
                             break;
                         }
-                        case 1:
+                        case 2:
                         {
                             var dialogOutput = EditorUtility.DisplayDialog(
                                 $"{language} language will be removed from the project permanently",
