@@ -23,6 +23,7 @@ namespace DartCore.Localization
         private const int BUTTON_HEIGHT = 30;
         private const int ELEMENT_HEIGHT = 23;
         private const int ELEMENT_WIDTH = 150;
+        private const int LANGUAGE_NAME_DISPLAYER_WIDTH = 100;
 
         private Vector2 scrollPos;
         private string search = "";
@@ -90,7 +91,8 @@ namespace DartCore.Localization
 
             var rectPos = EditorGUILayout.GetControlRect();
             var rectBox = new Rect(rectPos.x, rectPos.y, rectPos.width, position.height - 110);
-            var viewRect = new Rect(rectPos.x, rectPos.y, (1 + currentLanguages.Length) * ELEMENT_WIDTH, searchedKeys.Count * ELEMENT_HEIGHT);
+            var viewRect = new Rect(rectPos.x, rectPos.y, 
+                currentLanguages.Length * LANGUAGE_NAME_DISPLAYER_WIDTH + ELEMENT_WIDTH, searchedKeys.Count * ELEMENT_HEIGHT);
 
             scrollPos = GUI.BeginScrollView(rectBox, scrollPos, viewRect, false, true);
 
@@ -131,7 +133,8 @@ namespace DartCore.Localization
                 for (var j = 0; j < currentLanguages.Length; j++)
                 {
                     var language = currentLanguages[j];
-                    var offsetedContentPos = new Rect(contentPos.x + (j + 1) * ELEMENT_WIDTH, contentPos.y, contentPos.width, ELEMENT_HEIGHT);
+                    var xOffset = ELEMENT_WIDTH + j * LANGUAGE_NAME_DISPLAYER_WIDTH;
+                    var offsetedContentPos = new Rect(contentPos.x + xOffset, contentPos.y, contentPos.width, ELEMENT_HEIGHT);
                     GUI.Label(offsetedContentPos,
                         languageLocalizationDict[language]
                             ? $"<color=green>{language.ToString()}</color>"

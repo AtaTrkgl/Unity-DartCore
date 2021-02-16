@@ -52,7 +52,12 @@ namespace DartCore.Localization
                     if (values[i] == null)
                         values[i] = Localizator.GetString(key, Localizator.GetAvailableLanguages()[i], false);
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{Localizator.GetAvailableLanguages()[i]}: ", GUILayout.MaxWidth(50));
+                    
+                    var isSameAsTheSavedValue = values[i] == Localizator.GetString(key, Localizator.GetAvailableLanguages()[i], false);
+                    GUI.color = isSameAsTheSavedValue ? Color.green : Color.red;
+                    EditorGUILayout.LabelField($"{Localizator.GetAvailableLanguages()[i]}: ",
+                        GUILayout.MaxWidth(50));
+                    GUI.color = Color.white;
 
                     var customTextAreaStyle = EditorStyles.textArea;
                     customTextAreaStyle.wordWrap = true;
