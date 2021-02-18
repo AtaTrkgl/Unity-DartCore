@@ -66,7 +66,10 @@ namespace DartCore.Localization
         }
 
         private static string ConvertSavedStringToUsableString(string savedString) => savedString.Trim().Replace(LINE_BREAK_TEXT, "\n");
-        private static string ConvertUsableStringToSavedString(string usableString) => usableString.Replace("\n", LINE_BREAK_TEXT);
+        private static string ConvertUsableStringToSavedString(string usableString) => usableString
+            .Replace(Environment.NewLine, LINE_BREAK_TEXT)
+            .Replace("\n", LINE_BREAK_TEXT)
+            .Trim();
 
         /// <summary>
         /// Works like DartCore.Localization.GetString(), if there is no localized value for the given key in the current language
