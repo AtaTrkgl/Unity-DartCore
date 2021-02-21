@@ -27,7 +27,9 @@ namespace DartCore.Localization
 
         private Vector2 scrollPos;
         private string search = "";
+        private string lastSearch = ".";
         private List<string> searchedKeys;
+        private List<string> keysWithCorrectLocalizationStatus;
         private LocalizationStatus statusToDisplay = LocalizationStatus.All;
 
         public void OnEnable()
@@ -84,7 +86,7 @@ namespace DartCore.Localization
             Search(search);
 
             // Search Options
-            statusToDisplay = (LocalizationStatus) EditorGUILayout.EnumPopup(statusToDisplay);
+            SetLocalizationStatus((LocalizationStatus) EditorGUILayout.EnumPopup(statusToDisplay));
 
             GUILayout.Space(10);
             EditorScriptingUtils.HorizontalLine(3);
@@ -110,13 +112,6 @@ namespace DartCore.Localization
                 foreach (var language in currentLanguages)
                     languageLocalizationDict.Add(language,
                         !string.IsNullOrWhiteSpace(Localizator.GetString(searchedKeys[i], language, false)));
-
-                // Filtering
-                if (statusToDisplay == LocalizationStatus.Localized &&
-                    languageLocalizationDict.Values.Contains(false)) continue;
-
-                if (statusToDisplay == LocalizationStatus.NotLocalized &&
-                    !languageLocalizationDict.Values.Contains(false)) continue;
 
                 // Displaying
                 EditorGUILayout.BeginHorizontal();
@@ -146,21 +141,67 @@ namespace DartCore.Localization
             }
 
             GUI.EndScrollView();
-    }
+        }
 
+        private void SetLocalizationStatus(LocalizationStatus status)
+        {
+            if (status == statusToDisplay) return;
+            
+            statusToDisplay = status;
+            FilterSearchedKeys();
+        }
+
+        private void FilterSearchedKeys()
+        {
+            if (statusToDisplay == LocalizationStatus.All)
+            {
+                keysWithCorrectLocalizationStatus = keys.ToList();
+            }
+            else
+            {
+                keysWithCorrectLocalizationStatus = new List<string>();
+            
+                foreach (var key in keys)
+                {
+                    var isLocalized = true;
+                    foreach (var language in currentLanguages)
+                    {
+                        // Contains a value that's not localized.
+                        if (string.IsNullOrWhiteSpace(Localizator.GetString(key, language, false)))
+                        {
+                            if (statusToDisplay == LocalizationStatus.NotLocalized)
+                                keysWithCorrectLocalizationStatus.Add(key);
+
+                            isLocalized = false;
+                            break;
+                        }
+                    }
+                    if (statusToDisplay == LocalizationStatus.Localized && isLocalized)
+                        keysWithCorrectLocalizationStatus.Add(key);
+                }
+            }
+            
+            Search("", ignoreRepetition: true);
+        }
+        
         private void UpdateArrays()
         {
             Localizator.RefreshAll();
             keys = Localizator.GetKeys();
             Array.Sort(keys);
             currentLanguages = Localizator.GetAvailableLanguages();
+            
+            Search("", ignoreRepetition: true);
+            FilterSearchedKeys();
         }
 
-        private void Search(string search)
+        private void Search(string search, bool ignoreRepetition = false)
         {
+            if (search == lastSearch && !ignoreRepetition) return;
+            
             searchedKeys = new List<string>();
 
-            foreach (var key in keys)
+            foreach (var key in keysWithCorrectLocalizationStatus)
             {
                 if (key.Trim().Contains(search) || search == "")
                 {
@@ -170,7 +211,8 @@ namespace DartCore.Localization
                         searchedKeys.Add(key.Trim());
                 }
             }
-            
+
+            lastSearch = search;
         }
     }
 

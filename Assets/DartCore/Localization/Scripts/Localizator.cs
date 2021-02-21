@@ -65,6 +65,11 @@ namespace DartCore.Localization
             return ConvertSavedStringToUsableString(languageArray[index]);
         }
 
+        public static string GetStringRaw(string key, SystemLanguage language)
+        {
+            return ConvertUsableStringToSavedString(GetString(key, language, returnErrorString: false));
+        }
+
         private static string ConvertSavedStringToUsableString(string savedString) => savedString.Trim().Replace(LINE_BREAK_TEXT, "\n");
         private static string ConvertUsableStringToSavedString(string usableString) => usableString
             .Replace(Environment.NewLine, LINE_BREAK_TEXT)
@@ -130,10 +135,9 @@ namespace DartCore.Localization
                 for (int i = 0; i < keysArray.Length; i++)
                 {
                     if (i != index)
-                        newText += keysArray[i] + "\n";
+                        newText += keysArray[i] + (i != keysArray.Length - 1 ? "\n" : "");
                 }
 
-                newText = newText.Remove(newText.Length - 1);
                 File.WriteAllText(LNG_FILES_PATH + KEYS_FILE_NAME + ".txt", newText);
 
                 // VALUE REMOVAL
@@ -143,7 +147,7 @@ namespace DartCore.Localization
                     for (int i = 0; i < keysArray.Length; i++)
                     {
                         if (i != index)
-                            newText += GetString(keysArray[i], language) + "\n";
+                            newText += GetStringRaw(keysArray[i], language) + "\n";
                     }
 
                     newText = newText.Remove(newText.Length - 1);

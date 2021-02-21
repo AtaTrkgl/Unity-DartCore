@@ -103,7 +103,7 @@ namespace DartCore.Localization
                     {
                         Localizator.AddKey(newName.Trim());
                         foreach (var language in Localizator.GetAvailableLanguages())
-                            Localizator.AddLocalizedValue(newName.Trim(), Localizator.GetString(key, language), language);
+                            Localizator.AddLocalizedValue(newName.Trim(), Localizator.GetString(key, language, returnErrorString: false), language);
                         
                         Localizator.RemoveKey(key);
 
