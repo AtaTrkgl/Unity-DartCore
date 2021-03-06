@@ -7,7 +7,7 @@ namespace DartCore.Localization
     [ExecuteInEditMode]
     public class LanguageUpdater : MonoBehaviour
     {
-        public string key;
+        [LocalizedKey] public string key;
         [Tooltip("Should an error message get displayed when there is no value for the given key, if set to false will just remain empty.")]
         public bool displayErrorMessage = true;
         private TextMeshProUGUI text;

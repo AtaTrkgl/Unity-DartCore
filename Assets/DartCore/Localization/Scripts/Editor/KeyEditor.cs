@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DartCore.Localization
+namespace DartCore.Localization.Editor
 {
     public class KeyEditor : EditorWindow
     {
@@ -36,7 +36,7 @@ namespace DartCore.Localization
             };
 
             key = GUILayout.TextField(key, keySearchBarStyle);
-            key = key.Replace(' ', '_').ToLower();
+            key = ConvertRawToKey(key);
 
             GUILayout.Space(10f);
             Localizator.UpdateKeyFile();
@@ -125,5 +125,7 @@ namespace DartCore.Localization
 
             keyLastValue = key;
         }
+        
+        public static string ConvertRawToKey(string raw) => raw.Replace(' ', '_').ToLower();
     }
 }

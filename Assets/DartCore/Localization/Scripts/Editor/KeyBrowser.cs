@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace DartCore.Localization
+namespace DartCore.Localization.Editor
 {
     public class KeyBrowser : EditorWindow
     {
@@ -104,6 +104,7 @@ namespace DartCore.Localization
             var contentPos = new Rect(rectBox.x, firstIndex * ELEMENT_HEIGHT + 80f, rectBox.width, ELEMENT_HEIGHT);
 
             Localizator.UpdateKeyFile();
+            
             for (var i = firstIndex; i < Mathf.Min(firstIndex + viewCount, searchedKeys.Count); i++)
             {
                 contentPos.y += ELEMENT_HEIGHT;
@@ -112,7 +113,7 @@ namespace DartCore.Localization
                 foreach (var language in currentLanguages)
                     languageLocalizationDict.Add(language,
                         !string.IsNullOrWhiteSpace(Localizator.GetString(searchedKeys[i], language, false)));
-
+                
                 // Displaying
                 EditorGUILayout.BeginHorizontal();
 
@@ -148,10 +149,10 @@ namespace DartCore.Localization
             if (status == statusToDisplay) return;
             
             statusToDisplay = status;
-            FilterSearchedKeys();
+            FilterKeys();
         }
 
-        private void FilterSearchedKeys()
+        private void FilterKeys()
         {
             if (statusToDisplay == LocalizationStatus.All)
             {
@@ -192,7 +193,7 @@ namespace DartCore.Localization
             currentLanguages = Localizator.GetAvailableLanguages();
             
             Search("", ignoreRepetition: true);
-            FilterSearchedKeys();
+            FilterKeys();
         }
 
         private void Search(string search, bool ignoreRepetition = false)
@@ -201,6 +202,7 @@ namespace DartCore.Localization
             
             searchedKeys = new List<string>();
 
+            if (keysWithCorrectLocalizationStatus == null) FilterKeys();
             foreach (var key in keysWithCorrectLocalizationStatus)
             {
                 if (key.Trim().Contains(search) || search == "")
