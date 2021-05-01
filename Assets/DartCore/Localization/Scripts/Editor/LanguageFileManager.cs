@@ -3,7 +3,7 @@ using UnityEngine;
 using DartCore.Utilities;
 using System;
 
-namespace DartCore.Localization.Editor
+namespace DartCore.Localization.Backend
 {
     public class LanguageFileManager : EditorWindow
     {

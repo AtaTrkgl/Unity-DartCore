@@ -32,14 +32,19 @@ for file in os.listdir():
     # language file
     if file.endswith(".txt") and not file.startswith("_"):
         with open(file, "r", encoding="utf-8") as f:
-            languages.append(get_striped_list(f.readlines()))
+        	lines = f.readlines()
+        	last_line = lines[len(f.readlines()) - 1]
+        	if last_line == "\n":
+        		lines.append("")
 
+        	languages.append(get_striped_list(lines))
 
 # Generating row dict from index
 def get_row_dict(index: int) -> dict:
     row_dict = {"Keys": keys[index]}
     for language in languages:
-        row_dict[language[0]] = language[index]
+    	# language[0] is the name of the language.
+    	row_dict[language[0]] = language[index]
 
     return row_dict
 

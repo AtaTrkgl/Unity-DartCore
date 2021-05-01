@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace DartCore.Localization.Editor
+namespace DartCore.Localization.Backend
 {
     public class KeyBrowser : EditorWindow
     {

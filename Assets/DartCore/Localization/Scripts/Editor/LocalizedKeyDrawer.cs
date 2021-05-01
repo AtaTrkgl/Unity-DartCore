@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using DartCore.Localization.Editor;
+using DartCore.Localization.Backend;
 
 namespace DartCore.Localization
 {

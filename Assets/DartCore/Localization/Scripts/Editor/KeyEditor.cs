@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace DartCore.Localization.Editor
+namespace DartCore.Localization.Backend
 {
     public class KeyEditor : EditorWindow
     {
