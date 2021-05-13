@@ -10,7 +10,7 @@ namespace DartCore.Localization.Backend
         [MenuItem("DartCore/Localization/Language File Manager")]
         private static void OpenWindow()
         {
-            var window = ScriptableObject.CreateInstance<LanguageFileManager>();
+            var window = CreateInstance<LanguageFileManager>();
             window.titleContent = new GUIContent("Language File Manager");
             window.Show();
         }
@@ -41,7 +41,7 @@ namespace DartCore.Localization.Backend
             var languageButtonStyle = new GUIStyle(EditorStyles.miniButton)
             {
                 fixedHeight = 30f,
-                fixedWidth = position.width * .9f,
+                fixedWidth = position.width * .3f,
                 fontSize = 12,
                 padding = new RectOffset(10, 10, 5, 5),
                 alignment = TextAnchor.MiddleCenter,
@@ -52,47 +52,44 @@ namespace DartCore.Localization.Backend
             foreach (var language in languages)
             {
                 EditorScriptingUtils.BeginCenter();
+                GUILayout.BeginHorizontal();
                 var localizationPercentage = localizationPercentages[language];
-                if (GUILayout.Button(
-                    $"<color={(localizationPercentage > 90f ? "green" : "red")}><b>{language.ToString()}</b>, {localizationPercentage}% Localized</color>",
-                    languageButtonStyle))
+                
+                // Label
+                GUILayout.Label($"<color={(localizationPercentage > 90f ? "green" : "red")}><b>{language.ToString()}</b>, {localizationPercentage}% Localized</color>",
+                    languageButtonStyle);
+                
+                // Switch to the language
+                if (GUILayout.Button($"Switch", languageButtonStyle))
                 {
-                    var input = EditorUtility.DisplayDialogComplex(
-                        $"What do you want to do with {language} language",
-                        $"Do you want to remove or switch to {language} language?",
-                        "Switch",
-                        "Nothing, go back",
-                        "Delete"
-                    );
-                    switch (input)
+                    var dialogOutput = EditorUtility.DisplayDialog(
+                        $"Current language will be set to {language}",
+                        $"Are you sure you want to switch to {language}?",
+                        "Yes",
+                        "No");
+
+                    if (dialogOutput)
+                        Localizator.UpdateLanguage(language);
+                }
+                
+                // Remove the language
+                if (GUILayout.Button($"Remove", languageButtonStyle))
+                {
+                    var dialogOutput = EditorUtility.DisplayDialog(
+                        $"{language} language will be removed from the project permanently",
+                        $"Are you sure you want to remove {language} language from your project?",
+                        "Yes",
+                        "No");
+
+                    if (dialogOutput)
                     {
-                        case 0:
-                        {
-                            var dialogOutput = EditorUtility.DisplayDialog(
-                                $"Current language will be set to {language}",
-                                $"Are you sure you want to switch to {language}?",
-                                "Yes",
-                                "No");
-
-                            if (dialogOutput)
-                                Localizator.UpdateLanguage(language);
-                            break;
-                        }
-                        case 2:
-                        {
-                            var dialogOutput = EditorUtility.DisplayDialog(
-                                $"{language} language will be removed from the project permanently",
-                                $"Are you sure you want to remove {language} language from your project?",
-                                "Yes",
-                                "No");
-
-                            if (dialogOutput)
-                                Localizator.RemoveLanguage(language);
-                            break;
-                        }
+                        Localizator.RemoveLanguage(language);
+                        ((KeyBrowser) GetWindow(typeof(KeyBrowser))).UpdateArrays();
                     }
+
                 }
 
+                GUILayout.EndHorizontal();
                 EditorScriptingUtils.EndCenter();
             }
 
@@ -140,8 +137,11 @@ namespace DartCore.Localization.Backend
                         "Cancel");
 
                     if (dialogOutput)
+                    {
                         Localizator.CreateLanguage(languageToAdd, languageFileName.Replace('.', '_'), languageName,
                             localizationErrorMessage);
+                        ((KeyBrowser) GetWindow(typeof(KeyBrowser))).UpdateArrays();
+                    }
                 }
             }
             else

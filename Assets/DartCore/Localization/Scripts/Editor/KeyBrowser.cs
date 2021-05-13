@@ -109,10 +109,7 @@ namespace DartCore.Localization.Backend
             {
                 contentPos.y += ELEMENT_HEIGHT;
 
-                var languageLocalizationDict = new Dictionary<SystemLanguage, bool>();
-                foreach (var language in currentLanguages)
-                    languageLocalizationDict.Add(language,
-                        !string.IsNullOrWhiteSpace(Localizator.GetString(searchedKeys[i], language, false)));
+                var localizationStatus = Localizator.GetLocalizationStatusOfKey(searchedKeys[i]);
                 
                 // Displaying
                 EditorGUILayout.BeginHorizontal();
@@ -122,6 +119,9 @@ namespace DartCore.Localization.Backend
                     currentKey == "lng_name" || currentKey == "lng_error" ? keyButtonStyleBold : keyButtonStyle))
                 {
                     KeyEditor.key = currentKey;
+                    
+                    var window = (KeyEditor) GetWindow( typeof(KeyEditor), false,"Key Editor",true);
+                    window.Show();
                     FocusWindowIfItsOpen(typeof(KeyEditor));
                 }
 
@@ -132,7 +132,7 @@ namespace DartCore.Localization.Backend
                     var xOffset = ELEMENT_WIDTH + j * LANGUAGE_NAME_DISPLAYER_WIDTH;
                     var offsetedContentPos = new Rect(contentPos.x + xOffset, contentPos.y, contentPos.width, ELEMENT_HEIGHT);
                     GUI.Label(offsetedContentPos,
-                        languageLocalizationDict[language]
+                        localizationStatus[j]
                             ? $"<color=green>{language.ToString()}</color>"
                             : $"<color=red>{language.ToString()}</color>",
                         languageDisplayerStyle);
@@ -164,20 +164,10 @@ namespace DartCore.Localization.Backend
             
                 foreach (var key in keys)
                 {
-                    var isLocalized = true;
-                    foreach (var language in currentLanguages)
-                    {
-                        // Contains a value that's not localized.
-                        if (string.IsNullOrWhiteSpace(Localizator.GetString(key, language, false)))
-                        {
-                            if (statusToDisplay == LocalizationStatus.NotLocalized)
-                                keysWithCorrectLocalizationStatus.Add(key);
-
-                            isLocalized = false;
-                            break;
-                        }
-                    }
-                    if (statusToDisplay == LocalizationStatus.Localized && isLocalized)
+                    var isLocalized = !Localizator.GetLocalizationStatusOfKey(key).Contains(false);
+                    
+                    if (statusToDisplay == LocalizationStatus.Localized && isLocalized ||
+                        statusToDisplay == LocalizationStatus.NotLocalized && !isLocalized)
                         keysWithCorrectLocalizationStatus.Add(key);
                 }
             }
@@ -185,10 +175,10 @@ namespace DartCore.Localization.Backend
             Search("", ignoreRepetition: true);
         }
         
-        private void UpdateArrays()
+        public void UpdateArrays()
         {
             Localizator.RefreshAll();
-            keys = Localizator.GetKeys();
+            keys = Localizator.GetKeysArray();
             Array.Sort(keys);
             currentLanguages = Localizator.GetAvailableLanguages();
             

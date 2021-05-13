@@ -8,12 +8,9 @@ namespace DartCore.Localization
 {
     public class Localizator
     {
-        private static bool keysArrayInitilized = false;
         private static string[] keysArray;
-        private static string[] currentLanguageArray;
-
+        private static Dictionary<SystemLanguage, string[]> languageArrays;
         private static Dictionary<SystemLanguage, string> languageNames;
-        private static bool lngDictIsInitilized = false;
 
         private static SystemLanguage currentLanguage = SystemLanguage.English;
 
@@ -21,6 +18,23 @@ namespace DartCore.Localization
         private const string KEYS_FILE_NAME = "_keys";
         private const string LNG_NAMES_FILE = "_lng_names";
         private const string LINE_BREAK_TEXT = "<line_break>";
+
+        /// <summary>
+        /// returns an array which consists of all the keys.
+        /// </summary>
+        public static string[] GetKeysArray() => keysArray ??= ReadAllLines(KEYS_FILE_NAME);
+
+        private static Dictionary<SystemLanguage, string> GetLanguageNames()
+        {
+            if (languageNames == null)LoadLanguageFile();
+            return languageNames;
+        }
+
+        private static Dictionary<SystemLanguage, string[]> GetLanguageArrays()
+        {
+            if (languageArrays == null) LoadLanguageFile();
+            return languageArrays;
+        }
 
         /// <summary>
         /// Returns the localized value of the given key in the current language.
@@ -35,34 +49,33 @@ namespace DartCore.Localization
         /// </summary>
         public static string GetString(string key, SystemLanguage language, bool returnErrorString = true)
         {
-            if (!keysArrayInitilized)
-            {
-                UpdateKeyFile();
-                keysArrayInitilized = true;
-            }
-
-            if (!lngDictIsInitilized)
-            {
-                LoadLanguageFile();
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            if (!languageNames.ContainsKey(language))
-            {
-                Debug.LogWarning(language + " is not present in the project.");
+            if (!GetLanguageNames().ContainsKey(language))
                 return "";
-            }
 
-            var languageArray = Resources.Load<TextAsset>(languageNames[language]).text.Split('\n');
-
+            var languageArray = GetLanguageArrays()[language];
             var index = GetIndexOfKey(key);
+
             var doesLngFileContainsKey = languageArray.Length > index && index >= 0;
 
             if (!doesLngFileContainsKey || index == -1)
                 return returnErrorString ? ConvertSavedStringToUsableString(languageArray[1]) : "";
             
             return ConvertSavedStringToUsableString(languageArray[index]);
+        }
+
+        /// <summary>
+        /// Returns a list of booleans that corresponds to the localization status of the key in the available languages.
+        /// </summary>
+        public static bool[] GetLocalizationStatusOfKey(string key)
+        {
+            var availableLanguages = GetAvailableLanguages();
+            var localizationStatuses = new bool[availableLanguages.Length];
+
+            var keyIndex = GetIndexOfKey(key);
+            for (var i = 0; i < availableLanguages.Length; i++)
+                localizationStatuses[i] = !string.IsNullOrWhiteSpace(GetLanguageArrays()[availableLanguages[i]][keyIndex]);
+
+            return localizationStatuses;
         }
 
         public static string GetStringRaw(string key, SystemLanguage language)
@@ -122,36 +135,31 @@ namespace DartCore.Localization
             key = key.Replace('\n', new char()).Replace(' ', '_');
             if (DoesContainKey(key))
             {
-                if (!lngDictIsInitilized)
-                {
-                    UpdateLanguageDictionary();
-                    lngDictIsInitilized = true;
-                }
 
                 int index = GetIndexOfKey(key);
 
                 // KEY REMOVAL
                 string newText = "";
-                for (int i = 0; i < keysArray.Length; i++)
+                for (int i = 0; i < GetKeysArray().Length; i++)
                 {
                     if (i != index)
-                        newText += keysArray[i] + (i != keysArray.Length - 1 ? "\n" : "");
+                        newText += GetKeysArray()[i] + (i != GetKeysArray().Length - 1 ? "\n" : "");
                 }
 
                 File.WriteAllText(LNG_FILES_PATH + KEYS_FILE_NAME + ".txt", newText);
 
                 // VALUE REMOVAL
-                foreach (var language in languageNames.Keys)
+                foreach (var language in GetLanguageNames().Keys)
                 {
                     newText = "";
-                    for (int i = 0; i < keysArray.Length; i++)
+                    for (int i = 0; i < GetKeysArray().Length; i++)
                     {
                         if (i != index)
-                            newText += GetStringRaw(keysArray[i], language) + "\n";
+                            newText += GetStringRaw(GetKeysArray()[i], language) + "\n";
                     }
 
                     newText = newText.Remove(newText.Length - 1);
-                    File.WriteAllText(LNG_FILES_PATH + languageNames[language] + ".txt", newText);
+                    File.WriteAllText(LNG_FILES_PATH + GetLanguageNames()[language] + ".txt", newText);
                 }
             }
 #if UNITY_EDITOR
@@ -165,14 +173,8 @@ namespace DartCore.Localization
         {
             if (GetString(key, language, true) != localizedValue)
             {
-                if (!lngDictIsInitilized)
-                {
-                    UpdateLanguageDictionary();
-                    lngDictIsInitilized = true;
-                }
-
                 localizedValue = ConvertUsableStringToSavedString(localizedValue);
-                string value = File.ReadAllText(LNG_FILES_PATH + languageNames[language] + ".txt");
+                string value = File.ReadAllText(LNG_FILES_PATH + GetLanguageNames()[language] + ".txt");
 
                 var index = GetIndexOfKey(key);
                 string endString = "";
@@ -190,7 +192,7 @@ namespace DartCore.Localization
                         endString += splittedValue[i];
                 }
 
-                File.WriteAllText(LNG_FILES_PATH + languageNames[language] + ".txt", endString);
+                File.WriteAllText(LNG_FILES_PATH + GetLanguageNames()[language] + ".txt", endString);
 #if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
 #endif
@@ -200,14 +202,17 @@ namespace DartCore.Localization
         private static void LoadLanguageFile()
         {
             UpdateLanguageDictionary();
-            lngDictIsInitilized = true;
 
-            currentLanguageArray = ReadAllLines(languageNames[currentLanguage]);
+            var languages = GetAvailableLanguages();
+
+            languageArrays = new Dictionary<SystemLanguage, string[]>();
+            for (var i = 0; i < languages.Length; i++)
+                languageArrays[languages[i]] = ReadAllLines(GetLanguageNames()[languages[i]]);
         }
 
         public static bool UpdateLanguage(SystemLanguage language)
         {
-            if (!languageNames.ContainsKey(language))
+            if (!GetLanguageNames().ContainsKey(language))
                 return false;
 
             currentLanguage = language;
@@ -220,90 +225,45 @@ namespace DartCore.Localization
 
         public static void SetLanguageAccordingToSystem()
         {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
             var language = Application.systemLanguage;
-            if (languageNames.ContainsKey(language))
+            if (GetLanguageNames().ContainsKey(language))
                 UpdateLanguage(language);
         }
 
-        public static int GetLanguageCount()
-        {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            return languageNames.Count;
-        }
+        public static int GetLanguageCount() => GetLanguageNames().Count;
 
         public static SystemLanguage[] GetAvailableLanguages()
         {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            SystemLanguage[] languages = new SystemLanguage[languageNames.Keys.Count];
-            for (int i = 0; i < languageNames.Count; i++)
-                languages[i] = languageNames.Keys.ElementAt(i);
+            var languages = new SystemLanguage[GetLanguageNames().Keys.Count];
+            for (var i = 0; i < GetLanguageNames().Count; i++)
+                languages[i] = GetLanguageNames().Keys.ElementAt(i);
 
             return languages;
         }
 
         public static string[] GetCurrentLanguageFiles()
         {
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            string[] languageFiles = new string[languageNames.Values.Count];
-            for (int i = 0; i < languageNames.Count; i++)
-                languageFiles[i] = languageNames.Values.ElementAt(i);
+            var languageFiles = new string[GetLanguageNames().Values.Count];
+            for (var i = 0; i < GetLanguageNames().Count; i++)
+                languageFiles[i] = GetLanguageNames().Values.ElementAt(i);
 
             return languageFiles;
         }
 
         public static bool DoesContainKey(string key)
         {
-            if (!keysArrayInitilized)
-            {
-                UpdateKeyFile();
-                keysArrayInitilized = true;
-            }
-
             return GetIndexOfKey(key) != -1;
         }
 
         private static int GetIndexOfKey(string key)
         {
-            if (!keysArrayInitilized)
+            for (int i = 0; i < GetKeysArray().Length; i++)
             {
-                UpdateKeyFile();
-                keysArrayInitilized = true;
-            }
-            
-            for (int i = 0; i < keysArray.Length; i++)
-            {
-                if (keysArray[i].Trim() == key.Trim())
+                if (GetKeysArray()[i].Trim() == key.Trim())
                     return i;
             }
 
             return -1;
-        }
-
-        public static string[] GetKeys()
-        {
-            UpdateKeyFile();
-            return keysArray;
         }
 
         public static void CreateLanguage(SystemLanguage language, string fileName, string lngName,
@@ -315,13 +275,7 @@ namespace DartCore.Localization
             if (lngErrorMessage == "")
                 lngErrorMessage = $"Localization Error ({lngName})";
 
-            if (!lngDictIsInitilized)
-            {
-                UpdateLanguageDictionary();
-                lngDictIsInitilized = true;
-            }
-
-            if (!languageNames.ContainsKey(language) && !languageNames.ContainsValue(fileName))
+            if (!GetLanguageNames().ContainsKey(language) && !GetLanguageNames().ContainsValue(fileName))
             {
                 File.WriteAllText(LNG_FILES_PATH + fileName + ".txt", lngName.Trim() + "\n" + lngErrorMessage.Trim());
                 var lines = File.ReadAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt").Split('\n');
@@ -345,7 +299,7 @@ namespace DartCore.Localization
 
         public static void RemoveLanguage(SystemLanguage language)
         {
-            if (languageNames.Values.Count == 1)
+            if (GetLanguageNames().Values.Count == 1)
             {
                 Debug.LogError("You can not remove the only language available");
                 return;
@@ -359,16 +313,16 @@ namespace DartCore.Localization
             text = text.Remove(text.Length - 1);
             File.WriteAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt", text);
 
-            File.Delete(LNG_FILES_PATH + languageNames[language] + ".txt");
+            File.Delete(LNG_FILES_PATH + GetLanguageNames()[language] + ".txt");
 
-            languageNames.Remove(language);
+            GetLanguageNames().Remove(language);
         }
 
         private static void UpdateLanguageDictionary()
         {
             languageNames = new Dictionary<SystemLanguage, string>();
             var lines = ReadAllLines(LNG_NAMES_FILE);
-            for (int i = 0; i < lines.Length; i++)
+            for (var i = 0; i < lines.Length; i++)
             {
                 if (!string.IsNullOrWhiteSpace(lines[i]))
                 {
@@ -376,11 +330,8 @@ namespace DartCore.Localization
                 }
             }
 
-            if (!languageNames.ContainsKey(currentLanguage))
-            {
+            if (!languageNames.ContainsKey(currentLanguage)) 
                 currentLanguage = languageNames.Keys.ElementAt(0);
-                Debug.Log($"Changed the current language to {currentLanguage}");
-            }
         }
 
         private static string[] ReadAllLines(string fileName)
@@ -419,7 +370,7 @@ namespace DartCore.Localization
                     if (!string.IsNullOrWhiteSpace(line))
                         filledRowCount++;
 
-                dict.Add(language, Mathf.Round(100f * filledRowCount / lines.Length));
+                dict.Add(language,(float) Math.Round((decimal)(100f * filledRowCount / lines.Length), 2));
             }
 
             return dict;

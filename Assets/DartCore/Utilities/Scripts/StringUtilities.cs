@@ -1,4 +1,6 @@
-﻿namespace DartCore.Utilities
+﻿using System.Globalization;
+
+namespace DartCore.Utilities
 {
     public class StringUtilities
     {
@@ -30,6 +32,18 @@
             var newString = "";
             foreach (var word in newWords) newString += word + " ";
             return newString.Remove(newString.Length - 1);
+        }
+        
+        /// <summary>
+        /// returns a string with proper <sup> tags that represents the given number in scientific notation.
+        /// </summary>
+        /// <param name="num">Number to convert into scientific notation.</param>
+        public static string NumToScientificNotation(float num)
+        {
+            var numText = num.ToString();
+            if (!numText.ToUpper().Contains("E")) return numText;
+
+            return numText.Replace("E", " × 10<sup>") + "</sup>";
         }
     }
 }

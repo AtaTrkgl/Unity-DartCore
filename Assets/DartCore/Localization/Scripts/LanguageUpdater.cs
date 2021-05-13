@@ -12,11 +12,17 @@ namespace DartCore.Localization
         public bool displayErrorMessage = true;
         public bool useFallBackLanguage = true;
         public SystemLanguage fallbackLanguage = SystemLanguage.English;
+
+        public string prefix;
+        public string suffix;
+        
         private TextMeshProUGUI text;
+        private HyperLink hyperLink;
 
         private void Awake()
         {
             text = GetComponent<TextMeshProUGUI>();
+            hyperLink = GetComponent<HyperLink>();
         }
 
         private void OnEnable()
@@ -34,12 +40,18 @@ namespace DartCore.Localization
         {
             if (!text)
                 text = GetComponent<TextMeshProUGUI>();
-            
-            text.text = !useFallBackLanguage ? Localizator.GetString(key, displayErrorMessage)
-                : Localizator.GetStringWithFallBackLanguage(key,fallbackLanguage, displayErrorMessage);
 
-            if (GetComponent<HyperLink>())
-                GetComponent<HyperLink>().UpdateLinkColors();
+            var localizedText = !useFallBackLanguage
+                ? Localizator.GetString(key, displayErrorMessage)
+                : Localizator.GetStringWithFallBackLanguage(key, fallbackLanguage, displayErrorMessage);
+            
+            text.text = prefix + localizedText + suffix;
+
+            if (!hyperLink)
+                hyperLink = GetComponent<HyperLink>();
+            
+            if (hyperLink)
+                hyperLink.UpdateLinkColors();
         }
     }
 }
