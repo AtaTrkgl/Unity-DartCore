@@ -4,7 +4,7 @@ using DartCore.UI;
 
 namespace DartCore.Localization
 {
-    [ExecuteInEditMode]
+    [ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.Localization#3-language-updater")]
     public class LanguageUpdater : MonoBehaviour
     {
         [LocalizedKey] public string key;

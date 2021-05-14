@@ -1,8 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using DartCore.Localization.Backend;
 
-namespace DartCore.Localization
+namespace DartCore.Localization.Backend
 {
     [CustomPropertyDrawer(typeof(LocalizedKeyAttribute))]
     public class LocalizedKeyDrawer:PropertyDrawer

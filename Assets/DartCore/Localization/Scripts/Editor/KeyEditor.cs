@@ -79,6 +79,8 @@ namespace DartCore.Localization.Backend
                     {
                         Localizator.AddLocalizedValue(key, values[i], Localizator.GetAvailableLanguages()[i]);
                     }
+                    
+                    Localizator.RefreshAll();
                 }
 
                 if (GUILayout.Button("Remove Key"))

@@ -69,6 +69,7 @@ namespace DartCore.Localization.Backend
                 keysInit = true;
                 UpdateArrays();
                 Repaint();
+                Localizator.RefreshAll();
             }
 
             GUILayout.Space(10);
