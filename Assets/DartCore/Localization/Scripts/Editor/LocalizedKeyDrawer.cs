@@ -10,7 +10,7 @@ namespace DartCore.Localization.Backend
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var key = KeyEditor.ConvertRawToKey(property.stringValue);
+            var key = Localizator.ConvertRawToKey(property.stringValue);
             var keyExists = DoesKeyExists(key);
 
             // Rects
@@ -20,7 +20,7 @@ namespace DartCore.Localization.Backend
             
             // Drawing Property
             EditorGUI.PropertyField(keyRect, property, label);
-            property.stringValue = KeyEditor.ConvertRawToKey(property.stringValue);
+            property.stringValue = Localizator.ConvertRawToKey(property.stringValue);
             
             if (!keyExists)
                 EditorGUI.HelpBox(helpBoxRect, "The key does not exist in the current context", MessageType.Warning);
@@ -37,7 +37,7 @@ namespace DartCore.Localization.Backend
         {
             return base.GetPropertyHeight(property, label) 
                    + 60f // Button and the margin
-                   + (DoesKeyExists(KeyEditor.ConvertRawToKey(property.stringValue)) ? 0 : 40f); // Help Box
+                   + (DoesKeyExists(Localizator.ConvertRawToKey(property.stringValue)) ? 0 : 40f); // Help Box
         }
         
         private void OpenKeyOnEditor(string key)

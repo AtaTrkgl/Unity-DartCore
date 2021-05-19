@@ -66,10 +66,7 @@ namespace DartCore.Localization.Backend
 
             if (GUILayout.Button("Refresh", GUILayout.Height(BUTTON_HEIGHT)) || !keysInit)
             {
-                keysInit = true;
-                UpdateArrays();
-                Repaint();
-                Localizator.RefreshAll();
+                Refresh();
             }
 
             GUILayout.Space(10);
@@ -143,6 +140,14 @@ namespace DartCore.Localization.Backend
             }
 
             GUI.EndScrollView();
+        }
+
+        public void Refresh()
+        {
+            keysInit = true;
+            UpdateArrays();
+            Repaint();
+            Localizator.RefreshAll();
         }
 
         private void SetLocalizationStatus(LocalizationStatus status)

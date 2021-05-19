@@ -36,7 +36,7 @@ namespace DartCore.Localization.Backend
             };
 
             key = GUILayout.TextField(key, keySearchBarStyle);
-            key = ConvertRawToKey(key);
+            key = Localizator.ConvertRawToKey(key);
 
             GUILayout.Space(10f);
             Localizator.UpdateKeyFile();
@@ -81,6 +81,7 @@ namespace DartCore.Localization.Backend
                     }
                     
                     Localizator.RefreshAll();
+                    RefreshKeyBrowser();
                 }
 
                 if (GUILayout.Button("Remove Key"))
@@ -91,7 +92,13 @@ namespace DartCore.Localization.Backend
                         "Remove",
                         "Cancel");
                     if (dialogOutput)
+                    {
                         Localizator.RemoveKey(key);
+                        Localizator.RefreshAll();
+
+                        RefreshKeyBrowser();
+                    }
+
                 }
                 
                 // Renaming
@@ -111,10 +118,11 @@ namespace DartCore.Localization.Backend
 
                         key = newName.Trim();
                         newName = "";
+                        RefreshKeyBrowser();
                     }
                 }
 
-                newName = GUILayout.TextField(newName, GUILayout.Width(this.position.width * .5f)).Trim();
+                newName = Localizator.ConvertRawToKey(GUILayout.TextField(newName, GUILayout.Width(this.position.width * .5f)));
                 EditorScriptingUtils.EndCenter();
                 if (Localizator.DoesContainKey(newName.Trim()))
                     EditorGUILayout.HelpBox("The key name entered is already in use.",
@@ -123,11 +131,16 @@ namespace DartCore.Localization.Backend
             else if (GUILayout.Button("Add New Key") && !string.IsNullOrEmpty(key) && !string.IsNullOrWhiteSpace(key))
             {
                 Localizator.AddKey(key);
+                RefreshKeyBrowser();
             }
 
             keyLastValue = key;
         }
-        
-        public static string ConvertRawToKey(string raw) => raw.Replace(' ', '_').ToLower();
+
+        private void RefreshKeyBrowser()
+        {
+            var window = (KeyBrowser) GetWindow( typeof(KeyBrowser), false,"Key Browser",false);
+            window.Refresh();
+        }
     }
 }

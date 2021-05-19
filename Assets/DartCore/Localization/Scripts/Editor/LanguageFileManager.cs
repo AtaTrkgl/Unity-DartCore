@@ -62,14 +62,8 @@ namespace DartCore.Localization.Backend
                 // Switch to the language
                 if (GUILayout.Button($"Switch", languageButtonStyle))
                 {
-                    var dialogOutput = EditorUtility.DisplayDialog(
-                        $"Current language will be set to {language}",
-                        $"Are you sure you want to switch to {language}?",
-                        "Yes",
-                        "No");
-
-                    if (dialogOutput)
-                        Localizator.UpdateLanguage(language);
+                    Localizator.UpdateLanguage(language);
+                    Debug.Log($"Switched to the {language} language.");
                 }
                 
                 // Remove the language

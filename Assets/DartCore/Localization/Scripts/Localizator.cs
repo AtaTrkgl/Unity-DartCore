@@ -83,6 +83,7 @@ namespace DartCore.Localization
             return ConvertUsableStringToSavedString(GetString(key, language, returnErrorString: false));
         }
 
+        public static string ConvertRawToKey(string raw) => raw.Replace(' ', '_').ToLower();
         private static string ConvertSavedStringToUsableString(string savedString) => savedString.Trim().Replace(LINE_BREAK_TEXT, "\n");
         private static string ConvertUsableStringToSavedString(string usableString) => usableString
             .Replace(Environment.NewLine, LINE_BREAK_TEXT)
@@ -121,6 +122,8 @@ namespace DartCore.Localization
                 UnityEditor.AssetDatabase.Refresh();
 #endif
                 UpdateKeyFile();
+                foreach (var language in GetAvailableLanguages())
+                    AddLocalizedValue(key, "", language);
             }
         }
 
@@ -132,30 +135,34 @@ namespace DartCore.Localization
                 return;
             }
 
-            key = key.Replace('\n', new char()).Replace(' ', '_');
+            key = ConvertRawToKey(key);
             if (DoesContainKey(key))
             {
-
-                int index = GetIndexOfKey(key);
+                var index = GetIndexOfKey(key);
 
                 // KEY REMOVAL
-                string newText = "";
-                for (int i = 0; i < GetKeysArray().Length; i++)
+                var newText = "";
+                var keys = GetKeysArray();
+                for (var i = 0; i < keys.Length; i++)
                 {
                     if (i != index)
-                        newText += GetKeysArray()[i] + (i != GetKeysArray().Length - 1 ? "\n" : "");
+                        newText += keys[i] + (i != keys.Length - 1 ? "\n" : "");
+                    else if (i == keys.Length - 1) // If the last key is to be removed than there will be an extra \n
+                        newText = newText.Remove(newText.Length - 1);
                 }
 
                 File.WriteAllText(LNG_FILES_PATH + KEYS_FILE_NAME + ".txt", newText);
-
+                UpdateKeyFile();
+                
                 // VALUE REMOVAL
+                keys = GetKeysArray();
                 foreach (var language in GetLanguageNames().Keys)
                 {
                     newText = "";
-                    for (int i = 0; i < GetKeysArray().Length; i++)
+                    for (var i = 0; i < keys.Length; i++)
                     {
                         if (i != index)
-                            newText += GetStringRaw(GetKeysArray()[i], language) + "\n";
+                            newText += GetStringRaw(keys[i], language) + "\n";
                     }
 
                     newText = newText.Remove(newText.Length - 1);
