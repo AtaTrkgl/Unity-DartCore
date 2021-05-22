@@ -284,19 +284,25 @@ namespace DartCore.Localization
 
             if (!GetLanguageNames().ContainsKey(language) && !GetLanguageNames().ContainsValue(fileName))
             {
-                File.WriteAllText(LNG_FILES_PATH + fileName + ".txt", lngName.Trim() + "\n" + lngErrorMessage.Trim());
+                // The new Language's File.
+                var fileContent = lngName.Trim() + "\n" + lngErrorMessage.Trim();
+                UpdateKeyFile();
+                
+                // i starts from 2 as index 0 is lng_name and 1 is lng_error.
+                for (var i = 2; i < keysArray.Length; i++)
+                    fileContent += "\n";
+                File.WriteAllText(LNG_FILES_PATH + fileName + ".txt", fileContent);
+                
+                // Language Names File
                 var lines = File.ReadAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt").Split('\n');
-                string text = "";
-                for (int i = 0; i < lines.Length; i++)
+                var fileNameText = "";
+                for (var i = 0; i < lines.Length; i++)
                 {
-                    if (i == (int) language)
-                        text += fileName + "\n";
-                    else
-                        text += lines[i] + "\n";
+                    fileNameText += (i == (int) language ? fileName : lines[i]) + "\n";
                 }
 
-                text = text.Remove(text.Length - 1);
-                File.WriteAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt", text);
+                fileNameText = fileNameText.Remove(fileNameText.Length - 1);
+                File.WriteAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt", fileNameText);
 #if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
 #endif

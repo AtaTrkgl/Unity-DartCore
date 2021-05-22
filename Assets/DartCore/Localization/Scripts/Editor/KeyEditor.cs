@@ -61,12 +61,11 @@ namespace DartCore.Localization.Backend
 
                     var customTextAreaStyle = EditorStyles.textArea;
                     customTextAreaStyle.wordWrap = true;
+                    customTextAreaStyle.fixedHeight = 0;
+                    customTextAreaStyle.stretchHeight = true;
 
                     values[i] = EditorGUILayout.TextArea(
-                        values[i], customTextAreaStyle,
-                        GUILayout.Height(Mathf.Clamp(customTextAreaStyle.CalcHeight(new GUIContent(values[i]), position.width * .75f), 100f,
-                            float.PositiveInfinity)),
-                        GUILayout.Width(position.width * .75f), GUILayout.ExpandHeight(true));
+                        values[i], customTextAreaStyle);
 
                     GUILayout.EndHorizontal();
                 }
