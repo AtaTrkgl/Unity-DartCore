@@ -25,8 +25,8 @@ namespace DartCore.UI
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bgColorOn"), new GUIContent("BG Color On"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bgColorOff"), new GUIContent("BG Color Off"));
             EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("transitionDuration"),
-                new GUIContent("Color Transition Time"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("fillTransitionSpeed"),
+                new GUIContent("Transition Speed"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("toolTip"), new GUIContent("Tooltip Text"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("localizeTooltip"),

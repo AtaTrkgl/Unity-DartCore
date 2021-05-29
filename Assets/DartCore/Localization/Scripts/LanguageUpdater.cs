@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
-using DartCore.UI;
 
 namespace DartCore.Localization
 {
-    [ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.Localization#3-language-updater")]
+    [ExecuteInEditMode, HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.Localization#3-language-updater"), RequireComponent(typeof(TMP_Text))]
     public class LanguageUpdater : MonoBehaviour
     {
         [LocalizedKey] public string key;
@@ -17,12 +16,10 @@ namespace DartCore.Localization
         public string suffix;
         
         private TextMeshProUGUI text;
-        private HyperLink hyperLink;
 
         private void Awake()
         {
             text = GetComponent<TextMeshProUGUI>();
-            hyperLink = GetComponent<HyperLink>();
         }
 
         private void OnEnable()
@@ -46,12 +43,6 @@ namespace DartCore.Localization
                 : Localizator.GetStringWithFallBackLanguage(key, fallbackLanguage, displayErrorMessage);
             
             text.text = prefix + localizedText + suffix;
-
-            if (!hyperLink)
-                hyperLink = GetComponent<HyperLink>();
-            
-            if (hyperLink)
-                hyperLink.UpdateLinkColors();
         }
     }
 }

@@ -60,6 +60,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -135,6 +137,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -223,6 +227,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -252,13 +258,12 @@ MonoBehaviour:
   min: 0
   max: 10
   current: 5.15
-  fillTime: 0.1
+  fillSpeed: 8
+  bgColor: {r: 1, g: 1, b: 1, a: 1}
   fillerColor: {r: 1, g: 0, b: 0, a: 1}
   isRadial: 0
   innerRadius: 0
   innerCircleIcon: {fileID: 0}
   innerCircleIconColor: {r: 0, g: 0, b: 0, a: 0}
   innerCircleColor: {r: 0, g: 0, b: 0, a: 0}
-  mask: {fileID: 6538757975157428497}
-  filler: {fileID: 4901565297569607235}
-  innerCircle: {fileID: 0}
+  outerCircleRadius: 5

@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,7 +8,7 @@ using UnityEditor;
 namespace DartCore.UI
 {
     [HelpURL("https://github.com/AtaTrkgl/Unity-DartCore/wiki/DartCore.UI#3-switch")]
-    public class Switch : DartCore.UI.TogglePlus
+    public class Switch : TogglePlus
     {
         #region Unity Editor
 
@@ -33,7 +32,7 @@ namespace DartCore.UI
         private Image bgFill;
         private Image bg;
         private float circleX;
-        private readonly float padding = 1.5f;
+        private const float PADDING = .5f;
 
         private void Awake()
         {
@@ -65,12 +64,15 @@ namespace DartCore.UI
             if (isInteractive && !wasInteractive)
                 NormalState();
 
-            circleX = rectTrans.sizeDelta.x * .5f - circle.sizeDelta.x * .5f - padding;
-            circle.DOLocalMoveX(isOn ? circleX : -circleX, .1f).SetUpdate(true);
-            bgFill.DOFillAmount(isOn ? 1 : 0, .2f).SetUpdate(true);
+            circleX = rectTrans.sizeDelta.x * .5f - circle.sizeDelta.x * .5f - PADDING;
 
-            bg.DOColor(bgColorOn, transitionDuration).SetUpdate(true);
-            bgFill.DOColor(bgColorOff, transitionDuration).SetUpdate(true);
+            circle.localPosition = new Vector3(Mathf.Lerp(circle.localPosition.x, isOn ? circleX : -circleX,
+                fillTransitionSpeed * Time.unscaledDeltaTime), circle.localPosition.y, circle.localPosition.z);
+
+            bgFill.fillAmount = Mathf.Lerp(bgFill.fillAmount, isOn ? 1 : 0, fillTransitionSpeed * .7f * Time.unscaledDeltaTime);
+
+            bg.color = Color.Lerp(bg.color, bgColorOn, fillTransitionSpeed * Time.unscaledDeltaTime);
+            bgFill.color = Color.Lerp(bgFill.color, bgColorOff, fillTransitionSpeed * Time.unscaledDeltaTime);
 
             wasInteractive = isInteractive;
         }

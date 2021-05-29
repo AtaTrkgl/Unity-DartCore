@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using DG.Tweening;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -28,7 +28,7 @@ namespace DartCore.UI
         [Header("Configuration")] [SerializeField]
         private float padding;
 
-        public float followTime = .1f;
+        [FormerlySerializedAs("followTime"), Range(1f, 20f)] public float followSpeed = 12f;
 
         private RectTransform containerTrans;
         private RectTransform draggableWindowTrans;
@@ -74,10 +74,9 @@ namespace DartCore.UI
         private void FollowCursor()
         {
             var desiredPos = (Vector2) Input.mousePosition / canvas.lossyScale - cursorOffset;
-            draggableWindowTrans.DOLocalMove(new Vector2(
-                    Mathf.Clamp(desiredPos.x, boundaries.x, boundaries.y),
-                    Mathf.Clamp(desiredPos.y, boundaries.z, boundaries.w)),
-                followTime).SetUpdate(true);
+            draggableWindowTrans.localPosition = new Vector2(
+                Mathf.Lerp(draggableWindowTrans.localPosition.x, Mathf.Clamp(desiredPos.x, boundaries.x, boundaries.y), followSpeed * Time.unscaledDeltaTime),
+                Mathf.Lerp(draggableWindowTrans.localPosition.y, Mathf.Clamp(desiredPos.y, boundaries.z, boundaries.w), followSpeed * Time.unscaledDeltaTime));
         }
 
         private void UpdatePadding()

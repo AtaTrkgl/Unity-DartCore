@@ -1,4 +1,5 @@
 ﻿using System;
+using DartCore.Localization;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
@@ -29,6 +30,9 @@ namespace DartCore.UI
             UpdateLinkColors();
         }
 
+        private void OnEnable() => Localizator.OnLanguageChange += UpdateLinkColors;
+        private void OnDisable() => Localizator.OnLanguageChange -= UpdateLinkColors;
+        
         public void OnPointerClick(PointerEventData eventData)
         {
             var linkIndex = TMP_TextUtilities.FindIntersectingLink(text, eventData.position, null);

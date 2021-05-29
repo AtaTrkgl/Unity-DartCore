@@ -62,6 +62,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -93,15 +95,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  transitionDuration: 0.15
   highlightedColor: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
   disabledColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
-  fillTransitionDuration: 0.1
+  colorTransitionSpeed: 8
+  fillTransitionSpeed: 15
   fillColor: {r: 1, g: 0, b: 0, a: 1}
-  colorTransitionDuration: 0.7
   animType: 0
   fillScale: 0.8
   toolTip: 
+  localizeTooltip: 0
   tooltipTextColor: {r: 0.36862746, g: 0.36862746, b: 0.36862746, a: 1}
   tooltipBgColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   highlightedClip: {fileID: 0}
@@ -170,6 +172,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -256,6 +260,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

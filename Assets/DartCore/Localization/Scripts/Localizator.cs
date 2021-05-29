@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.IO;
 using System;
+using UnityEditor;
 
 namespace DartCore.Localization
 {
@@ -318,11 +319,14 @@ namespace DartCore.Localization
                 return;
             }
 
-            var lines = File.ReadAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt").Split('\n');
+            var textFile = (TextAsset) AssetDatabase.LoadAssetAtPath(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt", typeof(TextAsset));
+            var lines = textFile.text.Split('\n');
+            
             lines[(int) language] = "";
-            string text = "";
+            var text = "";
             foreach (var line in lines)
                 text += line + "\n";
+            
             text = text.Remove(text.Length - 1);
             File.WriteAllText(LNG_FILES_PATH + LNG_NAMES_FILE + ".txt", text);
 

@@ -1,9 +1,9 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -37,12 +37,13 @@ namespace DartCore.UI
         [Header("Colors")] public Color normalColor;
         public Color highlightedColor;
         public Color disabledColor;
-        [Range(0f, 1f)] public float transitionDuration = .1f;
+        [FormerlySerializedAs("transitionDuration")]
+        [Range(1f, 20f)] public float colorTransitionSpeed = 8f;
 
-        [Header("Filling")] public float fillTransitionDuration = .1f;
-        private float fillTransDur;
+        [FormerlySerializedAs("fillTransitionDuration"),
+        Header("Filling"), Range(1f, 20f)] public float fillTransitionSpeed = 8f;
+        private float currentFillTransitionSpeed;
         public Color fillColor = Color.red;
-        public float colorTransitionDuration = .1f;
         public ToggleFillAnimation animType;
         [Range(0, 1)] public float fillScale = .8f;
 
@@ -63,13 +64,14 @@ namespace DartCore.UI
         private Image fill;
 
         private RectTransform maskRect;
-        private Image image;
+        private Image backgroundImage;
+        private Color backgroundColor;
 
         private void Awake()
         {
             mask = transform.Find("Mask").GetComponent<Image>();
             maskRect = mask.GetComponent<RectTransform>();
-            image = GetComponent<Image>();
+            backgroundImage = GetComponent<Image>();
 
             fill = mask.transform.Find("Fill").GetComponent<Image>();
             NormalState();
@@ -95,9 +97,13 @@ namespace DartCore.UI
                 NormalState();
 
             if (isOn)
-                fill.DOColor(fillColor, animType == ToggleFillAnimation.Fade ? fillTransDur : colorTransitionDuration).SetUpdate(true);
-
+                fill.color = Color.Lerp(fill.color, fillColor,(animType == ToggleFillAnimation.Fade ?
+                    currentFillTransitionSpeed : colorTransitionSpeed) * Time.unscaledDeltaTime);
+ 
             wasInteractive = isInteractive;
+            if (backgroundImage)
+                backgroundImage.color = Color.Lerp(backgroundImage.color, backgroundColor,
+                    colorTransitionSpeed * Time.unscaledDeltaTime);
         }
 
         private void UpdateFill()
@@ -108,40 +114,40 @@ namespace DartCore.UI
             switch (animType)
             {
                 case ToggleFillAnimation.Horizontal:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillMethod = Image.FillMethod.Horizontal;
                     break;
                 case ToggleFillAnimation.Vertical:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillMethod = Image.FillMethod.Vertical;
                     break;
                 case ToggleFillAnimation.Radial90:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillMethod = Image.FillMethod.Radial90;
                     break;
                 case ToggleFillAnimation.Radial180:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillMethod = Image.FillMethod.Radial180;
                     break;
                 case ToggleFillAnimation.Radial360:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillMethod = Image.FillMethod.Radial360;
                     break;
                 case ToggleFillAnimation.Fade:
-                    fillTransDur = fillTransitionDuration;
+                    currentFillTransitionSpeed = fillTransitionSpeed;
                     mask.fillAmount = 1;
                     if (!isOn)
-                        fill.DOColor(Color.clear, fillTransDur).SetUpdate(true);
+                        fill.color = Color.Lerp(fill.color, Color.clear, currentFillTransitionSpeed * Time.unscaledDeltaTime);
                     break;
                 case ToggleFillAnimation.None:
-                    fillTransDur = 0f;
+                    currentFillTransitionSpeed = 0f;
                     break;
                 default:
                     break;
             }
 
             if (animType != ToggleFillAnimation.Fade)
-                mask.DOFillAmount(isOn ? 1 : 0, fillTransDur).SetUpdate(true);
+                mask.fillAmount = Mathf.Lerp(mask.fillAmount, isOn ? 1 : 0, currentFillTransitionSpeed * Time.unscaledDeltaTime);
         }
 
         private void Click()
@@ -156,8 +162,8 @@ namespace DartCore.UI
         private void Highlight()
         {
             if (!isInteractive) return;
-            
-            GetComponent<Image>().DOColor(highlightedColor, transitionDuration).SetUpdate(true);
+
+            backgroundColor = highlightedColor;
             if (toolTip.Length > 0)
                 Tooltip.ShowTooltipStatic(toolTip, tooltipTextColor, tooltipBgColor, localizeTooltip);
             UIAudioManager.PlayOneShotAudio(highlightedClip, volume, mixerGroup);
@@ -166,8 +172,8 @@ namespace DartCore.UI
         protected void NormalState()
         {
             if (!isInteractive) return;
-            
-            image.DOColor(normalColor, transitionDuration).SetUpdate(true);
+
+            backgroundColor = normalColor;
             if (toolTip.Length > 0)
                 Tooltip.HideTooltipStatic();
         }
@@ -175,7 +181,7 @@ namespace DartCore.UI
         protected void DisabledState()
         {
             if (!isInteractive)
-                image.DOColor(disabledColor, transitionDuration).SetUpdate(true);
+                backgroundColor = disabledColor;
         }
 
         #region Cursor Detection

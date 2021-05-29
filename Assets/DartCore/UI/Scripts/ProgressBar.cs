@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 using System;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -40,7 +40,7 @@ namespace DartCore.UI
         public float min;
         public float max = 1;
         public float current = 0;
-        [Range(0, .5f)] public float fillTime = .1f;
+        [FormerlySerializedAs("fillTime")] [Range(1f, 20f)] public float fillSpeed = 8f;
         public Color bgColor = Color.white;
         public Color fillerColor = Color.red;
         public bool isRadial;
@@ -57,7 +57,6 @@ namespace DartCore.UI
         private Image outerCircleMask;
         private Image bgImage;
         [Range(0f, 10f)] public float outerCircleRadius = 5f;
-        private float currentOuterCircleRadius;
 
         private void Awake()
         {
@@ -68,7 +67,6 @@ namespace DartCore.UI
                 mask = outerCircleMask.transform.Find("Mask").GetComponent<Image>();
                 filler = mask.transform.Find("Fill").GetComponent<Image>();
                 innerCircle = transform.Find("InnerCircle").GetComponent<Image>();
-                currentOuterCircleRadius = outerCircleRadius;
                 innerCircleImage = innerCircle.transform.Find("Icon").GetComponent<Image>();
                 innerCircleRect = innerCircle.GetComponent<RectTransform>();
             }
@@ -90,7 +88,6 @@ namespace DartCore.UI
                 bgImage.color = bgColor;
                 filler.color = fillerColor;
                 mask.fillAmount = (current - min) / (max - min);
-                currentOuterCircleRadius = outerCircleRadius;
             }
 #endif
 
@@ -99,13 +96,13 @@ namespace DartCore.UI
             if (hasBoundries)
                 current = Mathf.Clamp(current, min, max);
 
-            bgImage.DOColor(bgColor, fillTime).SetUpdate(true);
+            bgImage.color = Color.Lerp(bgImage.color, bgColor, fillSpeed * Time.unscaledDeltaTime);
             GetCurrentFill();
             if (isRadial)
             {
                 UpdateInnerCircle();
-                DOTween.To(() => currentOuterCircleRadius, x => currentOuterCircleRadius = x, outerCircleRadius, .1f);
-                outerCircleMask.pixelsPerUnitMultiplier = currentOuterCircleRadius;
+                outerCircleMask.pixelsPerUnitMultiplier = Mathf.Lerp(outerCircleMask.pixelsPerUnitMultiplier,
+                    outerCircleRadius, fillSpeed * Time.unscaledDeltaTime);
                 outerCircleMask.SetAllDirty();
             }
         }
@@ -117,9 +114,9 @@ namespace DartCore.UI
 
             var desiredFillAmount = currentOffset / maxOffset;
             if (mask)
-                mask.DOFillAmount(desiredFillAmount, fillTime).SetUpdate(true);
+                mask.fillAmount = Mathf.Lerp(mask.fillAmount, desiredFillAmount, fillSpeed * Time.unscaledDeltaTime);
 
-            filler.DOColor(fillerColor, .4f).SetUpdate(true);
+            filler.color = Color.Lerp(filler.color, fillerColor, fillSpeed * Time.unscaledDeltaTime);
         }
 
         private void UpdateInnerCircle()
